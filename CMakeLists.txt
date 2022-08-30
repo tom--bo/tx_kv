@@ -3,4 +3,4 @@ project(tx_kv)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(tx_kv main.cpp KVserver.cpp KVserver.h KVclient.cpp KVclient.h TxManager.cpp TxManager.h common.h MapStore.cpp MapStore.h LockManager.cpp LockManager.h)
+add_executable(tx_kv main.cpp KVserver.cpp KVserver.h KVclient.cpp KVclient.h TxManager.cpp TxManager.h common.h MapStore.cpp MapStore.h LockManager.cpp LockManager.h LockDef.h)

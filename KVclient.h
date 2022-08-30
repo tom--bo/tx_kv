@@ -6,7 +6,7 @@
 
 class KVclient {
 private:
-  TxID own_txid = 0; // should be set to 0 when commit or rollback
+  TxCB *txcb; // should be set to 0 when commit or rollback
   KVserver *srv;
 public:
   void start_tx();

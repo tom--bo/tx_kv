@@ -2,30 +2,30 @@
 #include "KVserver.h"
 
 void KVclient::start_tx() {
-  own_txid = srv->start_tx();
+  txcb = srv->start_tx();
 }
 
 ReturnVal KVclient::get(ulong key) {
-  return srv->get(own_txid, key);
+  return srv->get(txcb, key);
 }
 
 ErrorNo KVclient::put(ulong key, ulong value) {
-  return srv->put(own_txid, key, value);
+  return srv->put(txcb, key, value);
 }
 
 ErrorNo KVclient::del(ulong key) {
-  return srv->del(own_txid, key);
+  return srv->del(txcb, key);
 }
 
 ErrorNo KVclient::commit_tx() {
-  return srv->commit_tx(own_txid);
+  return srv->commit_tx(txcb);
 }
 
 ErrorNo KVclient::rollback_tx() {
-  return srv->rollback_tx(own_txid);
+  return srv->rollback_tx(txcb);
 }
 
 void KVclient::print_own_txid() {
-  std::cout << own_txid << std::endl;
+  std::cout << txcb->txid << std::endl;
 }
 

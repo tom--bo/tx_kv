@@ -1,6 +1,6 @@
 #include "MapStore.h"
 
-ReturnVal MapStore::get(TxID txid, ulong key) {
+ReturnVal MapStore::get(TxCB *txcb, ulong key) {
   auto itr = store.find(key);
   if (itr != store.end()) {
     // found
@@ -9,12 +9,12 @@ ReturnVal MapStore::get(TxID txid, ulong key) {
   return ReturnVal {0, KEY_NOT_FOUND};
 }
 
-ErrorNo MapStore::put(TxID txid, ulong key, ulong value) {
+ErrorNo MapStore::put(TxCB *txcb, ulong key, ulong value) {
   store[key] = value;
   return NO_ERROR;
 }
 
-ErrorNo MapStore::del(TxID txid, ulong key) {
+ErrorNo MapStore::del(TxCB *txcb, ulong key) {
   auto itr = store.find(key);
   if (itr != store.end()) {
     store.erase(itr);
@@ -22,12 +22,12 @@ ErrorNo MapStore::del(TxID txid, ulong key) {
   return NO_ERROR;
 }
 
-ErrorNo MapStore::commit_tx(TxID txid) {
+ErrorNo MapStore::commit_tx(TxCB *txcb) {
 
   return NO_ERROR;
 }
 
-ErrorNo MapStore::rollback_tx(TxID txid) {
+ErrorNo MapStore::rollback_tx(TxCB *txcb) {
 
   return NO_ERROR;
 }

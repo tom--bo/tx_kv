@@ -9,16 +9,16 @@
 
 // Server Program (Tp-Monitor and Application) in TP book
 class KVserver {
-private:
+ private:
   TxManager *txManager;
   MapStore *store;
-public:
-  TxID start_tx();
-  ReturnVal get(TxID txid, ulong key);
-  ErrorNo put(TxID txid, ulong key, ulong value);
-  ErrorNo del(TxID txid, ulong key);
-  ErrorNo commit_tx(TxID txid);
-  ErrorNo rollback_tx(TxID txid);
+ public:
+  TxCB *start_tx();
+  ReturnVal get(TxCB *txcb, ulong key);
+  ErrorNo put(TxCB *txcb, ulong key, ulong value);
+  ErrorNo del(TxCB *txcb, ulong key);
+  ErrorNo commit_tx(TxCB *txcb);
+  ErrorNo rollback_tx(TxCB *txcb);
 
   bool db_init() {
     txManager = new TxManager();

@@ -5,14 +5,15 @@
 #include <unordered_map>
 #include "common.h"
 #include "LockManager.h"
+#include "TxManager.h"
 
 class MapStore {
-public:
-  ReturnVal get(TxID txid, ulong key);
-  ErrorNo put(TxID txid, ulong key, ulong value);
-  ErrorNo del(TxID txid, ulong key);
-  ErrorNo commit_tx(TxID txid);
-  ErrorNo rollback_tx(TxID txid);
+ public:
+  ReturnVal get(TxCB *txcb, ulong key);
+  ErrorNo put(TxCB *txcb, ulong key, ulong value);
+  ErrorNo del(TxCB *txcb, ulong key);
+  ErrorNo commit_tx(TxCB *txcb);
+  ErrorNo rollback_tx(TxCB *txcb);
   MapStore() {
     store = std::unordered_map<ulong, ulong>();
     lock_manager = new LockManager();
@@ -21,7 +22,7 @@ public:
     store.clear();
   }
 
-private:
+ private:
   std::unordered_map<ulong, ulong> store;
   LockManager *lock_manager;
 };
