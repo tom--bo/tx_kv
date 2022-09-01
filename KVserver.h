@@ -5,7 +5,7 @@
 #include "common.h"
 #include "TxManager.h"
 #include "MapStore.h"
-
+#include "LockManager.h"
 
 // Server Program (Tp-Monitor and Application) in TP book
 class KVserver {
@@ -21,8 +21,10 @@ class KVserver {
   ErrorNo rollback_tx(TxCB *txcb);
 
   bool db_init() {
-    txManager = new TxManager();
-    store = new MapStore();
+    LockManager *lm = new LockManager();
+    store = new MapStore(lm);
+    txManager = new TxManager(store);
+    return true;
   }
 
   KVserver() {

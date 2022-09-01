@@ -6,12 +6,12 @@
 
 typedef enum {
   LOCK_FREE,
-  LOCK_S,
-  LOCK_X,
-  LOCK_U,
   LOCK_IS,
   LOCK_IX,
+  LOCK_S,
   LOCK_SIX,
+  LOCK_U,
+  LOCK_X,
   LOCK_WAIT
 } LockMode;
 
@@ -29,9 +29,11 @@ typedef enum {
   LOCK_NOT_LOCKED
 } LockReply;
 
+struct LockHead;
+
 typedef struct _LockRequest{
   _LockRequest *next;  /* 'queue' in TP-book */
-  // LockHead *head;  /* need not maybe */
+  LockHead *head;  /* need not maybe */
   LockStatus status;
   LockMode mode;      /* requested mode */
   LockMode convert_mode;
@@ -47,6 +49,7 @@ typedef struct _LockRequest{
 struct LockHead {
  public:
   pthread_mutex_t mu;
+  pthread_cond_t cond;
   // LockHead *chain; /* Need this after impl hash-chain */
   // char *lock_name; /* Need this after impl hash-chain */
   LockRequest *queue;
@@ -54,6 +57,7 @@ struct LockHead {
   bool waiting;
   LockHead() {
     pthread_mutex_init(&mu, NULL);
+    pthread_cond_init(&cond, NULL);
     queue = nullptr;
     granted_mode = LOCK_FREE;
     waiting = false;

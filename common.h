@@ -15,5 +15,4 @@ typedef struct {
   ErrorNo error_no;
 } ReturnVal;
 
-
 #endif//TX_KV__COMMON_H_

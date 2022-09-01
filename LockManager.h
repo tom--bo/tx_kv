@@ -2,10 +2,11 @@
 #define TX_KV__LOCKMANAGER_H_
 
 #include "LockDef.h"
-#include "TxManager.h"
 #include "common.h"
 #include <atomic>
 #include <unordered_map>
+
+struct TxCB;
 
 class LockHash {
  private:
@@ -47,17 +48,20 @@ class LockHash {
 };
 
 class LockManager {
+ private:
+  LockHash *lockhash;
  public:
-  LockReply Lock() {
-    return LOCK_OK;
+  LockManager() {
+    lockhash = new LockHash();
   }
-  bool Unlock() {
-    return true;
-  }
-  bool UnlockAll(TxCB *txcb) {
-
-  }
-
+  /* LockClass and timeout are not impl yet */
+  /* LockHash is not hashed, so specify key directly now */
+  LockReply Lock(TxCB *me, ulong key, LockMode mode);
+  bool Unlock(LockRequest *req);
+  bool UnlockAll(TxCB *txcb);
+  /* TP-book(jp) p494 */
+  bool LockCompat(LockMode requested, LockMode granted);
+  LockMode GrantGroup(LockMode requested, LockMode granted);
 };
 
 #endif//TX_KV__LOCKMANAGER_H_

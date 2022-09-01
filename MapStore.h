@@ -4,27 +4,27 @@
 #include <limits.h>
 #include <unordered_map>
 #include "common.h"
-#include "LockManager.h"
-#include "TxManager.h"
+
+class TxCB;
+class LockManager;
 
 class MapStore {
+ private:
+  std::unordered_map<ulong, ulong> store;
+  LockManager *lock_manager;
  public:
   ReturnVal get(TxCB *txcb, ulong key);
   ErrorNo put(TxCB *txcb, ulong key, ulong value);
   ErrorNo del(TxCB *txcb, ulong key);
   ErrorNo commit_tx(TxCB *txcb);
   ErrorNo rollback_tx(TxCB *txcb);
-  MapStore() {
+  MapStore(LockManager* lm) {
     store = std::unordered_map<ulong, ulong>();
-    lock_manager = new LockManager();
+    lock_manager = lm;
   }
   ~MapStore() {
     store.clear();
   }
-
- private:
-  std::unordered_map<ulong, ulong> store;
-  LockManager *lock_manager;
 };
 
 #endif//TX_KV__MAPSTORE_H_
