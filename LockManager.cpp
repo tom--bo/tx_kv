@@ -6,13 +6,12 @@
 LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
   LockHead *head; /* *lock in original TP-book */
   LockRequest *request, *last;
-  request = new LockRequest{nullptr, head, LOCK_GRANTED, mode, mode, me->txid}; /* initialize at first */
-  LockReply replay = LOCK_NOT_LOCKED;
 
   head = lockhash->FindLockHead(key);
   if(head == nullptr) {
     head = lockhash->CreateLockHead(key);
   }
+  request = new LockRequest{nullptr, head, LOCK_GRANTED, mode, mode, me->txid}; /* initialize at first */
   pthread_mutex_lock(&head->mu); /* lock here 01 */
   if(head->queue == nullptr) { /* equivalent to L:11 in lock() in TP-book(jp) p570 */
     head->queue = request;
@@ -22,7 +21,7 @@ LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
       me->anchor = request;
     } else {
       me->anchor->next = request;
-      me->anchor = me->anchor->next;
+      me->anchor = me->anchor->tran_next;
     }
     pthread_mutex_unlock(&head->mu); /* unlock here 01 */
     return LOCK_OK; /* equivalent to L:17 in lock() in TP-book(jp) p570 */
@@ -38,21 +37,27 @@ LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
         me->listhead = request;
         me->anchor = request;
       } else {
-        me->anchor->next = request;
-        me->anchor = me->anchor->next;
+        me->anchor->tran_next = request;
+        me->anchor = me->anchor->tran_next;
       }
       pthread_mutex_unlock(&head->mu); /* unlock here 01 */
       return LOCK_OK; /* equivalent to L:28 in lock() in TP-book(jp) p570 */
     } else { /* L:30 */
       head->waiting = true;
       request->status = LOCK_WAITING;
+      last->next = request;
       me->wait = request;
       while(request->status == LOCK_WAITING) {
         pthread_cond_wait(&head->cond, &head->mu);
       }
       me->wait = nullptr;
-      me->anchor->next = request;
-      me->anchor = me->anchor->next;
+      if(me->anchor == nullptr) {
+        me->listhead = request;
+        me->anchor = request;
+      } else {
+        me->anchor->tran_next = request;
+        me->anchor = me->anchor->tran_next;
+      }
       pthread_mutex_unlock(&head->mu); /* unlock here 01 */
       return LOCK_OK; /* equivalent to L:28 in lock() in TP-book(jp) p570 */
     }
@@ -82,10 +87,12 @@ bool LockManager::Unlock(LockRequest *req) {
     lockhead->granted_mode = LOCK_FREE; /* re-calc granted_mode */
     now = lockhead->queue;
     while(now->status == LOCK_GRANTED) {
+      /* granted_mode is not updated correctly */
       lockhead->granted_mode = GrantGroup(now->mode, lockhead->granted_mode);
       now = now->next;
     }
     while(LockCompat(now->mode, lockhead->granted_mode)) {
+      /* granted_mode is not updated correctly */
       lockhead->granted_mode = GrantGroup(now->mode, lockhead->granted_mode);
       now->status = LOCK_GRANTED;
       if(now->next == nullptr) {
@@ -104,7 +111,7 @@ bool LockManager::UnlockAll(TxCB *txcb) {
   LockRequest *req = txcb->listhead;
   LockRequest *next;
   do {
-    next = req->next;
+    next = req->tran_next;
     Unlock(req);
     delete(req);
     req = next;

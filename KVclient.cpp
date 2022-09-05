@@ -26,6 +26,6 @@ ErrorNo KVclient::rollback_tx() {
 }
 
 void KVclient::print_own_txid() {
-  std::cout << txcb->txid << std::endl;
+  std::cout << "My txid: " << txcb->txid << std::endl;
 }
 

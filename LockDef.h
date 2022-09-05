@@ -33,7 +33,7 @@ struct LockHead;
 
 typedef struct _LockRequest{
   _LockRequest *next;  /* 'queue' in TP-book */
-  LockHead *head;  /* need not maybe */
+  LockHead *head;  /* Head of lock-queue in LockHash */
   LockStatus status;
   LockMode mode;      /* requested mode */
   LockMode convert_mode;
@@ -42,7 +42,7 @@ typedef struct _LockRequest{
   // PCB process;     /* not impl yet*/
   TxID txid; /* Instead of 'TransCB tran;' in TP-book */
   // LockRequest *tran_prev; /* not impl yet */
-  // LockRequest *tran_next; /* not impl yet */
+  _LockRequest *tran_next;
 } LockRequest;
 
 /* TBD: Need LockHead-pool */
