@@ -11,7 +11,7 @@ LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
   if(head == nullptr) {
     head = lockhash->CreateLockHead(key);
   }
-  request = new LockRequest{nullptr, head, LOCK_GRANTED, mode, mode, me->txid}; /* initialize at first */
+  request = new LockRequest{nullptr, head, LOCK_GRANTED, mode, mode, me}; /* initialize at first */
   pthread_mutex_lock(&head->mu); /* lock here 01 */
   if(head->queue == nullptr) { /* equivalent to L:11 in lock() in TP-book(jp) p570 */
     head->queue = request;

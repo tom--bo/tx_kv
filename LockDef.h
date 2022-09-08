@@ -4,6 +4,8 @@
 #include "common.h"
 #include <pthread.h>
 
+class TxCB;
+
 typedef enum {
   LOCK_FREE,
   LOCK_IS,
@@ -40,7 +42,7 @@ typedef struct _LockRequest{
   // int count;       /* need not maybe */
   // LockClass class; /* not impl yet */
   // PCB process;     /* not impl yet*/
-  TxID txid; /* Instead of 'TransCB tran;' in TP-book */
+  TxCB *txcb; /* Instead of 'TransCB tran;' in TP-book */
   // LockRequest *tran_prev; /* not impl yet */
   _LockRequest *tran_next;
 } LockRequest;
