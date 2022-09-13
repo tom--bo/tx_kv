@@ -1,9 +1,9 @@
 #ifndef TX_KV__MAPSTORE_H_
 #define TX_KV__MAPSTORE_H_
 
+#include "kv/common.h"
 #include <limits.h>
 #include <unordered_map>
-#include "common.h"
 
 class TxCB;
 class LockManager;
