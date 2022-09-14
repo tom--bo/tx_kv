@@ -1,8 +1,9 @@
-#include "KVclient.h"
-#include "KVserver.h"
+#include "kv/KVclient.h"
+#include "kv/KVserver.h"
 #include <iostream>
-#include <unistd.h>
 #include <pthread.h>
+#include <unistd.h>
+#include "server.h"
 
 using namespace std;
 
@@ -39,11 +40,26 @@ void *th2(void *) {
 
 
 
-
 int main() {
-  std::cout << "Start!" << std::endl;
+  std::cout << "Server Start!" << std::endl;
 
-  // return 0;
+  server = new KVserver();
+  server->db_init();
+
+  string server_address("0.0.0.0:50051");
+  TxKVImpl *txkvImpl = new TxKVImpl;
+
+  ServerBuilder builder;
+  builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+  builder.RegisterService(txkvImpl);
+  std::unique_ptr<Server> server(builder.BuildAndStart());
+  std::cout << "Server listening on " << server_address << std::endl;
+  server->Wait();
+}
+
+
+int main_dummy() {
+  std::cout << "Start!" << std::endl;
 
   server = new KVserver();
   server->db_init();

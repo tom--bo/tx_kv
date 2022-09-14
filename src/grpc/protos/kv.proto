@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package txkv;
+import "google/protobuf/empty.proto";
+
+// The txkv protocol definition.
+service MyKV {
+  rpc Begin (google.protobuf.Empty) returns (TxReply) {}
+  rpc Commit(TxRequest) returns (google.protobuf.Empty) {}
+  rpc Rollback(TxRequest) returns (google.protobuf.Empty) {}
+  rpc Get(KeyRequest) returns (ValReply) {}
+  rpc Put(WriteRequest) returns (google.protobuf.Empty) {}
+  rpc Del(KeyRequest) returns (google.protobuf.Empty) {}
+}
+
+message  TxRequest {
+  uint64 tid = 1;
+}
+message  TxReply {
+  uint64 tid = 1;
+}
+
+message KeyRequest {
+  uint64 tid = 1;
+  uint64 key = 2;
+}
+message ValReply {
+  uint64 val = 1;
+}
+
+message WriteRequest {
+  uint64 tid = 1;
+  uint64 key = 2;
+  uint64 val = 3;
+}
+

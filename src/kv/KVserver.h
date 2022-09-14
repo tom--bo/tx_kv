@@ -1,11 +1,11 @@
 #ifndef TX_KV__KVSERVER_H_
 #define TX_KV__KVSERVER_H_
 
-#include <iostream>
-#include "common.h"
-#include "TxManager.h"
-#include "MapStore.h"
 #include "LockManager.h"
+#include "MapStore.h"
+#include "TxManager.h"
+#include "common.h"
+#include <iostream>
 
 // Server Program (Tp-Monitor and Application) in TP book
 class KVserver {

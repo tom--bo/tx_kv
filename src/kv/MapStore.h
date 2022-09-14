@@ -1,7 +1,7 @@
 #ifndef TX_KV__MAPSTORE_H_
 #define TX_KV__MAPSTORE_H_
 
-#include "kv/common.h"
+#include "common.h"
 #include <limits.h>
 #include <unordered_map>
 
