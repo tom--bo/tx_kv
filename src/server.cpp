@@ -13,6 +13,7 @@ Status MyKVImpl::Begin(ServerContext* ctx, const google::protobuf::Empty*, TxRep
   TxCB *txcb = server->start_tx();
   TxMap[txcb->txid] = txcb;
   reply->set_tid(txcb->txid);
+  reply->set_error_code(0);
   return Status::OK;
 }
 
@@ -42,7 +43,12 @@ Status MyKVImpl::Get(ServerContext* ctx, const KeyRequest *req, ValReply *reply)
   if (itr != TxMap.end()) {
     TxCB *txcb = itr->second;
     ReturnVal ret = server->get(txcb, key);
-    reply->set_val(ret.val);
+    if(ret.error_no == KEY_NOT_FOUND) {
+      reply->set_error_code(1); // TBD: key not found
+    } else {
+      reply->set_error_code(0);
+      reply->set_val(ret.val);
+    }
   } else {
     // TBD: error
   }
@@ -77,8 +83,6 @@ Status MyKVImpl::Del(ServerContext* ctx, const KeyRequest *req, google::protobuf
 
 
 int main() {
-  std::cout << "Server Start!" << std::endl;
-
   // initialize server
   server = new KVserver();
   server->db_init();

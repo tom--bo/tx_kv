@@ -16,16 +16,20 @@ service MyKV {
 message  TxRequest {
   uint64 tid = 1;
 }
+
 message  TxReply {
   uint64 tid = 1;
+  uint32 error_code = 2;
 }
 
 message KeyRequest {
   uint64 tid = 1;
   uint64 key = 2;
 }
+
 message ValReply {
   uint64 val = 1;
+  uint32 error_code = 2;
 }
 
 message WriteRequest {

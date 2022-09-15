@@ -31,7 +31,8 @@ struct TxRequestDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT TxRequestDefaultTypeInternal _TxRequest_default_instance_;
 constexpr TxReply::TxReply(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : tid_(uint64_t{0u}){}
+  : tid_(uint64_t{0u})
+  , error_code_(0u){}
 struct TxReplyDefaultTypeInternal {
   constexpr TxReplyDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -56,7 +57,8 @@ struct KeyRequestDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT KeyRequestDefaultTypeInternal _KeyRequest_default_instance_;
 constexpr ValReply::ValReply(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : val_(uint64_t{0u}){}
+  : val_(uint64_t{0u})
+  , error_code_(0u){}
 struct ValReplyDefaultTypeInternal {
   constexpr ValReplyDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -100,6 +102,7 @@ const uint32_t TableStruct_kv_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(proto
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::txkv::TxReply, tid_),
+  PROTOBUF_FIELD_OFFSET(::txkv::TxReply, error_code_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::txkv::KeyRequest, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -115,6 +118,7 @@ const uint32_t TableStruct_kv_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(proto
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::txkv::ValReply, val_),
+  PROTOBUF_FIELD_OFFSET(::txkv::ValReply, error_code_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::txkv::WriteRequest, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -128,9 +132,9 @@ const uint32_t TableStruct_kv_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(proto
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::txkv::TxRequest)},
   { 7, -1, -1, sizeof(::txkv::TxReply)},
-  { 14, -1, -1, sizeof(::txkv::KeyRequest)},
-  { 22, -1, -1, sizeof(::txkv::ValReply)},
-  { 29, -1, -1, sizeof(::txkv::WriteRequest)},
+  { 15, -1, -1, sizeof(::txkv::KeyRequest)},
+  { 23, -1, -1, sizeof(::txkv::ValReply)},
+  { 31, -1, -1, sizeof(::txkv::WriteRequest)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -143,9 +147,10 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 
 const char descriptor_table_protodef_kv_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\010kv.proto\022\004txkv\032\033google/protobuf/empty."
-  "proto\"\030\n\tTxRequest\022\013\n\003tid\030\001 \001(\004\"\026\n\007TxRep"
-  "ly\022\013\n\003tid\030\001 \001(\004\"&\n\nKeyRequest\022\013\n\003tid\030\001 \001"
-  "(\004\022\013\n\003key\030\002 \001(\004\"\027\n\010ValReply\022\013\n\003val\030\001 \001(\004"
+  "proto\"\030\n\tTxRequest\022\013\n\003tid\030\001 \001(\004\"*\n\007TxRep"
+  "ly\022\013\n\003tid\030\001 \001(\004\022\022\n\nerror_code\030\002 \001(\r\"&\n\nK"
+  "eyRequest\022\013\n\003tid\030\001 \001(\004\022\013\n\003key\030\002 \001(\004\"+\n\010V"
+  "alReply\022\013\n\003val\030\001 \001(\004\022\022\n\nerror_code\030\002 \001(\r"
   "\"5\n\014WriteRequest\022\013\n\003tid\030\001 \001(\004\022\013\n\003key\030\002 \001"
   "(\004\022\013\n\003val\030\003 \001(\0042\267\002\n\004MyKV\0220\n\005Begin\022\026.goog"
   "le.protobuf.Empty\032\r.txkv.TxReply\"\000\0223\n\006Co"
@@ -162,7 +167,7 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_kv_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_kv_2eproto = {
-  false, false, 537, descriptor_table_protodef_kv_2eproto, "kv.proto", 
+  false, false, 577, descriptor_table_protodef_kv_2eproto, "kv.proto", 
   &descriptor_table_kv_2eproto_once, descriptor_table_kv_2eproto_deps, 1, 5,
   schemas, file_default_instances, TableStruct_kv_2eproto::offsets,
   file_level_metadata_kv_2eproto, file_level_enum_descriptors_kv_2eproto, file_level_service_descriptors_kv_2eproto,
@@ -371,12 +376,17 @@ TxReply::TxReply(::PROTOBUF_NAMESPACE_ID::Arena* arena,
 TxReply::TxReply(const TxReply& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  tid_ = from.tid_;
+  ::memcpy(&tid_, &from.tid_,
+    static_cast<size_t>(reinterpret_cast<char*>(&error_code_) -
+    reinterpret_cast<char*>(&tid_)) + sizeof(error_code_));
   // @@protoc_insertion_point(copy_constructor:txkv.TxReply)
 }
 
 inline void TxReply::SharedCtor() {
-tid_ = uint64_t{0u};
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&tid_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&error_code_) -
+    reinterpret_cast<char*>(&tid_)) + sizeof(error_code_));
 }
 
 TxReply::~TxReply() {
@@ -406,7 +416,9 @@ void TxReply::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  tid_ = uint64_t{0u};
+  ::memset(&tid_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&error_code_) -
+      reinterpret_cast<char*>(&tid_)) + sizeof(error_code_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -420,6 +432,14 @@ const char* TxReply::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
           tid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 error_code = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          error_code_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -459,6 +479,12 @@ uint8_t* TxReply::_InternalSerialize(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64ToArray(1, this->_internal_tid(), target);
   }
 
+  // uint32 error_code = 2;
+  if (this->_internal_error_code() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(2, this->_internal_error_code(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -478,6 +504,11 @@ size_t TxReply::ByteSizeLong() const {
   // uint64 tid = 1;
   if (this->_internal_tid() != 0) {
     total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64SizePlusOne(this->_internal_tid());
+  }
+
+  // uint32 error_code = 2;
+  if (this->_internal_error_code() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32SizePlusOne(this->_internal_error_code());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
@@ -505,6 +536,9 @@ void TxReply::MergeFrom(const TxReply& from) {
   if (from._internal_tid() != 0) {
     _internal_set_tid(from._internal_tid());
   }
+  if (from._internal_error_code() != 0) {
+    _internal_set_error_code(from._internal_error_code());
+  }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -522,7 +556,12 @@ bool TxReply::IsInitialized() const {
 void TxReply::InternalSwap(TxReply* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(tid_, other->tid_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(TxReply, error_code_)
+      + sizeof(TxReply::error_code_)
+      - PROTOBUF_FIELD_OFFSET(TxReply, tid_)>(
+          reinterpret_cast<char*>(&tid_),
+          reinterpret_cast<char*>(&other->tid_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata TxReply::GetMetadata() const {
@@ -761,12 +800,17 @@ ValReply::ValReply(::PROTOBUF_NAMESPACE_ID::Arena* arena,
 ValReply::ValReply(const ValReply& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  val_ = from.val_;
+  ::memcpy(&val_, &from.val_,
+    static_cast<size_t>(reinterpret_cast<char*>(&error_code_) -
+    reinterpret_cast<char*>(&val_)) + sizeof(error_code_));
   // @@protoc_insertion_point(copy_constructor:txkv.ValReply)
 }
 
 inline void ValReply::SharedCtor() {
-val_ = uint64_t{0u};
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&val_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&error_code_) -
+    reinterpret_cast<char*>(&val_)) + sizeof(error_code_));
 }
 
 ValReply::~ValReply() {
@@ -796,7 +840,9 @@ void ValReply::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  val_ = uint64_t{0u};
+  ::memset(&val_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&error_code_) -
+      reinterpret_cast<char*>(&val_)) + sizeof(error_code_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -810,6 +856,14 @@ const char* ValReply::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
           val_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 error_code = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          error_code_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -849,6 +903,12 @@ uint8_t* ValReply::_InternalSerialize(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64ToArray(1, this->_internal_val(), target);
   }
 
+  // uint32 error_code = 2;
+  if (this->_internal_error_code() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(2, this->_internal_error_code(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -868,6 +928,11 @@ size_t ValReply::ByteSizeLong() const {
   // uint64 val = 1;
   if (this->_internal_val() != 0) {
     total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64SizePlusOne(this->_internal_val());
+  }
+
+  // uint32 error_code = 2;
+  if (this->_internal_error_code() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32SizePlusOne(this->_internal_error_code());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
@@ -895,6 +960,9 @@ void ValReply::MergeFrom(const ValReply& from) {
   if (from._internal_val() != 0) {
     _internal_set_val(from._internal_val());
   }
+  if (from._internal_error_code() != 0) {
+    _internal_set_error_code(from._internal_error_code());
+  }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -912,7 +980,12 @@ bool ValReply::IsInitialized() const {
 void ValReply::InternalSwap(ValReply* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(val_, other->val_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(ValReply, error_code_)
+      + sizeof(ValReply::error_code_)
+      - PROTOBUF_FIELD_OFFSET(ValReply, val_)>(
+          reinterpret_cast<char*>(&val_),
+          reinterpret_cast<char*>(&other->val_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata ValReply::GetMetadata() const {

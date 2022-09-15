@@ -351,6 +351,7 @@ class TxReply final :
 
   enum : int {
     kTidFieldNumber = 1,
+    kErrorCodeFieldNumber = 2,
   };
   // uint64 tid = 1;
   void clear_tid();
@@ -361,6 +362,15 @@ class TxReply final :
   void _internal_set_tid(uint64_t value);
   public:
 
+  // uint32 error_code = 2;
+  void clear_error_code();
+  uint32_t error_code() const;
+  void set_error_code(uint32_t value);
+  private:
+  uint32_t _internal_error_code() const;
+  void _internal_set_error_code(uint32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:txkv.TxReply)
  private:
   class _Internal;
@@ -369,6 +379,7 @@ class TxReply final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   uint64_t tid_;
+  uint32_t error_code_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_kv_2eproto;
 };
@@ -654,6 +665,7 @@ class ValReply final :
 
   enum : int {
     kValFieldNumber = 1,
+    kErrorCodeFieldNumber = 2,
   };
   // uint64 val = 1;
   void clear_val();
@@ -664,6 +676,15 @@ class ValReply final :
   void _internal_set_val(uint64_t value);
   public:
 
+  // uint32 error_code = 2;
+  void clear_error_code();
+  uint32_t error_code() const;
+  void set_error_code(uint32_t value);
+  private:
+  uint32_t _internal_error_code() const;
+  void _internal_set_error_code(uint32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:txkv.ValReply)
  private:
   class _Internal;
@@ -672,6 +693,7 @@ class ValReply final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   uint64_t val_;
+  uint32_t error_code_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_kv_2eproto;
 };
@@ -898,6 +920,26 @@ inline void TxReply::set_tid(uint64_t value) {
   // @@protoc_insertion_point(field_set:txkv.TxReply.tid)
 }
 
+// uint32 error_code = 2;
+inline void TxReply::clear_error_code() {
+  error_code_ = 0u;
+}
+inline uint32_t TxReply::_internal_error_code() const {
+  return error_code_;
+}
+inline uint32_t TxReply::error_code() const {
+  // @@protoc_insertion_point(field_get:txkv.TxReply.error_code)
+  return _internal_error_code();
+}
+inline void TxReply::_internal_set_error_code(uint32_t value) {
+  
+  error_code_ = value;
+}
+inline void TxReply::set_error_code(uint32_t value) {
+  _internal_set_error_code(value);
+  // @@protoc_insertion_point(field_set:txkv.TxReply.error_code)
+}
+
 // -------------------------------------------------------------------
 
 // KeyRequest
@@ -964,6 +1006,26 @@ inline void ValReply::_internal_set_val(uint64_t value) {
 inline void ValReply::set_val(uint64_t value) {
   _internal_set_val(value);
   // @@protoc_insertion_point(field_set:txkv.ValReply.val)
+}
+
+// uint32 error_code = 2;
+inline void ValReply::clear_error_code() {
+  error_code_ = 0u;
+}
+inline uint32_t ValReply::_internal_error_code() const {
+  return error_code_;
+}
+inline uint32_t ValReply::error_code() const {
+  // @@protoc_insertion_point(field_get:txkv.ValReply.error_code)
+  return _internal_error_code();
+}
+inline void ValReply::_internal_set_error_code(uint32_t value) {
+  
+  error_code_ = value;
+}
+inline void ValReply::set_error_code(uint32_t value) {
+  _internal_set_error_code(value);
+  // @@protoc_insertion_point(field_set:txkv.ValReply.error_code)
 }
 
 // -------------------------------------------------------------------

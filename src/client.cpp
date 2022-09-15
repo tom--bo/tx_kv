@@ -38,7 +38,6 @@ class TxKVClient {
       return false;
     } else {
       tid = txReply.tid();
-      cout << "txid = " << tid << endl;
     }
     return true;
   }
@@ -56,14 +55,14 @@ class TxKVClient {
     return false;
   }
 
-  uint64_t Get(uint64_t key) {
+  void Get(uint64_t key, ValReply *val) {
     ClientContext context;
     KeyRequest *req = new KeyRequest();
-    ValReply *val = new ValReply();
     req->set_tid(tid);
     req->set_key(key);
     Status status = stub_->Get(&context, *req, val);
-    return val->val();
+    delete(req);
+    return;
   }
 
   uint64_t Put(uint64_t key, uint64_t val) {
@@ -90,7 +89,6 @@ class TxKVClient {
 
 int main() {
   string in, tmp;
-  uint64_t res;
   bool ret;
   TxKVClient *cli = new TxKVClient(
       grpc::CreateChannel("127.0.0.1:8000", grpc::InsecureChannelCredentials())
@@ -111,23 +109,28 @@ int main() {
 
     // switch by cmd
     if(tmp == "begin") {
-      cout << "begin" << endl;
       ret = cli->Begin();
       if(!ret) {
         break;
       }
     } else if(tmp == "commit") {
-      cout << "commit" << endl;
       cli->Commit();
     } else if(tmp == "rollback") {
       cout << "rollback" << endl;
       cli->Rollback();
     } else if(tmp == "get") {
+      ValReply *valReply = new ValReply();
       iss >> tmp;
       uint64_t key = stoull(tmp, nullptr, 10);
-      cout << "key: " << key << endl;
-      res = cli->Get(key);
-      cout << res << endl;
+      cli->Get(key, valReply);
+      if(valReply->error_code() == 0) {
+        cout << valReply->val() << endl;
+      } else if(valReply->error_code() == 1) {
+        cout << "Key Not Found" << endl;
+      } else {
+        cout << "Unknown Error Code" << endl;
+      }
+      delete(valReply);
     } else if(tmp == "put") {
       iss >> tmp; // key
       uint64_t key = stoull(tmp, nullptr, 10);
