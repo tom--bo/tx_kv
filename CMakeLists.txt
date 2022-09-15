@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.23)
-project(tx_kv_server)
+project(server)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -13,7 +13,7 @@ FetchContent_Declare(
 set(FETCHCONTENT_QUIET OFF)
 FetchContent_MakeAvailable(gRPC)
 
-add_executable(tx_kv_server src/main.cpp
+add_executable(server src/server.cpp
         src/kv/KVserver.cpp src/kv/KVserver.h
         src/kv/KVclient.cpp src/kv/KVclient.h
         src/kv/TxManager.cpp src/kv/TxManager.h
@@ -25,12 +25,12 @@ add_executable(tx_kv_server src/main.cpp
         src/grpc/kv.pb.cc src/grpc/kv.pb.h
         src/server.h)
 
-target_link_libraries(tx_kv_server PUBLIC "-pthread" grpc++)
+target_link_libraries(server PUBLIC "-pthread" grpc++)
 
 
 # client
 
-project(tx_kv_cli)
+project(cli)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -44,7 +44,7 @@ FetchContent_Declare(
 set(FETCHCONTENT_QUIET OFF)
 FetchContent_MakeAvailable(gRPC)
 
-add_executable(tx_kv_cli src/client.cpp
+add_executable(cli src/client.cpp
         # src/kv/KVserver.cpp src/kv/KVserver.h
         # src/kv/KVclient.cpp src/kv/KVclient.h
         # src/kv/TxManager.cpp src/kv/TxManager.h
@@ -56,4 +56,4 @@ add_executable(tx_kv_cli src/client.cpp
         src/grpc/kv.pb.cc src/grpc/kv.pb.h
         )
 
-target_link_libraries(tx_kv_cli PUBLIC "-pthread" grpc++)
+target_link_libraries(cli PUBLIC "-pthread" grpc++)

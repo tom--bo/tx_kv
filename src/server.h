@@ -14,6 +14,7 @@
 #include <grpcpp/server_builder.h>
 #include <grpcpp/server_context.h>
 #include "grpc/kv.grpc.pb.h"
+#include "kv/KVclient.h"
 
 using grpc::Server;
 using grpc::ServerBuilder;
@@ -28,35 +29,21 @@ using txkv::KeyRequest;
 using txkv::ValReply;
 using txkv::WriteRequest;
 
-class TxKVImpl final : public txkv::MyKV::Service {
+class MyKVImpl final : public txkv::MyKV::Service {
+ private:
+  std::unordered_map<uint64_t, TxCB *> TxMap;
  public:
-  explicit TxKVImpl(){}
-  ~TxKVImpl(){}
-
-  Status Begin(ServerContext* ctx, const google::protobuf::Empty*, TxReply *reply) override {
-    reply->set_tid(100);
-    return Status::OK;
+  explicit MyKVImpl(std::unordered_map<uint64_t, TxCB *> txmap){
+    TxMap = txmap;
   }
+  ~MyKVImpl(){}
 
-  Status Commit(ServerContext* ctx, const TxRequest *req, google::protobuf::Empty* res) override {
-    return Status::OK;
-  }
-
-  Status Rollback(ServerContext* ctx, const TxRequest *req, google::protobuf::Empty* res) override {
-    return Status::OK;
-  }
-
-  Status Get(ServerContext* ctx, const KeyRequest *req, ValReply *reply) override {
-    return Status::OK;
-  }
-
-  Status Put(ServerContext* ctx, const WriteRequest *wreq, google::protobuf::Empty* res) override {
-    return Status::OK;
-  }
-
-  Status Del(ServerContext* ctx, const KeyRequest *req, google::protobuf::Empty* res) override {
-    return Status::OK;
-  }
+  Status Begin(ServerContext* ctx, const google::protobuf::Empty*, TxReply *reply) override;
+  Status Commit(ServerContext* ctx, const TxRequest *req, google::protobuf::Empty* res) override;
+  Status Rollback(ServerContext* ctx, const TxRequest *req, google::protobuf::Empty* res) override;
+  Status Get(ServerContext* ctx, const KeyRequest *req, ValReply *reply) override;
+  Status Put(ServerContext* ctx, const WriteRequest *wreq, google::protobuf::Empty* res) override;
+  Status Del(ServerContext* ctx, const KeyRequest *req, google::protobuf::Empty* res) override;
 };
 
 
