@@ -18,11 +18,10 @@ LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
     head->granted_mode = mode;
     if(me->anchor == nullptr) {
       me->listhead = request;
-      me->anchor = request;
     } else {
-      me->anchor->next = request;
-      me->anchor = me->anchor->tran_next;
+      me->anchor->tran_next = request;
     }
+    me->anchor = request;
     pthread_mutex_unlock(&head->mu); /* unlock here 01 */
     return LOCK_OK; /* equivalent to L:17 in lock() in TP-book(jp) p570 */
   } else { // has locks anyway L:18
@@ -31,18 +30,18 @@ LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
       /* skip checking lock-conversion, and lock for same key from 1 tx */
       last = last->next;
     }
-    if(!head->waiting && LockCompat(mode, head->granted_mode)) { /* L:25 */
+    if(!head->waiting && LockCompat(mode, head->granted_mode)) { /* L:25 This key has no waiting thread and current lock-req is also granted */
       head->granted_mode = GrantGroup(mode, head->granted_mode); /* lock_max() in original */
+      last->next = request;
       if(me->anchor == nullptr) {
         me->listhead = request;
-        me->anchor = request;
       } else {
         me->anchor->tran_next = request;
-        me->anchor = me->anchor->tran_next;
       }
+      me->anchor = request;
       pthread_mutex_unlock(&head->mu); /* unlock here 01 */
       return LOCK_OK; /* equivalent to L:28 in lock() in TP-book(jp) p570 */
-    } else { /* L:30 */
+    } else { /* L:30 This lock req should be queued because there is waiting thread or this lock-req is not compatible with granted lock mode */
       head->waiting = true;
       request->status = LOCK_WAITING;
       last->next = request;
@@ -53,18 +52,17 @@ LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
       me->wait = nullptr;
       if(me->anchor == nullptr) {
         me->listhead = request;
-        me->anchor = request;
       } else {
         me->anchor->tran_next = request;
-        me->anchor = me->anchor->tran_next;
       }
+      me->anchor = request;
       pthread_mutex_unlock(&head->mu); /* unlock here 01 */
       return LOCK_OK; /* equivalent to L:28 in lock() in TP-book(jp) p570 */
     }
   }
 }
 bool LockManager::Unlock(LockRequest *req) {
-  LockRequest *now, *next;
+  LockRequest *now, *priv;
   LockHead *lockhead = req->head;
   pthread_mutex_lock(&lockhead->mu); /* lock 01 */
   if(lockhead->queue == req && req->next == nullptr) { /* L:19 in UnLock in TP-book(jp) p572 */
@@ -76,22 +74,28 @@ bool LockManager::Unlock(LockRequest *req) {
     if(lockhead->queue == req) {
       lockhead->queue = req->next; /* delete req node from list */
     } else {
+      // The second and subsequent in lockhead->queue is 'req'
       now = lockhead->queue;
-      next = now->next;
-      while(next != req) {
-        now = next;
-        next = now->next;
+      while(now != nullptr && now != req) {
+        priv = now;
+        now = now->next;
       }
-      now->next = next->next; /* delete req node from list */
+      if(now == nullptr) {
+        // TBD: error
+        exit(2);
+      }
+      priv->next = now->next; /* delete req node from list */
     }
-    lockhead->granted_mode = LOCK_FREE; /* re-calc granted_mode */
-    now = lockhead->queue;
-    while(now->status == LOCK_GRANTED) {
+    /* re-calc granted_mode */
+    lockhead->granted_mode = LOCK_FREE;
+    now = (lockhead->queue);
+    while(now != nullptr && now->status == LOCK_GRANTED) {
       /* granted_mode is not updated correctly */
       lockhead->granted_mode = GrantGroup(now->mode, lockhead->granted_mode);
       now = now->next;
     }
-    while(LockCompat(now->mode, lockhead->granted_mode)) {
+    /* Unlock other locks according to granted_mode */
+    while(now != nullptr && LockCompat(now->mode, lockhead->granted_mode)) {
       /* granted_mode is not updated correctly */
       lockhead->granted_mode = GrantGroup(now->mode, lockhead->granted_mode);
       now->status = LOCK_GRANTED;
