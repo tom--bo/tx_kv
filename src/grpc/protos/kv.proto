@@ -5,36 +5,40 @@ import "google/protobuf/empty.proto";
 
 // The txkv protocol definition.
 service MyKV {
-  rpc Begin (google.protobuf.Empty) returns (TxReply) {}
-  rpc Commit(TxRequest) returns (google.protobuf.Empty) {}
-  rpc Rollback(TxRequest) returns (google.protobuf.Empty) {}
-  rpc Get(KeyRequest) returns (ValReply) {}
-  rpc Put(WriteRequest) returns (google.protobuf.Empty) {}
-  rpc Del(KeyRequest) returns (google.protobuf.Empty) {}
+  rpc Connect (google.protobuf.Empty) returns (ConnectionReply) {}
+  rpc Begin (BaseRequest) returns (ErrorReply) {}
+  rpc Commit(BaseRequest) returns (ErrorReply) {}
+  rpc Rollback(BaseRequest) returns (ErrorReply) {}
+  rpc Get(KeyRequest) returns (GetReply) {}
+  rpc Put(WriteRequest) returns (ErrorReply) {}
+  rpc Del(KeyRequest) returns (ErrorReply) {}
 }
 
-message  TxRequest {
-  uint64 tid = 1;
+message BaseRequest {
+  uint64 cid = 1;
 }
 
-message  TxReply {
-  uint64 tid = 1;
+message  ConnectionReply {
+  uint64 cid = 1;
   uint32 error_code = 2;
 }
 
+message ErrorReply {
+  uint32 error_code = 1;
+}
+
 message KeyRequest {
-  uint64 tid = 1;
+  uint64 cid = 1;
   uint64 key = 2;
 }
 
-message ValReply {
+message GetReply {
   uint64 val = 1;
   uint32 error_code = 2;
 }
 
 message WriteRequest {
-  uint64 tid = 1;
+  uint64 cid = 1;
   uint64 key = 2;
   uint64 val = 3;
 }
-

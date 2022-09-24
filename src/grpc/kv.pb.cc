@@ -17,34 +17,46 @@
 
 PROTOBUF_PRAGMA_INIT_SEG
 namespace txkv {
-constexpr TxRequest::TxRequest(
+constexpr BaseRequest::BaseRequest(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : tid_(uint64_t{0u}){}
-struct TxRequestDefaultTypeInternal {
-  constexpr TxRequestDefaultTypeInternal()
+  : cid_(uint64_t{0u}){}
+struct BaseRequestDefaultTypeInternal {
+  constexpr BaseRequestDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~TxRequestDefaultTypeInternal() {}
+  ~BaseRequestDefaultTypeInternal() {}
   union {
-    TxRequest _instance;
+    BaseRequest _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT TxRequestDefaultTypeInternal _TxRequest_default_instance_;
-constexpr TxReply::TxReply(
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT BaseRequestDefaultTypeInternal _BaseRequest_default_instance_;
+constexpr ConnectionReply::ConnectionReply(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : tid_(uint64_t{0u})
+  : cid_(uint64_t{0u})
   , error_code_(0u){}
-struct TxReplyDefaultTypeInternal {
-  constexpr TxReplyDefaultTypeInternal()
+struct ConnectionReplyDefaultTypeInternal {
+  constexpr ConnectionReplyDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~TxReplyDefaultTypeInternal() {}
+  ~ConnectionReplyDefaultTypeInternal() {}
   union {
-    TxReply _instance;
+    ConnectionReply _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT TxReplyDefaultTypeInternal _TxReply_default_instance_;
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ConnectionReplyDefaultTypeInternal _ConnectionReply_default_instance_;
+constexpr ErrorReply::ErrorReply(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : error_code_(0u){}
+struct ErrorReplyDefaultTypeInternal {
+  constexpr ErrorReplyDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~ErrorReplyDefaultTypeInternal() {}
+  union {
+    ErrorReply _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ErrorReplyDefaultTypeInternal _ErrorReply_default_instance_;
 constexpr KeyRequest::KeyRequest(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : tid_(uint64_t{0u})
+  : cid_(uint64_t{0u})
   , key_(uint64_t{0u}){}
 struct KeyRequestDefaultTypeInternal {
   constexpr KeyRequestDefaultTypeInternal()
@@ -55,22 +67,22 @@ struct KeyRequestDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT KeyRequestDefaultTypeInternal _KeyRequest_default_instance_;
-constexpr ValReply::ValReply(
+constexpr GetReply::GetReply(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : val_(uint64_t{0u})
   , error_code_(0u){}
-struct ValReplyDefaultTypeInternal {
-  constexpr ValReplyDefaultTypeInternal()
+struct GetReplyDefaultTypeInternal {
+  constexpr GetReplyDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~ValReplyDefaultTypeInternal() {}
+  ~GetReplyDefaultTypeInternal() {}
   union {
-    ValReply _instance;
+    GetReply _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ValReplyDefaultTypeInternal _ValReply_default_instance_;
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT GetReplyDefaultTypeInternal _GetReply_default_instance_;
 constexpr WriteRequest::WriteRequest(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : tid_(uint64_t{0u})
+  : cid_(uint64_t{0u})
   , key_(uint64_t{0u})
   , val_(uint64_t{0u}){}
 struct WriteRequestDefaultTypeInternal {
@@ -83,92 +95,103 @@ struct WriteRequestDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT WriteRequestDefaultTypeInternal _WriteRequest_default_instance_;
 }  // namespace txkv
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_kv_2eproto[5];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_kv_2eproto[6];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_kv_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_kv_2eproto = nullptr;
 
 const uint32_t TableStruct_kv_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::txkv::TxRequest, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::txkv::BaseRequest, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::txkv::TxRequest, tid_),
+  PROTOBUF_FIELD_OFFSET(::txkv::BaseRequest, cid_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::txkv::TxReply, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::txkv::ConnectionReply, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::txkv::TxReply, tid_),
-  PROTOBUF_FIELD_OFFSET(::txkv::TxReply, error_code_),
+  PROTOBUF_FIELD_OFFSET(::txkv::ConnectionReply, cid_),
+  PROTOBUF_FIELD_OFFSET(::txkv::ConnectionReply, error_code_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::txkv::ErrorReply, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::txkv::ErrorReply, error_code_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::txkv::KeyRequest, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::txkv::KeyRequest, tid_),
+  PROTOBUF_FIELD_OFFSET(::txkv::KeyRequest, cid_),
   PROTOBUF_FIELD_OFFSET(::txkv::KeyRequest, key_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::txkv::ValReply, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::txkv::GetReply, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::txkv::ValReply, val_),
-  PROTOBUF_FIELD_OFFSET(::txkv::ValReply, error_code_),
+  PROTOBUF_FIELD_OFFSET(::txkv::GetReply, val_),
+  PROTOBUF_FIELD_OFFSET(::txkv::GetReply, error_code_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::txkv::WriteRequest, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::txkv::WriteRequest, tid_),
+  PROTOBUF_FIELD_OFFSET(::txkv::WriteRequest, cid_),
   PROTOBUF_FIELD_OFFSET(::txkv::WriteRequest, key_),
   PROTOBUF_FIELD_OFFSET(::txkv::WriteRequest, val_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, -1, -1, sizeof(::txkv::TxRequest)},
-  { 7, -1, -1, sizeof(::txkv::TxReply)},
-  { 15, -1, -1, sizeof(::txkv::KeyRequest)},
-  { 23, -1, -1, sizeof(::txkv::ValReply)},
-  { 31, -1, -1, sizeof(::txkv::WriteRequest)},
+  { 0, -1, -1, sizeof(::txkv::BaseRequest)},
+  { 7, -1, -1, sizeof(::txkv::ConnectionReply)},
+  { 15, -1, -1, sizeof(::txkv::ErrorReply)},
+  { 22, -1, -1, sizeof(::txkv::KeyRequest)},
+  { 30, -1, -1, sizeof(::txkv::GetReply)},
+  { 38, -1, -1, sizeof(::txkv::WriteRequest)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::txkv::_TxRequest_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::txkv::_TxReply_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::txkv::_BaseRequest_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::txkv::_ConnectionReply_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::txkv::_ErrorReply_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::txkv::_KeyRequest_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::txkv::_ValReply_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::txkv::_GetReply_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::txkv::_WriteRequest_default_instance_),
 };
 
 const char descriptor_table_protodef_kv_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\010kv.proto\022\004txkv\032\033google/protobuf/empty."
-  "proto\"\030\n\tTxRequest\022\013\n\003tid\030\001 \001(\004\"*\n\007TxRep"
-  "ly\022\013\n\003tid\030\001 \001(\004\022\022\n\nerror_code\030\002 \001(\r\"&\n\nK"
-  "eyRequest\022\013\n\003tid\030\001 \001(\004\022\013\n\003key\030\002 \001(\004\"+\n\010V"
-  "alReply\022\013\n\003val\030\001 \001(\004\022\022\n\nerror_code\030\002 \001(\r"
-  "\"5\n\014WriteRequest\022\013\n\003tid\030\001 \001(\004\022\013\n\003key\030\002 \001"
-  "(\004\022\013\n\003val\030\003 \001(\0042\267\002\n\004MyKV\0220\n\005Begin\022\026.goog"
-  "le.protobuf.Empty\032\r.txkv.TxReply\"\000\0223\n\006Co"
-  "mmit\022\017.txkv.TxRequest\032\026.google.protobuf."
-  "Empty\"\000\0225\n\010Rollback\022\017.txkv.TxRequest\032\026.g"
-  "oogle.protobuf.Empty\"\000\022)\n\003Get\022\020.txkv.Key"
-  "Request\032\016.txkv.ValReply\"\000\0223\n\003Put\022\022.txkv."
-  "WriteRequest\032\026.google.protobuf.Empty\"\000\0221"
-  "\n\003Del\022\020.txkv.KeyRequest\032\026.google.protobu"
-  "f.Empty\"\000b\006proto3"
+  "proto\"\032\n\013BaseRequest\022\013\n\003cid\030\001 \001(\004\"2\n\017Con"
+  "nectionReply\022\013\n\003cid\030\001 \001(\004\022\022\n\nerror_code\030"
+  "\002 \001(\r\" \n\nErrorReply\022\022\n\nerror_code\030\001 \001(\r\""
+  "&\n\nKeyRequest\022\013\n\003cid\030\001 \001(\004\022\013\n\003key\030\002 \001(\004\""
+  "+\n\010GetReply\022\013\n\003val\030\001 \001(\004\022\022\n\nerror_code\030\002"
+  " \001(\r\"5\n\014WriteRequest\022\013\n\003cid\030\001 \001(\004\022\013\n\003key"
+  "\030\002 \001(\004\022\013\n\003val\030\003 \001(\0042\335\002\n\004MyKV\022:\n\007Connect\022"
+  "\026.google.protobuf.Empty\032\025.txkv.Connectio"
+  "nReply\"\000\022.\n\005Begin\022\021.txkv.BaseRequest\032\020.t"
+  "xkv.ErrorReply\"\000\022/\n\006Commit\022\021.txkv.BaseRe"
+  "quest\032\020.txkv.ErrorReply\"\000\0221\n\010Rollback\022\021."
+  "txkv.BaseRequest\032\020.txkv.ErrorReply\"\000\022)\n\003"
+  "Get\022\020.txkv.KeyRequest\032\016.txkv.GetReply\"\000\022"
+  "-\n\003Put\022\022.txkv.WriteRequest\032\020.txkv.ErrorR"
+  "eply\"\000\022+\n\003Del\022\020.txkv.KeyRequest\032\020.txkv.E"
+  "rrorReply\"\000b\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_kv_2eproto_deps[1] = {
   &::descriptor_table_google_2fprotobuf_2fempty_2eproto,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_kv_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_kv_2eproto = {
-  false, false, 577, descriptor_table_protodef_kv_2eproto, "kv.proto", 
-  &descriptor_table_kv_2eproto_once, descriptor_table_kv_2eproto_deps, 1, 5,
+  false, false, 659, descriptor_table_protodef_kv_2eproto, "kv.proto", 
+  &descriptor_table_kv_2eproto_once, descriptor_table_kv_2eproto_deps, 1, 6,
   schemas, file_default_instances, TableStruct_kv_2eproto::offsets,
   file_level_metadata_kv_2eproto, file_level_enum_descriptors_kv_2eproto, file_level_service_descriptors_kv_2eproto,
 };
@@ -182,71 +205,71 @@ namespace txkv {
 
 // ===================================================================
 
-class TxRequest::_Internal {
+class BaseRequest::_Internal {
  public:
 };
 
-TxRequest::TxRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+BaseRequest::BaseRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor();
   if (!is_message_owned) {
     RegisterArenaDtor(arena);
   }
-  // @@protoc_insertion_point(arena_constructor:txkv.TxRequest)
+  // @@protoc_insertion_point(arena_constructor:txkv.BaseRequest)
 }
-TxRequest::TxRequest(const TxRequest& from)
+BaseRequest::BaseRequest(const BaseRequest& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  tid_ = from.tid_;
-  // @@protoc_insertion_point(copy_constructor:txkv.TxRequest)
+  cid_ = from.cid_;
+  // @@protoc_insertion_point(copy_constructor:txkv.BaseRequest)
 }
 
-inline void TxRequest::SharedCtor() {
-tid_ = uint64_t{0u};
+inline void BaseRequest::SharedCtor() {
+cid_ = uint64_t{0u};
 }
 
-TxRequest::~TxRequest() {
-  // @@protoc_insertion_point(destructor:txkv.TxRequest)
+BaseRequest::~BaseRequest() {
+  // @@protoc_insertion_point(destructor:txkv.BaseRequest)
   if (GetArenaForAllocation() != nullptr) return;
   SharedDtor();
   _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-inline void TxRequest::SharedDtor() {
+inline void BaseRequest::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
 }
 
-void TxRequest::ArenaDtor(void* object) {
-  TxRequest* _this = reinterpret_cast< TxRequest* >(object);
+void BaseRequest::ArenaDtor(void* object) {
+  BaseRequest* _this = reinterpret_cast< BaseRequest* >(object);
   (void)_this;
 }
-void TxRequest::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+void BaseRequest::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 }
-void TxRequest::SetCachedSize(int size) const {
+void BaseRequest::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
 
-void TxRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:txkv.TxRequest)
+void BaseRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:txkv.BaseRequest)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  tid_ = uint64_t{0u};
+  cid_ = uint64_t{0u};
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* TxRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* BaseRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // uint64 tid = 1;
+      // uint64 cid = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
-          tid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          cid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -274,85 +297,85 @@ failure:
 #undef CHK_
 }
 
-uint8_t* TxRequest::_InternalSerialize(
+uint8_t* BaseRequest::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:txkv.TxRequest)
+  // @@protoc_insertion_point(serialize_to_array_start:txkv.BaseRequest)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint64 tid = 1;
-  if (this->_internal_tid() != 0) {
+  // uint64 cid = 1;
+  if (this->_internal_cid() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64ToArray(1, this->_internal_tid(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64ToArray(1, this->_internal_cid(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:txkv.TxRequest)
+  // @@protoc_insertion_point(serialize_to_array_end:txkv.BaseRequest)
   return target;
 }
 
-size_t TxRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:txkv.TxRequest)
+size_t BaseRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:txkv.BaseRequest)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // uint64 tid = 1;
-  if (this->_internal_tid() != 0) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64SizePlusOne(this->_internal_tid());
+  // uint64 cid = 1;
+  if (this->_internal_cid() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64SizePlusOne(this->_internal_cid());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData TxRequest::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData BaseRequest::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
-    TxRequest::MergeImpl
+    BaseRequest::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*TxRequest::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*BaseRequest::GetClassData() const { return &_class_data_; }
 
-void TxRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+void BaseRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
                       const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-  static_cast<TxRequest *>(to)->MergeFrom(
-      static_cast<const TxRequest &>(from));
+  static_cast<BaseRequest *>(to)->MergeFrom(
+      static_cast<const BaseRequest &>(from));
 }
 
 
-void TxRequest::MergeFrom(const TxRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:txkv.TxRequest)
+void BaseRequest::MergeFrom(const BaseRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:txkv.BaseRequest)
   GOOGLE_DCHECK_NE(&from, this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from._internal_tid() != 0) {
-    _internal_set_tid(from._internal_tid());
+  if (from._internal_cid() != 0) {
+    _internal_set_cid(from._internal_cid());
   }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void TxRequest::CopyFrom(const TxRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:txkv.TxRequest)
+void BaseRequest::CopyFrom(const BaseRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:txkv.BaseRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool TxRequest::IsInitialized() const {
+bool BaseRequest::IsInitialized() const {
   return true;
 }
 
-void TxRequest::InternalSwap(TxRequest* other) {
+void BaseRequest::InternalSwap(BaseRequest* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(tid_, other->tid_);
+  swap(cid_, other->cid_);
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata TxRequest::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata BaseRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_kv_2eproto_getter, &descriptor_table_kv_2eproto_once,
       file_level_metadata_kv_2eproto[0]);
@@ -360,78 +383,78 @@ void TxRequest::InternalSwap(TxRequest* other) {
 
 // ===================================================================
 
-class TxReply::_Internal {
+class ConnectionReply::_Internal {
  public:
 };
 
-TxReply::TxReply(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+ConnectionReply::ConnectionReply(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor();
   if (!is_message_owned) {
     RegisterArenaDtor(arena);
   }
-  // @@protoc_insertion_point(arena_constructor:txkv.TxReply)
+  // @@protoc_insertion_point(arena_constructor:txkv.ConnectionReply)
 }
-TxReply::TxReply(const TxReply& from)
+ConnectionReply::ConnectionReply(const ConnectionReply& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::memcpy(&tid_, &from.tid_,
+  ::memcpy(&cid_, &from.cid_,
     static_cast<size_t>(reinterpret_cast<char*>(&error_code_) -
-    reinterpret_cast<char*>(&tid_)) + sizeof(error_code_));
-  // @@protoc_insertion_point(copy_constructor:txkv.TxReply)
+    reinterpret_cast<char*>(&cid_)) + sizeof(error_code_));
+  // @@protoc_insertion_point(copy_constructor:txkv.ConnectionReply)
 }
 
-inline void TxReply::SharedCtor() {
+inline void ConnectionReply::SharedCtor() {
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
-    reinterpret_cast<char*>(&tid_) - reinterpret_cast<char*>(this)),
+    reinterpret_cast<char*>(&cid_) - reinterpret_cast<char*>(this)),
     0, static_cast<size_t>(reinterpret_cast<char*>(&error_code_) -
-    reinterpret_cast<char*>(&tid_)) + sizeof(error_code_));
+    reinterpret_cast<char*>(&cid_)) + sizeof(error_code_));
 }
 
-TxReply::~TxReply() {
-  // @@protoc_insertion_point(destructor:txkv.TxReply)
+ConnectionReply::~ConnectionReply() {
+  // @@protoc_insertion_point(destructor:txkv.ConnectionReply)
   if (GetArenaForAllocation() != nullptr) return;
   SharedDtor();
   _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-inline void TxReply::SharedDtor() {
+inline void ConnectionReply::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
 }
 
-void TxReply::ArenaDtor(void* object) {
-  TxReply* _this = reinterpret_cast< TxReply* >(object);
+void ConnectionReply::ArenaDtor(void* object) {
+  ConnectionReply* _this = reinterpret_cast< ConnectionReply* >(object);
   (void)_this;
 }
-void TxReply::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+void ConnectionReply::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 }
-void TxReply::SetCachedSize(int size) const {
+void ConnectionReply::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
 
-void TxReply::Clear() {
-// @@protoc_insertion_point(message_clear_start:txkv.TxReply)
+void ConnectionReply::Clear() {
+// @@protoc_insertion_point(message_clear_start:txkv.ConnectionReply)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  ::memset(&tid_, 0, static_cast<size_t>(
+  ::memset(&cid_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&error_code_) -
-      reinterpret_cast<char*>(&tid_)) + sizeof(error_code_));
+      reinterpret_cast<char*>(&cid_)) + sizeof(error_code_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* TxReply::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* ConnectionReply::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // uint64 tid = 1;
+      // uint64 cid = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
-          tid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          cid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -467,16 +490,16 @@ failure:
 #undef CHK_
 }
 
-uint8_t* TxReply::_InternalSerialize(
+uint8_t* ConnectionReply::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:txkv.TxReply)
+  // @@protoc_insertion_point(serialize_to_array_start:txkv.ConnectionReply)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint64 tid = 1;
-  if (this->_internal_tid() != 0) {
+  // uint64 cid = 1;
+  if (this->_internal_cid() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64ToArray(1, this->_internal_tid(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64ToArray(1, this->_internal_cid(), target);
   }
 
   // uint32 error_code = 2;
@@ -489,21 +512,21 @@ uint8_t* TxReply::_InternalSerialize(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:txkv.TxReply)
+  // @@protoc_insertion_point(serialize_to_array_end:txkv.ConnectionReply)
   return target;
 }
 
-size_t TxReply::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:txkv.TxReply)
+size_t ConnectionReply::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:txkv.ConnectionReply)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // uint64 tid = 1;
-  if (this->_internal_tid() != 0) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64SizePlusOne(this->_internal_tid());
+  // uint64 cid = 1;
+  if (this->_internal_cid() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64SizePlusOne(this->_internal_cid());
   }
 
   // uint32 error_code = 2;
@@ -514,27 +537,27 @@ size_t TxReply::ByteSizeLong() const {
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData TxReply::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ConnectionReply::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
-    TxReply::MergeImpl
+    ConnectionReply::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*TxReply::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ConnectionReply::GetClassData() const { return &_class_data_; }
 
-void TxReply::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+void ConnectionReply::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
                       const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-  static_cast<TxReply *>(to)->MergeFrom(
-      static_cast<const TxReply &>(from));
+  static_cast<ConnectionReply *>(to)->MergeFrom(
+      static_cast<const ConnectionReply &>(from));
 }
 
 
-void TxReply::MergeFrom(const TxReply& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:txkv.TxReply)
+void ConnectionReply::MergeFrom(const ConnectionReply& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:txkv.ConnectionReply)
   GOOGLE_DCHECK_NE(&from, this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from._internal_tid() != 0) {
-    _internal_set_tid(from._internal_tid());
+  if (from._internal_cid() != 0) {
+    _internal_set_cid(from._internal_cid());
   }
   if (from._internal_error_code() != 0) {
     _internal_set_error_code(from._internal_error_code());
@@ -542,32 +565,210 @@ void TxReply::MergeFrom(const TxReply& from) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void TxReply::CopyFrom(const TxReply& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:txkv.TxReply)
+void ConnectionReply::CopyFrom(const ConnectionReply& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:txkv.ConnectionReply)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool TxReply::IsInitialized() const {
+bool ConnectionReply::IsInitialized() const {
   return true;
 }
 
-void TxReply::InternalSwap(TxReply* other) {
+void ConnectionReply::InternalSwap(ConnectionReply* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(TxReply, error_code_)
-      + sizeof(TxReply::error_code_)
-      - PROTOBUF_FIELD_OFFSET(TxReply, tid_)>(
-          reinterpret_cast<char*>(&tid_),
-          reinterpret_cast<char*>(&other->tid_));
+      PROTOBUF_FIELD_OFFSET(ConnectionReply, error_code_)
+      + sizeof(ConnectionReply::error_code_)
+      - PROTOBUF_FIELD_OFFSET(ConnectionReply, cid_)>(
+          reinterpret_cast<char*>(&cid_),
+          reinterpret_cast<char*>(&other->cid_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata TxReply::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata ConnectionReply::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_kv_2eproto_getter, &descriptor_table_kv_2eproto_once,
       file_level_metadata_kv_2eproto[1]);
+}
+
+// ===================================================================
+
+class ErrorReply::_Internal {
+ public:
+};
+
+ErrorReply::ErrorReply(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:txkv.ErrorReply)
+}
+ErrorReply::ErrorReply(const ErrorReply& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  error_code_ = from.error_code_;
+  // @@protoc_insertion_point(copy_constructor:txkv.ErrorReply)
+}
+
+inline void ErrorReply::SharedCtor() {
+error_code_ = 0u;
+}
+
+ErrorReply::~ErrorReply() {
+  // @@protoc_insertion_point(destructor:txkv.ErrorReply)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void ErrorReply::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void ErrorReply::ArenaDtor(void* object) {
+  ErrorReply* _this = reinterpret_cast< ErrorReply* >(object);
+  (void)_this;
+}
+void ErrorReply::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void ErrorReply::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void ErrorReply::Clear() {
+// @@protoc_insertion_point(message_clear_start:txkv.ErrorReply)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  error_code_ = 0u;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* ErrorReply::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // uint32 error_code = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          error_code_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* ErrorReply::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:txkv.ErrorReply)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint32 error_code = 1;
+  if (this->_internal_error_code() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(1, this->_internal_error_code(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:txkv.ErrorReply)
+  return target;
+}
+
+size_t ErrorReply::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:txkv.ErrorReply)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // uint32 error_code = 1;
+  if (this->_internal_error_code() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32SizePlusOne(this->_internal_error_code());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ErrorReply::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    ErrorReply::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ErrorReply::GetClassData() const { return &_class_data_; }
+
+void ErrorReply::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<ErrorReply *>(to)->MergeFrom(
+      static_cast<const ErrorReply &>(from));
+}
+
+
+void ErrorReply::MergeFrom(const ErrorReply& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:txkv.ErrorReply)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_error_code() != 0) {
+    _internal_set_error_code(from._internal_error_code());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ErrorReply::CopyFrom(const ErrorReply& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:txkv.ErrorReply)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ErrorReply::IsInitialized() const {
+  return true;
+}
+
+void ErrorReply::InternalSwap(ErrorReply* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(error_code_, other->error_code_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata ErrorReply::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_kv_2eproto_getter, &descriptor_table_kv_2eproto_once,
+      file_level_metadata_kv_2eproto[2]);
 }
 
 // ===================================================================
@@ -588,17 +789,17 @@ KeyRequest::KeyRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
 KeyRequest::KeyRequest(const KeyRequest& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::memcpy(&tid_, &from.tid_,
+  ::memcpy(&cid_, &from.cid_,
     static_cast<size_t>(reinterpret_cast<char*>(&key_) -
-    reinterpret_cast<char*>(&tid_)) + sizeof(key_));
+    reinterpret_cast<char*>(&cid_)) + sizeof(key_));
   // @@protoc_insertion_point(copy_constructor:txkv.KeyRequest)
 }
 
 inline void KeyRequest::SharedCtor() {
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
-    reinterpret_cast<char*>(&tid_) - reinterpret_cast<char*>(this)),
+    reinterpret_cast<char*>(&cid_) - reinterpret_cast<char*>(this)),
     0, static_cast<size_t>(reinterpret_cast<char*>(&key_) -
-    reinterpret_cast<char*>(&tid_)) + sizeof(key_));
+    reinterpret_cast<char*>(&cid_)) + sizeof(key_));
 }
 
 KeyRequest::~KeyRequest() {
@@ -628,9 +829,9 @@ void KeyRequest::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  ::memset(&tid_, 0, static_cast<size_t>(
+  ::memset(&cid_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&key_) -
-      reinterpret_cast<char*>(&tid_)) + sizeof(key_));
+      reinterpret_cast<char*>(&cid_)) + sizeof(key_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -640,10 +841,10 @@ const char* KeyRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID:
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // uint64 tid = 1;
+      // uint64 cid = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
-          tid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          cid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -685,10 +886,10 @@ uint8_t* KeyRequest::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint64 tid = 1;
-  if (this->_internal_tid() != 0) {
+  // uint64 cid = 1;
+  if (this->_internal_cid() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64ToArray(1, this->_internal_tid(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64ToArray(1, this->_internal_cid(), target);
   }
 
   // uint64 key = 2;
@@ -713,9 +914,9 @@ size_t KeyRequest::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // uint64 tid = 1;
-  if (this->_internal_tid() != 0) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64SizePlusOne(this->_internal_tid());
+  // uint64 cid = 1;
+  if (this->_internal_cid() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64SizePlusOne(this->_internal_cid());
   }
 
   // uint64 key = 2;
@@ -745,8 +946,8 @@ void KeyRequest::MergeFrom(const KeyRequest& from) {
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from._internal_tid() != 0) {
-    _internal_set_tid(from._internal_tid());
+  if (from._internal_cid() != 0) {
+    _internal_set_cid(from._internal_cid());
   }
   if (from._internal_key() != 0) {
     _internal_set_key(from._internal_key());
@@ -771,71 +972,71 @@ void KeyRequest::InternalSwap(KeyRequest* other) {
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(KeyRequest, key_)
       + sizeof(KeyRequest::key_)
-      - PROTOBUF_FIELD_OFFSET(KeyRequest, tid_)>(
-          reinterpret_cast<char*>(&tid_),
-          reinterpret_cast<char*>(&other->tid_));
+      - PROTOBUF_FIELD_OFFSET(KeyRequest, cid_)>(
+          reinterpret_cast<char*>(&cid_),
+          reinterpret_cast<char*>(&other->cid_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata KeyRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_kv_2eproto_getter, &descriptor_table_kv_2eproto_once,
-      file_level_metadata_kv_2eproto[2]);
+      file_level_metadata_kv_2eproto[3]);
 }
 
 // ===================================================================
 
-class ValReply::_Internal {
+class GetReply::_Internal {
  public:
 };
 
-ValReply::ValReply(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+GetReply::GetReply(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor();
   if (!is_message_owned) {
     RegisterArenaDtor(arena);
   }
-  // @@protoc_insertion_point(arena_constructor:txkv.ValReply)
+  // @@protoc_insertion_point(arena_constructor:txkv.GetReply)
 }
-ValReply::ValReply(const ValReply& from)
+GetReply::GetReply(const GetReply& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   ::memcpy(&val_, &from.val_,
     static_cast<size_t>(reinterpret_cast<char*>(&error_code_) -
     reinterpret_cast<char*>(&val_)) + sizeof(error_code_));
-  // @@protoc_insertion_point(copy_constructor:txkv.ValReply)
+  // @@protoc_insertion_point(copy_constructor:txkv.GetReply)
 }
 
-inline void ValReply::SharedCtor() {
+inline void GetReply::SharedCtor() {
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
     reinterpret_cast<char*>(&val_) - reinterpret_cast<char*>(this)),
     0, static_cast<size_t>(reinterpret_cast<char*>(&error_code_) -
     reinterpret_cast<char*>(&val_)) + sizeof(error_code_));
 }
 
-ValReply::~ValReply() {
-  // @@protoc_insertion_point(destructor:txkv.ValReply)
+GetReply::~GetReply() {
+  // @@protoc_insertion_point(destructor:txkv.GetReply)
   if (GetArenaForAllocation() != nullptr) return;
   SharedDtor();
   _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-inline void ValReply::SharedDtor() {
+inline void GetReply::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
 }
 
-void ValReply::ArenaDtor(void* object) {
-  ValReply* _this = reinterpret_cast< ValReply* >(object);
+void GetReply::ArenaDtor(void* object) {
+  GetReply* _this = reinterpret_cast< GetReply* >(object);
   (void)_this;
 }
-void ValReply::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+void GetReply::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 }
-void ValReply::SetCachedSize(int size) const {
+void GetReply::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
 
-void ValReply::Clear() {
-// @@protoc_insertion_point(message_clear_start:txkv.ValReply)
+void GetReply::Clear() {
+// @@protoc_insertion_point(message_clear_start:txkv.GetReply)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -846,7 +1047,7 @@ void ValReply::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* ValReply::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* GetReply::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
@@ -891,9 +1092,9 @@ failure:
 #undef CHK_
 }
 
-uint8_t* ValReply::_InternalSerialize(
+uint8_t* GetReply::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:txkv.ValReply)
+  // @@protoc_insertion_point(serialize_to_array_start:txkv.GetReply)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -913,12 +1114,12 @@ uint8_t* ValReply::_InternalSerialize(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:txkv.ValReply)
+  // @@protoc_insertion_point(serialize_to_array_end:txkv.GetReply)
   return target;
 }
 
-size_t ValReply::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:txkv.ValReply)
+size_t GetReply::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:txkv.GetReply)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
@@ -938,21 +1139,21 @@ size_t ValReply::ByteSizeLong() const {
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ValReply::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData GetReply::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
-    ValReply::MergeImpl
+    GetReply::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ValReply::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetReply::GetClassData() const { return &_class_data_; }
 
-void ValReply::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+void GetReply::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
                       const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-  static_cast<ValReply *>(to)->MergeFrom(
-      static_cast<const ValReply &>(from));
+  static_cast<GetReply *>(to)->MergeFrom(
+      static_cast<const GetReply &>(from));
 }
 
 
-void ValReply::MergeFrom(const ValReply& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:txkv.ValReply)
+void GetReply::MergeFrom(const GetReply& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:txkv.GetReply)
   GOOGLE_DCHECK_NE(&from, this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
@@ -966,32 +1167,32 @@ void ValReply::MergeFrom(const ValReply& from) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void ValReply::CopyFrom(const ValReply& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:txkv.ValReply)
+void GetReply::CopyFrom(const GetReply& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:txkv.GetReply)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool ValReply::IsInitialized() const {
+bool GetReply::IsInitialized() const {
   return true;
 }
 
-void ValReply::InternalSwap(ValReply* other) {
+void GetReply::InternalSwap(GetReply* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(ValReply, error_code_)
-      + sizeof(ValReply::error_code_)
-      - PROTOBUF_FIELD_OFFSET(ValReply, val_)>(
+      PROTOBUF_FIELD_OFFSET(GetReply, error_code_)
+      + sizeof(GetReply::error_code_)
+      - PROTOBUF_FIELD_OFFSET(GetReply, val_)>(
           reinterpret_cast<char*>(&val_),
           reinterpret_cast<char*>(&other->val_));
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata ValReply::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata GetReply::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_kv_2eproto_getter, &descriptor_table_kv_2eproto_once,
-      file_level_metadata_kv_2eproto[3]);
+      file_level_metadata_kv_2eproto[4]);
 }
 
 // ===================================================================
@@ -1012,17 +1213,17 @@ WriteRequest::WriteRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
 WriteRequest::WriteRequest(const WriteRequest& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  ::memcpy(&tid_, &from.tid_,
+  ::memcpy(&cid_, &from.cid_,
     static_cast<size_t>(reinterpret_cast<char*>(&val_) -
-    reinterpret_cast<char*>(&tid_)) + sizeof(val_));
+    reinterpret_cast<char*>(&cid_)) + sizeof(val_));
   // @@protoc_insertion_point(copy_constructor:txkv.WriteRequest)
 }
 
 inline void WriteRequest::SharedCtor() {
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
-    reinterpret_cast<char*>(&tid_) - reinterpret_cast<char*>(this)),
+    reinterpret_cast<char*>(&cid_) - reinterpret_cast<char*>(this)),
     0, static_cast<size_t>(reinterpret_cast<char*>(&val_) -
-    reinterpret_cast<char*>(&tid_)) + sizeof(val_));
+    reinterpret_cast<char*>(&cid_)) + sizeof(val_));
 }
 
 WriteRequest::~WriteRequest() {
@@ -1052,9 +1253,9 @@ void WriteRequest::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  ::memset(&tid_, 0, static_cast<size_t>(
+  ::memset(&cid_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&val_) -
-      reinterpret_cast<char*>(&tid_)) + sizeof(val_));
+      reinterpret_cast<char*>(&cid_)) + sizeof(val_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1064,10 +1265,10 @@ const char* WriteRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_I
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // uint64 tid = 1;
+      // uint64 cid = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
-          tid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          cid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -1117,10 +1318,10 @@ uint8_t* WriteRequest::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint64 tid = 1;
-  if (this->_internal_tid() != 0) {
+  // uint64 cid = 1;
+  if (this->_internal_cid() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64ToArray(1, this->_internal_tid(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64ToArray(1, this->_internal_cid(), target);
   }
 
   // uint64 key = 2;
@@ -1151,9 +1352,9 @@ size_t WriteRequest::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // uint64 tid = 1;
-  if (this->_internal_tid() != 0) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64SizePlusOne(this->_internal_tid());
+  // uint64 cid = 1;
+  if (this->_internal_cid() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64SizePlusOne(this->_internal_cid());
   }
 
   // uint64 key = 2;
@@ -1188,8 +1389,8 @@ void WriteRequest::MergeFrom(const WriteRequest& from) {
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from._internal_tid() != 0) {
-    _internal_set_tid(from._internal_tid());
+  if (from._internal_cid() != 0) {
+    _internal_set_cid(from._internal_cid());
   }
   if (from._internal_key() != 0) {
     _internal_set_key(from._internal_key());
@@ -1217,31 +1418,34 @@ void WriteRequest::InternalSwap(WriteRequest* other) {
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(WriteRequest, val_)
       + sizeof(WriteRequest::val_)
-      - PROTOBUF_FIELD_OFFSET(WriteRequest, tid_)>(
-          reinterpret_cast<char*>(&tid_),
-          reinterpret_cast<char*>(&other->tid_));
+      - PROTOBUF_FIELD_OFFSET(WriteRequest, cid_)>(
+          reinterpret_cast<char*>(&cid_),
+          reinterpret_cast<char*>(&other->cid_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata WriteRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_kv_2eproto_getter, &descriptor_table_kv_2eproto_once,
-      file_level_metadata_kv_2eproto[4]);
+      file_level_metadata_kv_2eproto[5]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace txkv
 PROTOBUF_NAMESPACE_OPEN
-template<> PROTOBUF_NOINLINE ::txkv::TxRequest* Arena::CreateMaybeMessage< ::txkv::TxRequest >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::txkv::TxRequest >(arena);
+template<> PROTOBUF_NOINLINE ::txkv::BaseRequest* Arena::CreateMaybeMessage< ::txkv::BaseRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::txkv::BaseRequest >(arena);
 }
-template<> PROTOBUF_NOINLINE ::txkv::TxReply* Arena::CreateMaybeMessage< ::txkv::TxReply >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::txkv::TxReply >(arena);
+template<> PROTOBUF_NOINLINE ::txkv::ConnectionReply* Arena::CreateMaybeMessage< ::txkv::ConnectionReply >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::txkv::ConnectionReply >(arena);
+}
+template<> PROTOBUF_NOINLINE ::txkv::ErrorReply* Arena::CreateMaybeMessage< ::txkv::ErrorReply >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::txkv::ErrorReply >(arena);
 }
 template<> PROTOBUF_NOINLINE ::txkv::KeyRequest* Arena::CreateMaybeMessage< ::txkv::KeyRequest >(Arena* arena) {
   return Arena::CreateMessageInternal< ::txkv::KeyRequest >(arena);
 }
-template<> PROTOBUF_NOINLINE ::txkv::ValReply* Arena::CreateMaybeMessage< ::txkv::ValReply >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::txkv::ValReply >(arena);
+template<> PROTOBUF_NOINLINE ::txkv::GetReply* Arena::CreateMaybeMessage< ::txkv::GetReply >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::txkv::GetReply >(arena);
 }
 template<> PROTOBUF_NOINLINE ::txkv::WriteRequest* Arena::CreateMaybeMessage< ::txkv::WriteRequest >(Arena* arena) {
   return Arena::CreateMessageInternal< ::txkv::WriteRequest >(arena);

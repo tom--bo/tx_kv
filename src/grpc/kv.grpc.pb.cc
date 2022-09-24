@@ -22,6 +22,7 @@
 namespace txkv {
 
 static const char* MyKV_method_names[] = {
+  "/txkv.MyKV/Connect",
   "/txkv.MyKV/Begin",
   "/txkv.MyKV/Commit",
   "/txkv.MyKV/Rollback",
@@ -37,146 +38,170 @@ std::unique_ptr< MyKV::Stub> MyKV::NewStub(const std::shared_ptr< ::grpc::Channe
 }
 
 MyKV::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options)
-  : channel_(channel), rpcmethod_Begin_(MyKV_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_Commit_(MyKV_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_Rollback_(MyKV_method_names[2], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_Get_(MyKV_method_names[3], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_Put_(MyKV_method_names[4], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_Del_(MyKV_method_names[5], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  : channel_(channel), rpcmethod_Connect_(MyKV_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_Begin_(MyKV_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_Commit_(MyKV_method_names[2], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_Rollback_(MyKV_method_names[3], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_Get_(MyKV_method_names[4], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_Put_(MyKV_method_names[5], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_Del_(MyKV_method_names[6], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
-::grpc::Status MyKV::Stub::Begin(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::txkv::TxReply* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::google::protobuf::Empty, ::txkv::TxReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Begin_, context, request, response);
+::grpc::Status MyKV::Stub::Connect(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::txkv::ConnectionReply* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::google::protobuf::Empty, ::txkv::ConnectionReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Connect_, context, request, response);
 }
 
-void MyKV::Stub::async::Begin(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::txkv::TxReply* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::google::protobuf::Empty, ::txkv::TxReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Begin_, context, request, response, std::move(f));
+void MyKV::Stub::async::Connect(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::txkv::ConnectionReply* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::google::protobuf::Empty, ::txkv::ConnectionReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Connect_, context, request, response, std::move(f));
 }
 
-void MyKV::Stub::async::Begin(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::txkv::TxReply* response, ::grpc::ClientUnaryReactor* reactor) {
+void MyKV::Stub::async::Connect(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::txkv::ConnectionReply* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Connect_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::txkv::ConnectionReply>* MyKV::Stub::PrepareAsyncConnectRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::txkv::ConnectionReply, ::google::protobuf::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Connect_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::txkv::ConnectionReply>* MyKV::Stub::AsyncConnectRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncConnectRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status MyKV::Stub::Begin(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::txkv::ErrorReply* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::txkv::BaseRequest, ::txkv::ErrorReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Begin_, context, request, response);
+}
+
+void MyKV::Stub::async::Begin(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::txkv::BaseRequest, ::txkv::ErrorReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Begin_, context, request, response, std::move(f));
+}
+
+void MyKV::Stub::async::Begin(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Begin_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::txkv::TxReply>* MyKV::Stub::PrepareAsyncBeginRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::txkv::TxReply, ::google::protobuf::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Begin_, context, request);
+::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* MyKV::Stub::PrepareAsyncBeginRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::txkv::ErrorReply, ::txkv::BaseRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Begin_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::txkv::TxReply>* MyKV::Stub::AsyncBeginRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* MyKV::Stub::AsyncBeginRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
   auto* result =
     this->PrepareAsyncBeginRaw(context, request, cq);
   result->StartCall();
   return result;
 }
 
-::grpc::Status MyKV::Stub::Commit(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::google::protobuf::Empty* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::txkv::TxRequest, ::google::protobuf::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Commit_, context, request, response);
+::grpc::Status MyKV::Stub::Commit(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::txkv::ErrorReply* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::txkv::BaseRequest, ::txkv::ErrorReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Commit_, context, request, response);
 }
 
-void MyKV::Stub::async::Commit(::grpc::ClientContext* context, const ::txkv::TxRequest* request, ::google::protobuf::Empty* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::txkv::TxRequest, ::google::protobuf::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Commit_, context, request, response, std::move(f));
+void MyKV::Stub::async::Commit(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::txkv::BaseRequest, ::txkv::ErrorReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Commit_, context, request, response, std::move(f));
 }
 
-void MyKV::Stub::async::Commit(::grpc::ClientContext* context, const ::txkv::TxRequest* request, ::google::protobuf::Empty* response, ::grpc::ClientUnaryReactor* reactor) {
+void MyKV::Stub::async::Commit(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Commit_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>* MyKV::Stub::PrepareAsyncCommitRaw(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::google::protobuf::Empty, ::txkv::TxRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Commit_, context, request);
+::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* MyKV::Stub::PrepareAsyncCommitRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::txkv::ErrorReply, ::txkv::BaseRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Commit_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>* MyKV::Stub::AsyncCommitRaw(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* MyKV::Stub::AsyncCommitRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
   auto* result =
     this->PrepareAsyncCommitRaw(context, request, cq);
   result->StartCall();
   return result;
 }
 
-::grpc::Status MyKV::Stub::Rollback(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::google::protobuf::Empty* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::txkv::TxRequest, ::google::protobuf::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Rollback_, context, request, response);
+::grpc::Status MyKV::Stub::Rollback(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::txkv::ErrorReply* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::txkv::BaseRequest, ::txkv::ErrorReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Rollback_, context, request, response);
 }
 
-void MyKV::Stub::async::Rollback(::grpc::ClientContext* context, const ::txkv::TxRequest* request, ::google::protobuf::Empty* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::txkv::TxRequest, ::google::protobuf::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Rollback_, context, request, response, std::move(f));
+void MyKV::Stub::async::Rollback(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::txkv::BaseRequest, ::txkv::ErrorReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Rollback_, context, request, response, std::move(f));
 }
 
-void MyKV::Stub::async::Rollback(::grpc::ClientContext* context, const ::txkv::TxRequest* request, ::google::protobuf::Empty* response, ::grpc::ClientUnaryReactor* reactor) {
+void MyKV::Stub::async::Rollback(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Rollback_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>* MyKV::Stub::PrepareAsyncRollbackRaw(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::google::protobuf::Empty, ::txkv::TxRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Rollback_, context, request);
+::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* MyKV::Stub::PrepareAsyncRollbackRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::txkv::ErrorReply, ::txkv::BaseRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Rollback_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>* MyKV::Stub::AsyncRollbackRaw(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* MyKV::Stub::AsyncRollbackRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
   auto* result =
     this->PrepareAsyncRollbackRaw(context, request, cq);
   result->StartCall();
   return result;
 }
 
-::grpc::Status MyKV::Stub::Get(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::txkv::ValReply* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::txkv::KeyRequest, ::txkv::ValReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Get_, context, request, response);
+::grpc::Status MyKV::Stub::Get(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::txkv::GetReply* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::txkv::KeyRequest, ::txkv::GetReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Get_, context, request, response);
 }
 
-void MyKV::Stub::async::Get(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::txkv::ValReply* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::txkv::KeyRequest, ::txkv::ValReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Get_, context, request, response, std::move(f));
+void MyKV::Stub::async::Get(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::txkv::GetReply* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::txkv::KeyRequest, ::txkv::GetReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Get_, context, request, response, std::move(f));
 }
 
-void MyKV::Stub::async::Get(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::txkv::ValReply* response, ::grpc::ClientUnaryReactor* reactor) {
+void MyKV::Stub::async::Get(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::txkv::GetReply* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Get_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::txkv::ValReply>* MyKV::Stub::PrepareAsyncGetRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::txkv::ValReply, ::txkv::KeyRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Get_, context, request);
+::grpc::ClientAsyncResponseReader< ::txkv::GetReply>* MyKV::Stub::PrepareAsyncGetRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::txkv::GetReply, ::txkv::KeyRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Get_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::txkv::ValReply>* MyKV::Stub::AsyncGetRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::txkv::GetReply>* MyKV::Stub::AsyncGetRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
   auto* result =
     this->PrepareAsyncGetRaw(context, request, cq);
   result->StartCall();
   return result;
 }
 
-::grpc::Status MyKV::Stub::Put(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::google::protobuf::Empty* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::txkv::WriteRequest, ::google::protobuf::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Put_, context, request, response);
+::grpc::Status MyKV::Stub::Put(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::txkv::ErrorReply* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::txkv::WriteRequest, ::txkv::ErrorReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Put_, context, request, response);
 }
 
-void MyKV::Stub::async::Put(::grpc::ClientContext* context, const ::txkv::WriteRequest* request, ::google::protobuf::Empty* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::txkv::WriteRequest, ::google::protobuf::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Put_, context, request, response, std::move(f));
+void MyKV::Stub::async::Put(::grpc::ClientContext* context, const ::txkv::WriteRequest* request, ::txkv::ErrorReply* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::txkv::WriteRequest, ::txkv::ErrorReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Put_, context, request, response, std::move(f));
 }
 
-void MyKV::Stub::async::Put(::grpc::ClientContext* context, const ::txkv::WriteRequest* request, ::google::protobuf::Empty* response, ::grpc::ClientUnaryReactor* reactor) {
+void MyKV::Stub::async::Put(::grpc::ClientContext* context, const ::txkv::WriteRequest* request, ::txkv::ErrorReply* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Put_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>* MyKV::Stub::PrepareAsyncPutRaw(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::google::protobuf::Empty, ::txkv::WriteRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Put_, context, request);
+::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* MyKV::Stub::PrepareAsyncPutRaw(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::txkv::ErrorReply, ::txkv::WriteRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Put_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>* MyKV::Stub::AsyncPutRaw(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* MyKV::Stub::AsyncPutRaw(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::grpc::CompletionQueue* cq) {
   auto* result =
     this->PrepareAsyncPutRaw(context, request, cq);
   result->StartCall();
   return result;
 }
 
-::grpc::Status MyKV::Stub::Del(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::google::protobuf::Empty* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::txkv::KeyRequest, ::google::protobuf::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Del_, context, request, response);
+::grpc::Status MyKV::Stub::Del(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::txkv::ErrorReply* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::txkv::KeyRequest, ::txkv::ErrorReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Del_, context, request, response);
 }
 
-void MyKV::Stub::async::Del(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::google::protobuf::Empty* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::txkv::KeyRequest, ::google::protobuf::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Del_, context, request, response, std::move(f));
+void MyKV::Stub::async::Del(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::txkv::ErrorReply* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::txkv::KeyRequest, ::txkv::ErrorReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Del_, context, request, response, std::move(f));
 }
 
-void MyKV::Stub::async::Del(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::google::protobuf::Empty* response, ::grpc::ClientUnaryReactor* reactor) {
+void MyKV::Stub::async::Del(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::txkv::ErrorReply* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Del_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>* MyKV::Stub::PrepareAsyncDelRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::google::protobuf::Empty, ::txkv::KeyRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Del_, context, request);
+::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* MyKV::Stub::PrepareAsyncDelRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::txkv::ErrorReply, ::txkv::KeyRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Del_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>* MyKV::Stub::AsyncDelRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* MyKV::Stub::AsyncDelRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
   auto* result =
     this->PrepareAsyncDelRaw(context, request, cq);
   result->StartCall();
@@ -187,61 +212,71 @@ MyKV::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       MyKV_method_names[0],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< MyKV::Service, ::google::protobuf::Empty, ::txkv::TxReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      new ::grpc::internal::RpcMethodHandler< MyKV::Service, ::google::protobuf::Empty, ::txkv::ConnectionReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](MyKV::Service* service,
              ::grpc::ServerContext* ctx,
              const ::google::protobuf::Empty* req,
-             ::txkv::TxReply* resp) {
-               return service->Begin(ctx, req, resp);
+             ::txkv::ConnectionReply* resp) {
+               return service->Connect(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       MyKV_method_names[1],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< MyKV::Service, ::txkv::TxRequest, ::google::protobuf::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      new ::grpc::internal::RpcMethodHandler< MyKV::Service, ::txkv::BaseRequest, ::txkv::ErrorReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](MyKV::Service* service,
              ::grpc::ServerContext* ctx,
-             const ::txkv::TxRequest* req,
-             ::google::protobuf::Empty* resp) {
-               return service->Commit(ctx, req, resp);
+             const ::txkv::BaseRequest* req,
+             ::txkv::ErrorReply* resp) {
+               return service->Begin(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       MyKV_method_names[2],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< MyKV::Service, ::txkv::TxRequest, ::google::protobuf::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      new ::grpc::internal::RpcMethodHandler< MyKV::Service, ::txkv::BaseRequest, ::txkv::ErrorReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](MyKV::Service* service,
              ::grpc::ServerContext* ctx,
-             const ::txkv::TxRequest* req,
-             ::google::protobuf::Empty* resp) {
-               return service->Rollback(ctx, req, resp);
+             const ::txkv::BaseRequest* req,
+             ::txkv::ErrorReply* resp) {
+               return service->Commit(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       MyKV_method_names[3],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< MyKV::Service, ::txkv::KeyRequest, ::txkv::ValReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      new ::grpc::internal::RpcMethodHandler< MyKV::Service, ::txkv::BaseRequest, ::txkv::ErrorReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](MyKV::Service* service,
              ::grpc::ServerContext* ctx,
-             const ::txkv::KeyRequest* req,
-             ::txkv::ValReply* resp) {
-               return service->Get(ctx, req, resp);
+             const ::txkv::BaseRequest* req,
+             ::txkv::ErrorReply* resp) {
+               return service->Rollback(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       MyKV_method_names[4],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< MyKV::Service, ::txkv::WriteRequest, ::google::protobuf::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      new ::grpc::internal::RpcMethodHandler< MyKV::Service, ::txkv::KeyRequest, ::txkv::GetReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](MyKV::Service* service,
              ::grpc::ServerContext* ctx,
-             const ::txkv::WriteRequest* req,
-             ::google::protobuf::Empty* resp) {
-               return service->Put(ctx, req, resp);
+             const ::txkv::KeyRequest* req,
+             ::txkv::GetReply* resp) {
+               return service->Get(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       MyKV_method_names[5],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< MyKV::Service, ::txkv::KeyRequest, ::google::protobuf::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      new ::grpc::internal::RpcMethodHandler< MyKV::Service, ::txkv::WriteRequest, ::txkv::ErrorReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](MyKV::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::txkv::WriteRequest* req,
+             ::txkv::ErrorReply* resp) {
+               return service->Put(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      MyKV_method_names[6],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< MyKV::Service, ::txkv::KeyRequest, ::txkv::ErrorReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](MyKV::Service* service,
              ::grpc::ServerContext* ctx,
              const ::txkv::KeyRequest* req,
-             ::google::protobuf::Empty* resp) {
+             ::txkv::ErrorReply* resp) {
                return service->Del(ctx, req, resp);
              }, this)));
 }
@@ -249,42 +284,49 @@ MyKV::Service::Service() {
 MyKV::Service::~Service() {
 }
 
-::grpc::Status MyKV::Service::Begin(::grpc::ServerContext* context, const ::google::protobuf::Empty* request, ::txkv::TxReply* response) {
+::grpc::Status MyKV::Service::Connect(::grpc::ServerContext* context, const ::google::protobuf::Empty* request, ::txkv::ConnectionReply* response) {
   (void) context;
   (void) request;
   (void) response;
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status MyKV::Service::Commit(::grpc::ServerContext* context, const ::txkv::TxRequest* request, ::google::protobuf::Empty* response) {
+::grpc::Status MyKV::Service::Begin(::grpc::ServerContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response) {
   (void) context;
   (void) request;
   (void) response;
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status MyKV::Service::Rollback(::grpc::ServerContext* context, const ::txkv::TxRequest* request, ::google::protobuf::Empty* response) {
+::grpc::Status MyKV::Service::Commit(::grpc::ServerContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response) {
   (void) context;
   (void) request;
   (void) response;
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status MyKV::Service::Get(::grpc::ServerContext* context, const ::txkv::KeyRequest* request, ::txkv::ValReply* response) {
+::grpc::Status MyKV::Service::Rollback(::grpc::ServerContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response) {
   (void) context;
   (void) request;
   (void) response;
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status MyKV::Service::Put(::grpc::ServerContext* context, const ::txkv::WriteRequest* request, ::google::protobuf::Empty* response) {
+::grpc::Status MyKV::Service::Get(::grpc::ServerContext* context, const ::txkv::KeyRequest* request, ::txkv::GetReply* response) {
   (void) context;
   (void) request;
   (void) response;
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status MyKV::Service::Del(::grpc::ServerContext* context, const ::txkv::KeyRequest* request, ::google::protobuf::Empty* response) {
+::grpc::Status MyKV::Service::Put(::grpc::ServerContext* context, const ::txkv::WriteRequest* request, ::txkv::ErrorReply* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status MyKV::Service::Del(::grpc::ServerContext* context, const ::txkv::KeyRequest* request, ::txkv::ErrorReply* response) {
   (void) context;
   (void) request;
   (void) response;

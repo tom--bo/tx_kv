@@ -36,141 +36,161 @@ class MyKV final {
   class StubInterface {
    public:
     virtual ~StubInterface() {}
-    virtual ::grpc::Status Begin(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::txkv::TxReply* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::TxReply>> AsyncBegin(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::TxReply>>(AsyncBeginRaw(context, request, cq));
+    virtual ::grpc::Status Connect(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::txkv::ConnectionReply* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ConnectionReply>> AsyncConnect(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ConnectionReply>>(AsyncConnectRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::TxReply>> PrepareAsyncBegin(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::TxReply>>(PrepareAsyncBeginRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ConnectionReply>> PrepareAsyncConnect(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ConnectionReply>>(PrepareAsyncConnectRaw(context, request, cq));
     }
-    virtual ::grpc::Status Commit(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::google::protobuf::Empty* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>> AsyncCommit(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>>(AsyncCommitRaw(context, request, cq));
+    virtual ::grpc::Status Begin(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::txkv::ErrorReply* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>> AsyncBegin(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>>(AsyncBeginRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>> PrepareAsyncCommit(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>>(PrepareAsyncCommitRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>> PrepareAsyncBegin(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>>(PrepareAsyncBeginRaw(context, request, cq));
     }
-    virtual ::grpc::Status Rollback(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::google::protobuf::Empty* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>> AsyncRollback(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>>(AsyncRollbackRaw(context, request, cq));
+    virtual ::grpc::Status Commit(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::txkv::ErrorReply* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>> AsyncCommit(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>>(AsyncCommitRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>> PrepareAsyncRollback(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>>(PrepareAsyncRollbackRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>> PrepareAsyncCommit(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>>(PrepareAsyncCommitRaw(context, request, cq));
     }
-    virtual ::grpc::Status Get(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::txkv::ValReply* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ValReply>> AsyncGet(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ValReply>>(AsyncGetRaw(context, request, cq));
+    virtual ::grpc::Status Rollback(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::txkv::ErrorReply* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>> AsyncRollback(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>>(AsyncRollbackRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ValReply>> PrepareAsyncGet(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ValReply>>(PrepareAsyncGetRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>> PrepareAsyncRollback(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>>(PrepareAsyncRollbackRaw(context, request, cq));
     }
-    virtual ::grpc::Status Put(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::google::protobuf::Empty* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>> AsyncPut(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>>(AsyncPutRaw(context, request, cq));
+    virtual ::grpc::Status Get(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::txkv::GetReply* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::GetReply>> AsyncGet(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::GetReply>>(AsyncGetRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>> PrepareAsyncPut(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>>(PrepareAsyncPutRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::GetReply>> PrepareAsyncGet(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::GetReply>>(PrepareAsyncGetRaw(context, request, cq));
     }
-    virtual ::grpc::Status Del(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::google::protobuf::Empty* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>> AsyncDel(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>>(AsyncDelRaw(context, request, cq));
+    virtual ::grpc::Status Put(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::txkv::ErrorReply* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>> AsyncPut(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>>(AsyncPutRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>> PrepareAsyncDel(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>>(PrepareAsyncDelRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>> PrepareAsyncPut(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>>(PrepareAsyncPutRaw(context, request, cq));
+    }
+    virtual ::grpc::Status Del(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::txkv::ErrorReply* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>> AsyncDel(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>>(AsyncDelRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>> PrepareAsyncDel(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>>(PrepareAsyncDelRaw(context, request, cq));
     }
     class async_interface {
      public:
       virtual ~async_interface() {}
-      virtual void Begin(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::txkv::TxReply* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void Begin(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::txkv::TxReply* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      virtual void Commit(::grpc::ClientContext* context, const ::txkv::TxRequest* request, ::google::protobuf::Empty* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void Commit(::grpc::ClientContext* context, const ::txkv::TxRequest* request, ::google::protobuf::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      virtual void Rollback(::grpc::ClientContext* context, const ::txkv::TxRequest* request, ::google::protobuf::Empty* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void Rollback(::grpc::ClientContext* context, const ::txkv::TxRequest* request, ::google::protobuf::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      virtual void Get(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::txkv::ValReply* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void Get(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::txkv::ValReply* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      virtual void Put(::grpc::ClientContext* context, const ::txkv::WriteRequest* request, ::google::protobuf::Empty* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void Put(::grpc::ClientContext* context, const ::txkv::WriteRequest* request, ::google::protobuf::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      virtual void Del(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::google::protobuf::Empty* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void Del(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::google::protobuf::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void Connect(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::txkv::ConnectionReply* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void Connect(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::txkv::ConnectionReply* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void Begin(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void Begin(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void Commit(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void Commit(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void Rollback(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void Rollback(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void Get(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::txkv::GetReply* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void Get(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::txkv::GetReply* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void Put(::grpc::ClientContext* context, const ::txkv::WriteRequest* request, ::txkv::ErrorReply* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void Put(::grpc::ClientContext* context, const ::txkv::WriteRequest* request, ::txkv::ErrorReply* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void Del(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::txkv::ErrorReply* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void Del(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::txkv::ErrorReply* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
     class async_interface* experimental_async() { return async(); }
    private:
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::TxReply>* AsyncBeginRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::TxReply>* PrepareAsyncBeginRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>* AsyncCommitRaw(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>* PrepareAsyncCommitRaw(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>* AsyncRollbackRaw(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>* PrepareAsyncRollbackRaw(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ValReply>* AsyncGetRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ValReply>* PrepareAsyncGetRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>* AsyncPutRaw(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>* PrepareAsyncPutRaw(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>* AsyncDelRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::google::protobuf::Empty>* PrepareAsyncDelRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ConnectionReply>* AsyncConnectRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ConnectionReply>* PrepareAsyncConnectRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>* AsyncBeginRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>* PrepareAsyncBeginRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>* AsyncCommitRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>* PrepareAsyncCommitRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>* AsyncRollbackRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>* PrepareAsyncRollbackRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::GetReply>* AsyncGetRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::GetReply>* PrepareAsyncGetRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>* AsyncPutRaw(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>* PrepareAsyncPutRaw(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>* AsyncDelRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>* PrepareAsyncDelRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
     Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
-    ::grpc::Status Begin(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::txkv::TxReply* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::TxReply>> AsyncBegin(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::TxReply>>(AsyncBeginRaw(context, request, cq));
+    ::grpc::Status Connect(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::txkv::ConnectionReply* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ConnectionReply>> AsyncConnect(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ConnectionReply>>(AsyncConnectRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::TxReply>> PrepareAsyncBegin(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::TxReply>>(PrepareAsyncBeginRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ConnectionReply>> PrepareAsyncConnect(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ConnectionReply>>(PrepareAsyncConnectRaw(context, request, cq));
     }
-    ::grpc::Status Commit(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::google::protobuf::Empty* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>> AsyncCommit(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>>(AsyncCommitRaw(context, request, cq));
+    ::grpc::Status Begin(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::txkv::ErrorReply* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>> AsyncBegin(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>>(AsyncBeginRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>> PrepareAsyncCommit(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>>(PrepareAsyncCommitRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>> PrepareAsyncBegin(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>>(PrepareAsyncBeginRaw(context, request, cq));
     }
-    ::grpc::Status Rollback(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::google::protobuf::Empty* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>> AsyncRollback(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>>(AsyncRollbackRaw(context, request, cq));
+    ::grpc::Status Commit(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::txkv::ErrorReply* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>> AsyncCommit(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>>(AsyncCommitRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>> PrepareAsyncRollback(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>>(PrepareAsyncRollbackRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>> PrepareAsyncCommit(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>>(PrepareAsyncCommitRaw(context, request, cq));
     }
-    ::grpc::Status Get(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::txkv::ValReply* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ValReply>> AsyncGet(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ValReply>>(AsyncGetRaw(context, request, cq));
+    ::grpc::Status Rollback(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::txkv::ErrorReply* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>> AsyncRollback(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>>(AsyncRollbackRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ValReply>> PrepareAsyncGet(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ValReply>>(PrepareAsyncGetRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>> PrepareAsyncRollback(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>>(PrepareAsyncRollbackRaw(context, request, cq));
     }
-    ::grpc::Status Put(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::google::protobuf::Empty* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>> AsyncPut(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>>(AsyncPutRaw(context, request, cq));
+    ::grpc::Status Get(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::txkv::GetReply* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::GetReply>> AsyncGet(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::GetReply>>(AsyncGetRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>> PrepareAsyncPut(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>>(PrepareAsyncPutRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::GetReply>> PrepareAsyncGet(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::GetReply>>(PrepareAsyncGetRaw(context, request, cq));
     }
-    ::grpc::Status Del(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::google::protobuf::Empty* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>> AsyncDel(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>>(AsyncDelRaw(context, request, cq));
+    ::grpc::Status Put(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::txkv::ErrorReply* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>> AsyncPut(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>>(AsyncPutRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>> PrepareAsyncDel(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>>(PrepareAsyncDelRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>> PrepareAsyncPut(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>>(PrepareAsyncPutRaw(context, request, cq));
+    }
+    ::grpc::Status Del(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::txkv::ErrorReply* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>> AsyncDel(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>>(AsyncDelRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>> PrepareAsyncDel(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>>(PrepareAsyncDelRaw(context, request, cq));
     }
     class async final :
       public StubInterface::async_interface {
      public:
-      void Begin(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::txkv::TxReply* response, std::function<void(::grpc::Status)>) override;
-      void Begin(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::txkv::TxReply* response, ::grpc::ClientUnaryReactor* reactor) override;
-      void Commit(::grpc::ClientContext* context, const ::txkv::TxRequest* request, ::google::protobuf::Empty* response, std::function<void(::grpc::Status)>) override;
-      void Commit(::grpc::ClientContext* context, const ::txkv::TxRequest* request, ::google::protobuf::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
-      void Rollback(::grpc::ClientContext* context, const ::txkv::TxRequest* request, ::google::protobuf::Empty* response, std::function<void(::grpc::Status)>) override;
-      void Rollback(::grpc::ClientContext* context, const ::txkv::TxRequest* request, ::google::protobuf::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
-      void Get(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::txkv::ValReply* response, std::function<void(::grpc::Status)>) override;
-      void Get(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::txkv::ValReply* response, ::grpc::ClientUnaryReactor* reactor) override;
-      void Put(::grpc::ClientContext* context, const ::txkv::WriteRequest* request, ::google::protobuf::Empty* response, std::function<void(::grpc::Status)>) override;
-      void Put(::grpc::ClientContext* context, const ::txkv::WriteRequest* request, ::google::protobuf::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
-      void Del(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::google::protobuf::Empty* response, std::function<void(::grpc::Status)>) override;
-      void Del(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::google::protobuf::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void Connect(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::txkv::ConnectionReply* response, std::function<void(::grpc::Status)>) override;
+      void Connect(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::txkv::ConnectionReply* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void Begin(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response, std::function<void(::grpc::Status)>) override;
+      void Begin(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void Commit(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response, std::function<void(::grpc::Status)>) override;
+      void Commit(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void Rollback(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response, std::function<void(::grpc::Status)>) override;
+      void Rollback(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void Get(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::txkv::GetReply* response, std::function<void(::grpc::Status)>) override;
+      void Get(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::txkv::GetReply* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void Put(::grpc::ClientContext* context, const ::txkv::WriteRequest* request, ::txkv::ErrorReply* response, std::function<void(::grpc::Status)>) override;
+      void Put(::grpc::ClientContext* context, const ::txkv::WriteRequest* request, ::txkv::ErrorReply* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void Del(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::txkv::ErrorReply* response, std::function<void(::grpc::Status)>) override;
+      void Del(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::txkv::ErrorReply* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -182,18 +202,21 @@ class MyKV final {
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
     class async async_stub_{this};
-    ::grpc::ClientAsyncResponseReader< ::txkv::TxReply>* AsyncBeginRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::txkv::TxReply>* PrepareAsyncBeginRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>* AsyncCommitRaw(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>* PrepareAsyncCommitRaw(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>* AsyncRollbackRaw(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>* PrepareAsyncRollbackRaw(::grpc::ClientContext* context, const ::txkv::TxRequest& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::txkv::ValReply>* AsyncGetRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::txkv::ValReply>* PrepareAsyncGetRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>* AsyncPutRaw(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>* PrepareAsyncPutRaw(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>* AsyncDelRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::google::protobuf::Empty>* PrepareAsyncDelRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::txkv::ConnectionReply>* AsyncConnectRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::txkv::ConnectionReply>* PrepareAsyncConnectRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* AsyncBeginRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* PrepareAsyncBeginRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* AsyncCommitRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* PrepareAsyncCommitRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* AsyncRollbackRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* PrepareAsyncRollbackRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::txkv::GetReply>* AsyncGetRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::txkv::GetReply>* PrepareAsyncGetRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* AsyncPutRaw(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* PrepareAsyncPutRaw(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* AsyncDelRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* PrepareAsyncDelRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) override;
+    const ::grpc::internal::RpcMethod rpcmethod_Connect_;
     const ::grpc::internal::RpcMethod rpcmethod_Begin_;
     const ::grpc::internal::RpcMethod rpcmethod_Commit_;
     const ::grpc::internal::RpcMethod rpcmethod_Rollback_;
@@ -207,12 +230,33 @@ class MyKV final {
    public:
     Service();
     virtual ~Service();
-    virtual ::grpc::Status Begin(::grpc::ServerContext* context, const ::google::protobuf::Empty* request, ::txkv::TxReply* response);
-    virtual ::grpc::Status Commit(::grpc::ServerContext* context, const ::txkv::TxRequest* request, ::google::protobuf::Empty* response);
-    virtual ::grpc::Status Rollback(::grpc::ServerContext* context, const ::txkv::TxRequest* request, ::google::protobuf::Empty* response);
-    virtual ::grpc::Status Get(::grpc::ServerContext* context, const ::txkv::KeyRequest* request, ::txkv::ValReply* response);
-    virtual ::grpc::Status Put(::grpc::ServerContext* context, const ::txkv::WriteRequest* request, ::google::protobuf::Empty* response);
-    virtual ::grpc::Status Del(::grpc::ServerContext* context, const ::txkv::KeyRequest* request, ::google::protobuf::Empty* response);
+    virtual ::grpc::Status Connect(::grpc::ServerContext* context, const ::google::protobuf::Empty* request, ::txkv::ConnectionReply* response);
+    virtual ::grpc::Status Begin(::grpc::ServerContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response);
+    virtual ::grpc::Status Commit(::grpc::ServerContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response);
+    virtual ::grpc::Status Rollback(::grpc::ServerContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response);
+    virtual ::grpc::Status Get(::grpc::ServerContext* context, const ::txkv::KeyRequest* request, ::txkv::GetReply* response);
+    virtual ::grpc::Status Put(::grpc::ServerContext* context, const ::txkv::WriteRequest* request, ::txkv::ErrorReply* response);
+    virtual ::grpc::Status Del(::grpc::ServerContext* context, const ::txkv::KeyRequest* request, ::txkv::ErrorReply* response);
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_Connect : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_Connect() {
+      ::grpc::Service::MarkMethodAsync(0);
+    }
+    ~WithAsyncMethod_Connect() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Connect(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::txkv::ConnectionReply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestConnect(::grpc::ServerContext* context, ::google::protobuf::Empty* request, ::grpc::ServerAsyncResponseWriter< ::txkv::ConnectionReply>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
   };
   template <class BaseClass>
   class WithAsyncMethod_Begin : public BaseClass {
@@ -220,18 +264,18 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_Begin() {
-      ::grpc::Service::MarkMethodAsync(0);
+      ::grpc::Service::MarkMethodAsync(1);
     }
     ~WithAsyncMethod_Begin() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Begin(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::txkv::TxReply* /*response*/) override {
+    ::grpc::Status Begin(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestBegin(::grpc::ServerContext* context, ::google::protobuf::Empty* request, ::grpc::ServerAsyncResponseWriter< ::txkv::TxReply>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    void RequestBegin(::grpc::ServerContext* context, ::txkv::BaseRequest* request, ::grpc::ServerAsyncResponseWriter< ::txkv::ErrorReply>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -240,18 +284,18 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_Commit() {
-      ::grpc::Service::MarkMethodAsync(1);
+      ::grpc::Service::MarkMethodAsync(2);
     }
     ~WithAsyncMethod_Commit() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Commit(::grpc::ServerContext* /*context*/, const ::txkv::TxRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Commit(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestCommit(::grpc::ServerContext* context, ::txkv::TxRequest* request, ::grpc::ServerAsyncResponseWriter< ::google::protobuf::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+    void RequestCommit(::grpc::ServerContext* context, ::txkv::BaseRequest* request, ::grpc::ServerAsyncResponseWriter< ::txkv::ErrorReply>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -260,18 +304,18 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_Rollback() {
-      ::grpc::Service::MarkMethodAsync(2);
+      ::grpc::Service::MarkMethodAsync(3);
     }
     ~WithAsyncMethod_Rollback() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Rollback(::grpc::ServerContext* /*context*/, const ::txkv::TxRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Rollback(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestRollback(::grpc::ServerContext* context, ::txkv::TxRequest* request, ::grpc::ServerAsyncResponseWriter< ::google::protobuf::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+    void RequestRollback(::grpc::ServerContext* context, ::txkv::BaseRequest* request, ::grpc::ServerAsyncResponseWriter< ::txkv::ErrorReply>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -280,18 +324,18 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_Get() {
-      ::grpc::Service::MarkMethodAsync(3);
+      ::grpc::Service::MarkMethodAsync(4);
     }
     ~WithAsyncMethod_Get() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Get(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::ValReply* /*response*/) override {
+    ::grpc::Status Get(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::GetReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestGet(::grpc::ServerContext* context, ::txkv::KeyRequest* request, ::grpc::ServerAsyncResponseWriter< ::txkv::ValReply>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+    void RequestGet(::grpc::ServerContext* context, ::txkv::KeyRequest* request, ::grpc::ServerAsyncResponseWriter< ::txkv::GetReply>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -300,18 +344,18 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_Put() {
-      ::grpc::Service::MarkMethodAsync(4);
+      ::grpc::Service::MarkMethodAsync(5);
     }
     ~WithAsyncMethod_Put() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Put(::grpc::ServerContext* /*context*/, const ::txkv::WriteRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Put(::grpc::ServerContext* /*context*/, const ::txkv::WriteRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestPut(::grpc::ServerContext* context, ::txkv::WriteRequest* request, ::grpc::ServerAsyncResponseWriter< ::google::protobuf::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
+    void RequestPut(::grpc::ServerContext* context, ::txkv::WriteRequest* request, ::grpc::ServerAsyncResponseWriter< ::txkv::ErrorReply>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -320,47 +364,74 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_Del() {
-      ::grpc::Service::MarkMethodAsync(5);
+      ::grpc::Service::MarkMethodAsync(6);
     }
     ~WithAsyncMethod_Del() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Del(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Del(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestDel(::grpc::ServerContext* context, ::txkv::KeyRequest* request, ::grpc::ServerAsyncResponseWriter< ::google::protobuf::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
+    void RequestDel(::grpc::ServerContext* context, ::txkv::KeyRequest* request, ::grpc::ServerAsyncResponseWriter< ::txkv::ErrorReply>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_Begin<WithAsyncMethod_Commit<WithAsyncMethod_Rollback<WithAsyncMethod_Get<WithAsyncMethod_Put<WithAsyncMethod_Del<Service > > > > > > AsyncService;
+  typedef WithAsyncMethod_Connect<WithAsyncMethod_Begin<WithAsyncMethod_Commit<WithAsyncMethod_Rollback<WithAsyncMethod_Get<WithAsyncMethod_Put<WithAsyncMethod_Del<Service > > > > > > > AsyncService;
+  template <class BaseClass>
+  class WithCallbackMethod_Connect : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_Connect() {
+      ::grpc::Service::MarkMethodCallback(0,
+          new ::grpc::internal::CallbackUnaryHandler< ::google::protobuf::Empty, ::txkv::ConnectionReply>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::google::protobuf::Empty* request, ::txkv::ConnectionReply* response) { return this->Connect(context, request, response); }));}
+    void SetMessageAllocatorFor_Connect(
+        ::grpc::MessageAllocator< ::google::protobuf::Empty, ::txkv::ConnectionReply>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::google::protobuf::Empty, ::txkv::ConnectionReply>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_Connect() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Connect(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::txkv::ConnectionReply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* Connect(
+      ::grpc::CallbackServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::txkv::ConnectionReply* /*response*/)  { return nullptr; }
+  };
   template <class BaseClass>
   class WithCallbackMethod_Begin : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_Begin() {
-      ::grpc::Service::MarkMethodCallback(0,
-          new ::grpc::internal::CallbackUnaryHandler< ::google::protobuf::Empty, ::txkv::TxReply>(
+      ::grpc::Service::MarkMethodCallback(1,
+          new ::grpc::internal::CallbackUnaryHandler< ::txkv::BaseRequest, ::txkv::ErrorReply>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::google::protobuf::Empty* request, ::txkv::TxReply* response) { return this->Begin(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response) { return this->Begin(context, request, response); }));}
     void SetMessageAllocatorFor_Begin(
-        ::grpc::MessageAllocator< ::google::protobuf::Empty, ::txkv::TxReply>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::google::protobuf::Empty, ::txkv::TxReply>*>(handler)
+        ::grpc::MessageAllocator< ::txkv::BaseRequest, ::txkv::ErrorReply>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(1);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::txkv::BaseRequest, ::txkv::ErrorReply>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_Begin() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Begin(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::txkv::TxReply* /*response*/) override {
+    ::grpc::Status Begin(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* Begin(
-      ::grpc::CallbackServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::txkv::TxReply* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ErrorReply* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithCallbackMethod_Commit : public BaseClass {
@@ -368,26 +439,26 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_Commit() {
-      ::grpc::Service::MarkMethodCallback(1,
-          new ::grpc::internal::CallbackUnaryHandler< ::txkv::TxRequest, ::google::protobuf::Empty>(
+      ::grpc::Service::MarkMethodCallback(2,
+          new ::grpc::internal::CallbackUnaryHandler< ::txkv::BaseRequest, ::txkv::ErrorReply>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::txkv::TxRequest* request, ::google::protobuf::Empty* response) { return this->Commit(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response) { return this->Commit(context, request, response); }));}
     void SetMessageAllocatorFor_Commit(
-        ::grpc::MessageAllocator< ::txkv::TxRequest, ::google::protobuf::Empty>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(1);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::txkv::TxRequest, ::google::protobuf::Empty>*>(handler)
+        ::grpc::MessageAllocator< ::txkv::BaseRequest, ::txkv::ErrorReply>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(2);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::txkv::BaseRequest, ::txkv::ErrorReply>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_Commit() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Commit(::grpc::ServerContext* /*context*/, const ::txkv::TxRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Commit(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* Commit(
-      ::grpc::CallbackServerContext* /*context*/, const ::txkv::TxRequest* /*request*/, ::google::protobuf::Empty* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ErrorReply* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithCallbackMethod_Rollback : public BaseClass {
@@ -395,26 +466,26 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_Rollback() {
-      ::grpc::Service::MarkMethodCallback(2,
-          new ::grpc::internal::CallbackUnaryHandler< ::txkv::TxRequest, ::google::protobuf::Empty>(
+      ::grpc::Service::MarkMethodCallback(3,
+          new ::grpc::internal::CallbackUnaryHandler< ::txkv::BaseRequest, ::txkv::ErrorReply>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::txkv::TxRequest* request, ::google::protobuf::Empty* response) { return this->Rollback(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::txkv::BaseRequest* request, ::txkv::ErrorReply* response) { return this->Rollback(context, request, response); }));}
     void SetMessageAllocatorFor_Rollback(
-        ::grpc::MessageAllocator< ::txkv::TxRequest, ::google::protobuf::Empty>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(2);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::txkv::TxRequest, ::google::protobuf::Empty>*>(handler)
+        ::grpc::MessageAllocator< ::txkv::BaseRequest, ::txkv::ErrorReply>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::txkv::BaseRequest, ::txkv::ErrorReply>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_Rollback() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Rollback(::grpc::ServerContext* /*context*/, const ::txkv::TxRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Rollback(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* Rollback(
-      ::grpc::CallbackServerContext* /*context*/, const ::txkv::TxRequest* /*request*/, ::google::protobuf::Empty* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ErrorReply* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithCallbackMethod_Get : public BaseClass {
@@ -422,26 +493,26 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_Get() {
-      ::grpc::Service::MarkMethodCallback(3,
-          new ::grpc::internal::CallbackUnaryHandler< ::txkv::KeyRequest, ::txkv::ValReply>(
+      ::grpc::Service::MarkMethodCallback(4,
+          new ::grpc::internal::CallbackUnaryHandler< ::txkv::KeyRequest, ::txkv::GetReply>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::txkv::KeyRequest* request, ::txkv::ValReply* response) { return this->Get(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::txkv::KeyRequest* request, ::txkv::GetReply* response) { return this->Get(context, request, response); }));}
     void SetMessageAllocatorFor_Get(
-        ::grpc::MessageAllocator< ::txkv::KeyRequest, ::txkv::ValReply>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::txkv::KeyRequest, ::txkv::ValReply>*>(handler)
+        ::grpc::MessageAllocator< ::txkv::KeyRequest, ::txkv::GetReply>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(4);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::txkv::KeyRequest, ::txkv::GetReply>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_Get() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Get(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::ValReply* /*response*/) override {
+    ::grpc::Status Get(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::GetReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* Get(
-      ::grpc::CallbackServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::ValReply* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::GetReply* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithCallbackMethod_Put : public BaseClass {
@@ -449,26 +520,26 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_Put() {
-      ::grpc::Service::MarkMethodCallback(4,
-          new ::grpc::internal::CallbackUnaryHandler< ::txkv::WriteRequest, ::google::protobuf::Empty>(
+      ::grpc::Service::MarkMethodCallback(5,
+          new ::grpc::internal::CallbackUnaryHandler< ::txkv::WriteRequest, ::txkv::ErrorReply>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::txkv::WriteRequest* request, ::google::protobuf::Empty* response) { return this->Put(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::txkv::WriteRequest* request, ::txkv::ErrorReply* response) { return this->Put(context, request, response); }));}
     void SetMessageAllocatorFor_Put(
-        ::grpc::MessageAllocator< ::txkv::WriteRequest, ::google::protobuf::Empty>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(4);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::txkv::WriteRequest, ::google::protobuf::Empty>*>(handler)
+        ::grpc::MessageAllocator< ::txkv::WriteRequest, ::txkv::ErrorReply>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(5);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::txkv::WriteRequest, ::txkv::ErrorReply>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_Put() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Put(::grpc::ServerContext* /*context*/, const ::txkv::WriteRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Put(::grpc::ServerContext* /*context*/, const ::txkv::WriteRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* Put(
-      ::grpc::CallbackServerContext* /*context*/, const ::txkv::WriteRequest* /*request*/, ::google::protobuf::Empty* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::txkv::WriteRequest* /*request*/, ::txkv::ErrorReply* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithCallbackMethod_Del : public BaseClass {
@@ -476,42 +547,59 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_Del() {
-      ::grpc::Service::MarkMethodCallback(5,
-          new ::grpc::internal::CallbackUnaryHandler< ::txkv::KeyRequest, ::google::protobuf::Empty>(
+      ::grpc::Service::MarkMethodCallback(6,
+          new ::grpc::internal::CallbackUnaryHandler< ::txkv::KeyRequest, ::txkv::ErrorReply>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::txkv::KeyRequest* request, ::google::protobuf::Empty* response) { return this->Del(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::txkv::KeyRequest* request, ::txkv::ErrorReply* response) { return this->Del(context, request, response); }));}
     void SetMessageAllocatorFor_Del(
-        ::grpc::MessageAllocator< ::txkv::KeyRequest, ::google::protobuf::Empty>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(5);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::txkv::KeyRequest, ::google::protobuf::Empty>*>(handler)
+        ::grpc::MessageAllocator< ::txkv::KeyRequest, ::txkv::ErrorReply>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(6);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::txkv::KeyRequest, ::txkv::ErrorReply>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_Del() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Del(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Del(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* Del(
-      ::grpc::CallbackServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::google::protobuf::Empty* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::ErrorReply* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_Begin<WithCallbackMethod_Commit<WithCallbackMethod_Rollback<WithCallbackMethod_Get<WithCallbackMethod_Put<WithCallbackMethod_Del<Service > > > > > > CallbackService;
+  typedef WithCallbackMethod_Connect<WithCallbackMethod_Begin<WithCallbackMethod_Commit<WithCallbackMethod_Rollback<WithCallbackMethod_Get<WithCallbackMethod_Put<WithCallbackMethod_Del<Service > > > > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
+  template <class BaseClass>
+  class WithGenericMethod_Connect : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_Connect() {
+      ::grpc::Service::MarkMethodGeneric(0);
+    }
+    ~WithGenericMethod_Connect() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Connect(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::txkv::ConnectionReply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
   template <class BaseClass>
   class WithGenericMethod_Begin : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_Begin() {
-      ::grpc::Service::MarkMethodGeneric(0);
+      ::grpc::Service::MarkMethodGeneric(1);
     }
     ~WithGenericMethod_Begin() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Begin(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::txkv::TxReply* /*response*/) override {
+    ::grpc::Status Begin(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -522,13 +610,13 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_Commit() {
-      ::grpc::Service::MarkMethodGeneric(1);
+      ::grpc::Service::MarkMethodGeneric(2);
     }
     ~WithGenericMethod_Commit() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Commit(::grpc::ServerContext* /*context*/, const ::txkv::TxRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Commit(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -539,13 +627,13 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_Rollback() {
-      ::grpc::Service::MarkMethodGeneric(2);
+      ::grpc::Service::MarkMethodGeneric(3);
     }
     ~WithGenericMethod_Rollback() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Rollback(::grpc::ServerContext* /*context*/, const ::txkv::TxRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Rollback(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -556,13 +644,13 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_Get() {
-      ::grpc::Service::MarkMethodGeneric(3);
+      ::grpc::Service::MarkMethodGeneric(4);
     }
     ~WithGenericMethod_Get() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Get(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::ValReply* /*response*/) override {
+    ::grpc::Status Get(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::GetReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -573,13 +661,13 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_Put() {
-      ::grpc::Service::MarkMethodGeneric(4);
+      ::grpc::Service::MarkMethodGeneric(5);
     }
     ~WithGenericMethod_Put() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Put(::grpc::ServerContext* /*context*/, const ::txkv::WriteRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Put(::grpc::ServerContext* /*context*/, const ::txkv::WriteRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -590,15 +678,35 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_Del() {
-      ::grpc::Service::MarkMethodGeneric(5);
+      ::grpc::Service::MarkMethodGeneric(6);
     }
     ~WithGenericMethod_Del() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Del(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Del(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_Connect : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_Connect() {
+      ::grpc::Service::MarkMethodRaw(0);
+    }
+    ~WithRawMethod_Connect() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Connect(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::txkv::ConnectionReply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestConnect(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -607,18 +715,18 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_Begin() {
-      ::grpc::Service::MarkMethodRaw(0);
+      ::grpc::Service::MarkMethodRaw(1);
     }
     ~WithRawMethod_Begin() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Begin(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::txkv::TxReply* /*response*/) override {
+    ::grpc::Status Begin(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestBegin(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -627,18 +735,18 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_Commit() {
-      ::grpc::Service::MarkMethodRaw(1);
+      ::grpc::Service::MarkMethodRaw(2);
     }
     ~WithRawMethod_Commit() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Commit(::grpc::ServerContext* /*context*/, const ::txkv::TxRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Commit(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestCommit(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -647,18 +755,18 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_Rollback() {
-      ::grpc::Service::MarkMethodRaw(2);
+      ::grpc::Service::MarkMethodRaw(3);
     }
     ~WithRawMethod_Rollback() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Rollback(::grpc::ServerContext* /*context*/, const ::txkv::TxRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Rollback(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestRollback(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -667,18 +775,18 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_Get() {
-      ::grpc::Service::MarkMethodRaw(3);
+      ::grpc::Service::MarkMethodRaw(4);
     }
     ~WithRawMethod_Get() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Get(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::ValReply* /*response*/) override {
+    ::grpc::Status Get(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::GetReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestGet(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -687,18 +795,18 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_Put() {
-      ::grpc::Service::MarkMethodRaw(4);
+      ::grpc::Service::MarkMethodRaw(5);
     }
     ~WithRawMethod_Put() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Put(::grpc::ServerContext* /*context*/, const ::txkv::WriteRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Put(::grpc::ServerContext* /*context*/, const ::txkv::WriteRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestPut(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -707,19 +815,41 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_Del() {
-      ::grpc::Service::MarkMethodRaw(5);
+      ::grpc::Service::MarkMethodRaw(6);
     }
     ~WithRawMethod_Del() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Del(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Del(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestDel(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
     }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_Connect : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_Connect() {
+      ::grpc::Service::MarkMethodRawCallback(0,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Connect(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_Connect() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Connect(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::txkv::ConnectionReply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* Connect(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithRawCallbackMethod_Begin : public BaseClass {
@@ -727,7 +857,7 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_Begin() {
-      ::grpc::Service::MarkMethodRawCallback(0,
+      ::grpc::Service::MarkMethodRawCallback(1,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Begin(context, request, response); }));
@@ -736,7 +866,7 @@ class MyKV final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Begin(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::txkv::TxReply* /*response*/) override {
+    ::grpc::Status Begin(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -749,7 +879,7 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_Commit() {
-      ::grpc::Service::MarkMethodRawCallback(1,
+      ::grpc::Service::MarkMethodRawCallback(2,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Commit(context, request, response); }));
@@ -758,7 +888,7 @@ class MyKV final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Commit(::grpc::ServerContext* /*context*/, const ::txkv::TxRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Commit(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -771,7 +901,7 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_Rollback() {
-      ::grpc::Service::MarkMethodRawCallback(2,
+      ::grpc::Service::MarkMethodRawCallback(3,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Rollback(context, request, response); }));
@@ -780,7 +910,7 @@ class MyKV final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Rollback(::grpc::ServerContext* /*context*/, const ::txkv::TxRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Rollback(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -793,7 +923,7 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_Get() {
-      ::grpc::Service::MarkMethodRawCallback(3,
+      ::grpc::Service::MarkMethodRawCallback(4,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Get(context, request, response); }));
@@ -802,7 +932,7 @@ class MyKV final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Get(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::ValReply* /*response*/) override {
+    ::grpc::Status Get(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::GetReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -815,7 +945,7 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_Put() {
-      ::grpc::Service::MarkMethodRawCallback(4,
+      ::grpc::Service::MarkMethodRawCallback(5,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Put(context, request, response); }));
@@ -824,7 +954,7 @@ class MyKV final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Put(::grpc::ServerContext* /*context*/, const ::txkv::WriteRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Put(::grpc::ServerContext* /*context*/, const ::txkv::WriteRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -837,7 +967,7 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_Del() {
-      ::grpc::Service::MarkMethodRawCallback(5,
+      ::grpc::Service::MarkMethodRawCallback(6,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Del(context, request, response); }));
@@ -846,7 +976,7 @@ class MyKV final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Del(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Del(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -854,17 +984,44 @@ class MyKV final {
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
+  class WithStreamedUnaryMethod_Connect : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_Connect() {
+      ::grpc::Service::MarkMethodStreamed(0,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::google::protobuf::Empty, ::txkv::ConnectionReply>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::google::protobuf::Empty, ::txkv::ConnectionReply>* streamer) {
+                       return this->StreamedConnect(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_Connect() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status Connect(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::txkv::ConnectionReply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedConnect(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::google::protobuf::Empty,::txkv::ConnectionReply>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
   class WithStreamedUnaryMethod_Begin : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_Begin() {
-      ::grpc::Service::MarkMethodStreamed(0,
+      ::grpc::Service::MarkMethodStreamed(1,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::google::protobuf::Empty, ::txkv::TxReply>(
+          ::txkv::BaseRequest, ::txkv::ErrorReply>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::google::protobuf::Empty, ::txkv::TxReply>* streamer) {
+                     ::txkv::BaseRequest, ::txkv::ErrorReply>* streamer) {
                        return this->StreamedBegin(context,
                          streamer);
                   }));
@@ -873,12 +1030,12 @@ class MyKV final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status Begin(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::txkv::TxReply* /*response*/) override {
+    ::grpc::Status Begin(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedBegin(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::google::protobuf::Empty,::txkv::TxReply>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedBegin(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::txkv::BaseRequest,::txkv::ErrorReply>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_Commit : public BaseClass {
@@ -886,12 +1043,12 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_Commit() {
-      ::grpc::Service::MarkMethodStreamed(1,
+      ::grpc::Service::MarkMethodStreamed(2,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::txkv::TxRequest, ::google::protobuf::Empty>(
+          ::txkv::BaseRequest, ::txkv::ErrorReply>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::txkv::TxRequest, ::google::protobuf::Empty>* streamer) {
+                     ::txkv::BaseRequest, ::txkv::ErrorReply>* streamer) {
                        return this->StreamedCommit(context,
                          streamer);
                   }));
@@ -900,12 +1057,12 @@ class MyKV final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status Commit(::grpc::ServerContext* /*context*/, const ::txkv::TxRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Commit(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedCommit(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::txkv::TxRequest,::google::protobuf::Empty>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedCommit(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::txkv::BaseRequest,::txkv::ErrorReply>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_Rollback : public BaseClass {
@@ -913,12 +1070,12 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_Rollback() {
-      ::grpc::Service::MarkMethodStreamed(2,
+      ::grpc::Service::MarkMethodStreamed(3,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::txkv::TxRequest, ::google::protobuf::Empty>(
+          ::txkv::BaseRequest, ::txkv::ErrorReply>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::txkv::TxRequest, ::google::protobuf::Empty>* streamer) {
+                     ::txkv::BaseRequest, ::txkv::ErrorReply>* streamer) {
                        return this->StreamedRollback(context,
                          streamer);
                   }));
@@ -927,12 +1084,12 @@ class MyKV final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status Rollback(::grpc::ServerContext* /*context*/, const ::txkv::TxRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Rollback(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedRollback(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::txkv::TxRequest,::google::protobuf::Empty>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedRollback(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::txkv::BaseRequest,::txkv::ErrorReply>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_Get : public BaseClass {
@@ -940,12 +1097,12 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_Get() {
-      ::grpc::Service::MarkMethodStreamed(3,
+      ::grpc::Service::MarkMethodStreamed(4,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::txkv::KeyRequest, ::txkv::ValReply>(
+          ::txkv::KeyRequest, ::txkv::GetReply>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::txkv::KeyRequest, ::txkv::ValReply>* streamer) {
+                     ::txkv::KeyRequest, ::txkv::GetReply>* streamer) {
                        return this->StreamedGet(context,
                          streamer);
                   }));
@@ -954,12 +1111,12 @@ class MyKV final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status Get(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::ValReply* /*response*/) override {
+    ::grpc::Status Get(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::GetReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedGet(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::txkv::KeyRequest,::txkv::ValReply>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedGet(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::txkv::KeyRequest,::txkv::GetReply>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_Put : public BaseClass {
@@ -967,12 +1124,12 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_Put() {
-      ::grpc::Service::MarkMethodStreamed(4,
+      ::grpc::Service::MarkMethodStreamed(5,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::txkv::WriteRequest, ::google::protobuf::Empty>(
+          ::txkv::WriteRequest, ::txkv::ErrorReply>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::txkv::WriteRequest, ::google::protobuf::Empty>* streamer) {
+                     ::txkv::WriteRequest, ::txkv::ErrorReply>* streamer) {
                        return this->StreamedPut(context,
                          streamer);
                   }));
@@ -981,12 +1138,12 @@ class MyKV final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status Put(::grpc::ServerContext* /*context*/, const ::txkv::WriteRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Put(::grpc::ServerContext* /*context*/, const ::txkv::WriteRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedPut(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::txkv::WriteRequest,::google::protobuf::Empty>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedPut(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::txkv::WriteRequest,::txkv::ErrorReply>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_Del : public BaseClass {
@@ -994,12 +1151,12 @@ class MyKV final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_Del() {
-      ::grpc::Service::MarkMethodStreamed(5,
+      ::grpc::Service::MarkMethodStreamed(6,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::txkv::KeyRequest, ::google::protobuf::Empty>(
+          ::txkv::KeyRequest, ::txkv::ErrorReply>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::txkv::KeyRequest, ::google::protobuf::Empty>* streamer) {
+                     ::txkv::KeyRequest, ::txkv::ErrorReply>* streamer) {
                        return this->StreamedDel(context,
                          streamer);
                   }));
@@ -1008,16 +1165,16 @@ class MyKV final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status Del(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::google::protobuf::Empty* /*response*/) override {
+    ::grpc::Status Del(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedDel(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::txkv::KeyRequest,::google::protobuf::Empty>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedDel(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::txkv::KeyRequest,::txkv::ErrorReply>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_Begin<WithStreamedUnaryMethod_Commit<WithStreamedUnaryMethod_Rollback<WithStreamedUnaryMethod_Get<WithStreamedUnaryMethod_Put<WithStreamedUnaryMethod_Del<Service > > > > > > StreamedUnaryService;
+  typedef WithStreamedUnaryMethod_Connect<WithStreamedUnaryMethod_Begin<WithStreamedUnaryMethod_Commit<WithStreamedUnaryMethod_Rollback<WithStreamedUnaryMethod_Get<WithStreamedUnaryMethod_Put<WithStreamedUnaryMethod_Del<Service > > > > > > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_Begin<WithStreamedUnaryMethod_Commit<WithStreamedUnaryMethod_Rollback<WithStreamedUnaryMethod_Get<WithStreamedUnaryMethod_Put<WithStreamedUnaryMethod_Del<Service > > > > > > StreamedService;
+  typedef WithStreamedUnaryMethod_Connect<WithStreamedUnaryMethod_Begin<WithStreamedUnaryMethod_Commit<WithStreamedUnaryMethod_Rollback<WithStreamedUnaryMethod_Get<WithStreamedUnaryMethod_Put<WithStreamedUnaryMethod_Del<Service > > > > > > > StreamedService;
 };
 
 }  // namespace txkv

@@ -47,7 +47,7 @@ struct TableStruct_kv_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[5]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[6]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -55,51 +55,55 @@ struct TableStruct_kv_2eproto {
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_kv_2eproto;
 namespace txkv {
+class BaseRequest;
+struct BaseRequestDefaultTypeInternal;
+extern BaseRequestDefaultTypeInternal _BaseRequest_default_instance_;
+class ConnectionReply;
+struct ConnectionReplyDefaultTypeInternal;
+extern ConnectionReplyDefaultTypeInternal _ConnectionReply_default_instance_;
+class ErrorReply;
+struct ErrorReplyDefaultTypeInternal;
+extern ErrorReplyDefaultTypeInternal _ErrorReply_default_instance_;
+class GetReply;
+struct GetReplyDefaultTypeInternal;
+extern GetReplyDefaultTypeInternal _GetReply_default_instance_;
 class KeyRequest;
 struct KeyRequestDefaultTypeInternal;
 extern KeyRequestDefaultTypeInternal _KeyRequest_default_instance_;
-class TxReply;
-struct TxReplyDefaultTypeInternal;
-extern TxReplyDefaultTypeInternal _TxReply_default_instance_;
-class TxRequest;
-struct TxRequestDefaultTypeInternal;
-extern TxRequestDefaultTypeInternal _TxRequest_default_instance_;
-class ValReply;
-struct ValReplyDefaultTypeInternal;
-extern ValReplyDefaultTypeInternal _ValReply_default_instance_;
 class WriteRequest;
 struct WriteRequestDefaultTypeInternal;
 extern WriteRequestDefaultTypeInternal _WriteRequest_default_instance_;
 }  // namespace txkv
 PROTOBUF_NAMESPACE_OPEN
+template<> ::txkv::BaseRequest* Arena::CreateMaybeMessage<::txkv::BaseRequest>(Arena*);
+template<> ::txkv::ConnectionReply* Arena::CreateMaybeMessage<::txkv::ConnectionReply>(Arena*);
+template<> ::txkv::ErrorReply* Arena::CreateMaybeMessage<::txkv::ErrorReply>(Arena*);
+template<> ::txkv::GetReply* Arena::CreateMaybeMessage<::txkv::GetReply>(Arena*);
 template<> ::txkv::KeyRequest* Arena::CreateMaybeMessage<::txkv::KeyRequest>(Arena*);
-template<> ::txkv::TxReply* Arena::CreateMaybeMessage<::txkv::TxReply>(Arena*);
-template<> ::txkv::TxRequest* Arena::CreateMaybeMessage<::txkv::TxRequest>(Arena*);
-template<> ::txkv::ValReply* Arena::CreateMaybeMessage<::txkv::ValReply>(Arena*);
 template<> ::txkv::WriteRequest* Arena::CreateMaybeMessage<::txkv::WriteRequest>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace txkv {
 
 // ===================================================================
 
-class TxRequest final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:txkv.TxRequest) */ {
+class BaseRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:txkv.BaseRequest) */ {
  public:
-  inline TxRequest() : TxRequest(nullptr) {}
-  ~TxRequest() override;
-  explicit constexpr TxRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline BaseRequest() : BaseRequest(nullptr) {}
+  ~BaseRequest() override;
+  explicit constexpr BaseRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  TxRequest(const TxRequest& from);
-  TxRequest(TxRequest&& from) noexcept
-    : TxRequest() {
+  BaseRequest(const BaseRequest& from);
+  BaseRequest(BaseRequest&& from) noexcept
+    : BaseRequest() {
     *this = ::std::move(from);
   }
 
-  inline TxRequest& operator=(const TxRequest& from) {
+  inline BaseRequest& operator=(const BaseRequest& from) {
     CopyFrom(from);
     return *this;
   }
-  inline TxRequest& operator=(TxRequest&& from) noexcept {
+  inline BaseRequest& operator=(BaseRequest&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -122,20 +126,20 @@ class TxRequest final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const TxRequest& default_instance() {
+  static const BaseRequest& default_instance() {
     return *internal_default_instance();
   }
-  static inline const TxRequest* internal_default_instance() {
-    return reinterpret_cast<const TxRequest*>(
-               &_TxRequest_default_instance_);
+  static inline const BaseRequest* internal_default_instance() {
+    return reinterpret_cast<const BaseRequest*>(
+               &_BaseRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     0;
 
-  friend void swap(TxRequest& a, TxRequest& b) {
+  friend void swap(BaseRequest& a, BaseRequest& b) {
     a.Swap(&b);
   }
-  inline void Swap(TxRequest* other) {
+  inline void Swap(BaseRequest* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -148,7 +152,7 @@ class TxRequest final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(TxRequest* other) {
+  void UnsafeArenaSwap(BaseRequest* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -156,13 +160,13 @@ class TxRequest final :
 
   // implements Message ----------------------------------------------
 
-  TxRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<TxRequest>(arena);
+  BaseRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<BaseRequest>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const TxRequest& from);
+  void CopyFrom(const BaseRequest& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const TxRequest& from);
+  void MergeFrom(const BaseRequest& from);
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
   public:
@@ -179,15 +183,15 @@ class TxRequest final :
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(TxRequest* other);
+  void InternalSwap(BaseRequest* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "txkv.TxRequest";
+    return "txkv.BaseRequest";
   }
   protected:
-  explicit TxRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit BaseRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   private:
   static void ArenaDtor(void* object);
@@ -204,48 +208,48 @@ class TxRequest final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kTidFieldNumber = 1,
+    kCidFieldNumber = 1,
   };
-  // uint64 tid = 1;
-  void clear_tid();
-  uint64_t tid() const;
-  void set_tid(uint64_t value);
+  // uint64 cid = 1;
+  void clear_cid();
+  uint64_t cid() const;
+  void set_cid(uint64_t value);
   private:
-  uint64_t _internal_tid() const;
-  void _internal_set_tid(uint64_t value);
+  uint64_t _internal_cid() const;
+  void _internal_set_cid(uint64_t value);
   public:
 
-  // @@protoc_insertion_point(class_scope:txkv.TxRequest)
+  // @@protoc_insertion_point(class_scope:txkv.BaseRequest)
  private:
   class _Internal;
 
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  uint64_t tid_;
+  uint64_t cid_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_kv_2eproto;
 };
 // -------------------------------------------------------------------
 
-class TxReply final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:txkv.TxReply) */ {
+class ConnectionReply final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:txkv.ConnectionReply) */ {
  public:
-  inline TxReply() : TxReply(nullptr) {}
-  ~TxReply() override;
-  explicit constexpr TxReply(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline ConnectionReply() : ConnectionReply(nullptr) {}
+  ~ConnectionReply() override;
+  explicit constexpr ConnectionReply(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  TxReply(const TxReply& from);
-  TxReply(TxReply&& from) noexcept
-    : TxReply() {
+  ConnectionReply(const ConnectionReply& from);
+  ConnectionReply(ConnectionReply&& from) noexcept
+    : ConnectionReply() {
     *this = ::std::move(from);
   }
 
-  inline TxReply& operator=(const TxReply& from) {
+  inline ConnectionReply& operator=(const ConnectionReply& from) {
     CopyFrom(from);
     return *this;
   }
-  inline TxReply& operator=(TxReply&& from) noexcept {
+  inline ConnectionReply& operator=(ConnectionReply&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -268,20 +272,20 @@ class TxReply final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const TxReply& default_instance() {
+  static const ConnectionReply& default_instance() {
     return *internal_default_instance();
   }
-  static inline const TxReply* internal_default_instance() {
-    return reinterpret_cast<const TxReply*>(
-               &_TxReply_default_instance_);
+  static inline const ConnectionReply* internal_default_instance() {
+    return reinterpret_cast<const ConnectionReply*>(
+               &_ConnectionReply_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     1;
 
-  friend void swap(TxReply& a, TxReply& b) {
+  friend void swap(ConnectionReply& a, ConnectionReply& b) {
     a.Swap(&b);
   }
-  inline void Swap(TxReply* other) {
+  inline void Swap(ConnectionReply* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -294,7 +298,7 @@ class TxReply final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(TxReply* other) {
+  void UnsafeArenaSwap(ConnectionReply* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -302,13 +306,13 @@ class TxReply final :
 
   // implements Message ----------------------------------------------
 
-  TxReply* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<TxReply>(arena);
+  ConnectionReply* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ConnectionReply>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const TxReply& from);
+  void CopyFrom(const ConnectionReply& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const TxReply& from);
+  void MergeFrom(const ConnectionReply& from);
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
   public:
@@ -325,15 +329,15 @@ class TxReply final :
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(TxReply* other);
+  void InternalSwap(ConnectionReply* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "txkv.TxReply";
+    return "txkv.ConnectionReply";
   }
   protected:
-  explicit TxReply(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit ConnectionReply(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   private:
   static void ArenaDtor(void* object);
@@ -350,16 +354,16 @@ class TxReply final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kTidFieldNumber = 1,
+    kCidFieldNumber = 1,
     kErrorCodeFieldNumber = 2,
   };
-  // uint64 tid = 1;
-  void clear_tid();
-  uint64_t tid() const;
-  void set_tid(uint64_t value);
+  // uint64 cid = 1;
+  void clear_cid();
+  uint64_t cid() const;
+  void set_cid(uint64_t value);
   private:
-  uint64_t _internal_tid() const;
-  void _internal_set_tid(uint64_t value);
+  uint64_t _internal_cid() const;
+  void _internal_set_cid(uint64_t value);
   public:
 
   // uint32 error_code = 2;
@@ -371,14 +375,160 @@ class TxReply final :
   void _internal_set_error_code(uint32_t value);
   public:
 
-  // @@protoc_insertion_point(class_scope:txkv.TxReply)
+  // @@protoc_insertion_point(class_scope:txkv.ConnectionReply)
  private:
   class _Internal;
 
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  uint64_t tid_;
+  uint64_t cid_;
+  uint32_t error_code_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_kv_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ErrorReply final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:txkv.ErrorReply) */ {
+ public:
+  inline ErrorReply() : ErrorReply(nullptr) {}
+  ~ErrorReply() override;
+  explicit constexpr ErrorReply(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  ErrorReply(const ErrorReply& from);
+  ErrorReply(ErrorReply&& from) noexcept
+    : ErrorReply() {
+    *this = ::std::move(from);
+  }
+
+  inline ErrorReply& operator=(const ErrorReply& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ErrorReply& operator=(ErrorReply&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ErrorReply& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ErrorReply* internal_default_instance() {
+    return reinterpret_cast<const ErrorReply*>(
+               &_ErrorReply_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  friend void swap(ErrorReply& a, ErrorReply& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ErrorReply* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ErrorReply* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ErrorReply* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ErrorReply>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const ErrorReply& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const ErrorReply& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ErrorReply* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "txkv.ErrorReply";
+  }
+  protected:
+  explicit ErrorReply(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kErrorCodeFieldNumber = 1,
+  };
+  // uint32 error_code = 1;
+  void clear_error_code();
+  uint32_t error_code() const;
+  void set_error_code(uint32_t value);
+  private:
+  uint32_t _internal_error_code() const;
+  void _internal_set_error_code(uint32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:txkv.ErrorReply)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
   uint32_t error_code_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_kv_2eproto;
@@ -433,7 +583,7 @@ class KeyRequest final :
                &_KeyRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    3;
 
   friend void swap(KeyRequest& a, KeyRequest& b) {
     a.Swap(&b);
@@ -507,16 +657,16 @@ class KeyRequest final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kTidFieldNumber = 1,
+    kCidFieldNumber = 1,
     kKeyFieldNumber = 2,
   };
-  // uint64 tid = 1;
-  void clear_tid();
-  uint64_t tid() const;
-  void set_tid(uint64_t value);
+  // uint64 cid = 1;
+  void clear_cid();
+  uint64_t cid() const;
+  void set_cid(uint64_t value);
   private:
-  uint64_t _internal_tid() const;
-  void _internal_set_tid(uint64_t value);
+  uint64_t _internal_cid() const;
+  void _internal_set_cid(uint64_t value);
   public:
 
   // uint64 key = 2;
@@ -535,31 +685,31 @@ class KeyRequest final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  uint64_t tid_;
+  uint64_t cid_;
   uint64_t key_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_kv_2eproto;
 };
 // -------------------------------------------------------------------
 
-class ValReply final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:txkv.ValReply) */ {
+class GetReply final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:txkv.GetReply) */ {
  public:
-  inline ValReply() : ValReply(nullptr) {}
-  ~ValReply() override;
-  explicit constexpr ValReply(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline GetReply() : GetReply(nullptr) {}
+  ~GetReply() override;
+  explicit constexpr GetReply(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  ValReply(const ValReply& from);
-  ValReply(ValReply&& from) noexcept
-    : ValReply() {
+  GetReply(const GetReply& from);
+  GetReply(GetReply&& from) noexcept
+    : GetReply() {
     *this = ::std::move(from);
   }
 
-  inline ValReply& operator=(const ValReply& from) {
+  inline GetReply& operator=(const GetReply& from) {
     CopyFrom(from);
     return *this;
   }
-  inline ValReply& operator=(ValReply&& from) noexcept {
+  inline GetReply& operator=(GetReply&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -582,20 +732,20 @@ class ValReply final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const ValReply& default_instance() {
+  static const GetReply& default_instance() {
     return *internal_default_instance();
   }
-  static inline const ValReply* internal_default_instance() {
-    return reinterpret_cast<const ValReply*>(
-               &_ValReply_default_instance_);
+  static inline const GetReply* internal_default_instance() {
+    return reinterpret_cast<const GetReply*>(
+               &_GetReply_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    4;
 
-  friend void swap(ValReply& a, ValReply& b) {
+  friend void swap(GetReply& a, GetReply& b) {
     a.Swap(&b);
   }
-  inline void Swap(ValReply* other) {
+  inline void Swap(GetReply* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -608,7 +758,7 @@ class ValReply final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(ValReply* other) {
+  void UnsafeArenaSwap(GetReply* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -616,13 +766,13 @@ class ValReply final :
 
   // implements Message ----------------------------------------------
 
-  ValReply* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<ValReply>(arena);
+  GetReply* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<GetReply>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const ValReply& from);
+  void CopyFrom(const GetReply& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const ValReply& from);
+  void MergeFrom(const GetReply& from);
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
   public:
@@ -639,15 +789,15 @@ class ValReply final :
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(ValReply* other);
+  void InternalSwap(GetReply* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "txkv.ValReply";
+    return "txkv.GetReply";
   }
   protected:
-  explicit ValReply(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit GetReply(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   private:
   static void ArenaDtor(void* object);
@@ -685,7 +835,7 @@ class ValReply final :
   void _internal_set_error_code(uint32_t value);
   public:
 
-  // @@protoc_insertion_point(class_scope:txkv.ValReply)
+  // @@protoc_insertion_point(class_scope:txkv.GetReply)
  private:
   class _Internal;
 
@@ -747,7 +897,7 @@ class WriteRequest final :
                &_WriteRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    5;
 
   friend void swap(WriteRequest& a, WriteRequest& b) {
     a.Swap(&b);
@@ -821,17 +971,17 @@ class WriteRequest final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kTidFieldNumber = 1,
+    kCidFieldNumber = 1,
     kKeyFieldNumber = 2,
     kValFieldNumber = 3,
   };
-  // uint64 tid = 1;
-  void clear_tid();
-  uint64_t tid() const;
-  void set_tid(uint64_t value);
+  // uint64 cid = 1;
+  void clear_cid();
+  uint64_t cid() const;
+  void set_cid(uint64_t value);
   private:
-  uint64_t _internal_tid() const;
-  void _internal_set_tid(uint64_t value);
+  uint64_t _internal_cid() const;
+  void _internal_set_cid(uint64_t value);
   public:
 
   // uint64 key = 2;
@@ -859,7 +1009,7 @@ class WriteRequest final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  uint64_t tid_;
+  uint64_t cid_;
   uint64_t key_;
   uint64_t val_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -874,94 +1024,118 @@ class WriteRequest final :
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// TxRequest
+// BaseRequest
 
-// uint64 tid = 1;
-inline void TxRequest::clear_tid() {
-  tid_ = uint64_t{0u};
+// uint64 cid = 1;
+inline void BaseRequest::clear_cid() {
+  cid_ = uint64_t{0u};
 }
-inline uint64_t TxRequest::_internal_tid() const {
-  return tid_;
+inline uint64_t BaseRequest::_internal_cid() const {
+  return cid_;
 }
-inline uint64_t TxRequest::tid() const {
-  // @@protoc_insertion_point(field_get:txkv.TxRequest.tid)
-  return _internal_tid();
+inline uint64_t BaseRequest::cid() const {
+  // @@protoc_insertion_point(field_get:txkv.BaseRequest.cid)
+  return _internal_cid();
 }
-inline void TxRequest::_internal_set_tid(uint64_t value) {
+inline void BaseRequest::_internal_set_cid(uint64_t value) {
   
-  tid_ = value;
+  cid_ = value;
 }
-inline void TxRequest::set_tid(uint64_t value) {
-  _internal_set_tid(value);
-  // @@protoc_insertion_point(field_set:txkv.TxRequest.tid)
+inline void BaseRequest::set_cid(uint64_t value) {
+  _internal_set_cid(value);
+  // @@protoc_insertion_point(field_set:txkv.BaseRequest.cid)
 }
 
 // -------------------------------------------------------------------
 
-// TxReply
+// ConnectionReply
 
-// uint64 tid = 1;
-inline void TxReply::clear_tid() {
-  tid_ = uint64_t{0u};
+// uint64 cid = 1;
+inline void ConnectionReply::clear_cid() {
+  cid_ = uint64_t{0u};
 }
-inline uint64_t TxReply::_internal_tid() const {
-  return tid_;
+inline uint64_t ConnectionReply::_internal_cid() const {
+  return cid_;
 }
-inline uint64_t TxReply::tid() const {
-  // @@protoc_insertion_point(field_get:txkv.TxReply.tid)
-  return _internal_tid();
+inline uint64_t ConnectionReply::cid() const {
+  // @@protoc_insertion_point(field_get:txkv.ConnectionReply.cid)
+  return _internal_cid();
 }
-inline void TxReply::_internal_set_tid(uint64_t value) {
+inline void ConnectionReply::_internal_set_cid(uint64_t value) {
   
-  tid_ = value;
+  cid_ = value;
 }
-inline void TxReply::set_tid(uint64_t value) {
-  _internal_set_tid(value);
-  // @@protoc_insertion_point(field_set:txkv.TxReply.tid)
+inline void ConnectionReply::set_cid(uint64_t value) {
+  _internal_set_cid(value);
+  // @@protoc_insertion_point(field_set:txkv.ConnectionReply.cid)
 }
 
 // uint32 error_code = 2;
-inline void TxReply::clear_error_code() {
+inline void ConnectionReply::clear_error_code() {
   error_code_ = 0u;
 }
-inline uint32_t TxReply::_internal_error_code() const {
+inline uint32_t ConnectionReply::_internal_error_code() const {
   return error_code_;
 }
-inline uint32_t TxReply::error_code() const {
-  // @@protoc_insertion_point(field_get:txkv.TxReply.error_code)
+inline uint32_t ConnectionReply::error_code() const {
+  // @@protoc_insertion_point(field_get:txkv.ConnectionReply.error_code)
   return _internal_error_code();
 }
-inline void TxReply::_internal_set_error_code(uint32_t value) {
+inline void ConnectionReply::_internal_set_error_code(uint32_t value) {
   
   error_code_ = value;
 }
-inline void TxReply::set_error_code(uint32_t value) {
+inline void ConnectionReply::set_error_code(uint32_t value) {
   _internal_set_error_code(value);
-  // @@protoc_insertion_point(field_set:txkv.TxReply.error_code)
+  // @@protoc_insertion_point(field_set:txkv.ConnectionReply.error_code)
+}
+
+// -------------------------------------------------------------------
+
+// ErrorReply
+
+// uint32 error_code = 1;
+inline void ErrorReply::clear_error_code() {
+  error_code_ = 0u;
+}
+inline uint32_t ErrorReply::_internal_error_code() const {
+  return error_code_;
+}
+inline uint32_t ErrorReply::error_code() const {
+  // @@protoc_insertion_point(field_get:txkv.ErrorReply.error_code)
+  return _internal_error_code();
+}
+inline void ErrorReply::_internal_set_error_code(uint32_t value) {
+  
+  error_code_ = value;
+}
+inline void ErrorReply::set_error_code(uint32_t value) {
+  _internal_set_error_code(value);
+  // @@protoc_insertion_point(field_set:txkv.ErrorReply.error_code)
 }
 
 // -------------------------------------------------------------------
 
 // KeyRequest
 
-// uint64 tid = 1;
-inline void KeyRequest::clear_tid() {
-  tid_ = uint64_t{0u};
+// uint64 cid = 1;
+inline void KeyRequest::clear_cid() {
+  cid_ = uint64_t{0u};
 }
-inline uint64_t KeyRequest::_internal_tid() const {
-  return tid_;
+inline uint64_t KeyRequest::_internal_cid() const {
+  return cid_;
 }
-inline uint64_t KeyRequest::tid() const {
-  // @@protoc_insertion_point(field_get:txkv.KeyRequest.tid)
-  return _internal_tid();
+inline uint64_t KeyRequest::cid() const {
+  // @@protoc_insertion_point(field_get:txkv.KeyRequest.cid)
+  return _internal_cid();
 }
-inline void KeyRequest::_internal_set_tid(uint64_t value) {
+inline void KeyRequest::_internal_set_cid(uint64_t value) {
   
-  tid_ = value;
+  cid_ = value;
 }
-inline void KeyRequest::set_tid(uint64_t value) {
-  _internal_set_tid(value);
-  // @@protoc_insertion_point(field_set:txkv.KeyRequest.tid)
+inline void KeyRequest::set_cid(uint64_t value) {
+  _internal_set_cid(value);
+  // @@protoc_insertion_point(field_set:txkv.KeyRequest.cid)
 }
 
 // uint64 key = 2;
@@ -986,70 +1160,70 @@ inline void KeyRequest::set_key(uint64_t value) {
 
 // -------------------------------------------------------------------
 
-// ValReply
+// GetReply
 
 // uint64 val = 1;
-inline void ValReply::clear_val() {
+inline void GetReply::clear_val() {
   val_ = uint64_t{0u};
 }
-inline uint64_t ValReply::_internal_val() const {
+inline uint64_t GetReply::_internal_val() const {
   return val_;
 }
-inline uint64_t ValReply::val() const {
-  // @@protoc_insertion_point(field_get:txkv.ValReply.val)
+inline uint64_t GetReply::val() const {
+  // @@protoc_insertion_point(field_get:txkv.GetReply.val)
   return _internal_val();
 }
-inline void ValReply::_internal_set_val(uint64_t value) {
+inline void GetReply::_internal_set_val(uint64_t value) {
   
   val_ = value;
 }
-inline void ValReply::set_val(uint64_t value) {
+inline void GetReply::set_val(uint64_t value) {
   _internal_set_val(value);
-  // @@protoc_insertion_point(field_set:txkv.ValReply.val)
+  // @@protoc_insertion_point(field_set:txkv.GetReply.val)
 }
 
 // uint32 error_code = 2;
-inline void ValReply::clear_error_code() {
+inline void GetReply::clear_error_code() {
   error_code_ = 0u;
 }
-inline uint32_t ValReply::_internal_error_code() const {
+inline uint32_t GetReply::_internal_error_code() const {
   return error_code_;
 }
-inline uint32_t ValReply::error_code() const {
-  // @@protoc_insertion_point(field_get:txkv.ValReply.error_code)
+inline uint32_t GetReply::error_code() const {
+  // @@protoc_insertion_point(field_get:txkv.GetReply.error_code)
   return _internal_error_code();
 }
-inline void ValReply::_internal_set_error_code(uint32_t value) {
+inline void GetReply::_internal_set_error_code(uint32_t value) {
   
   error_code_ = value;
 }
-inline void ValReply::set_error_code(uint32_t value) {
+inline void GetReply::set_error_code(uint32_t value) {
   _internal_set_error_code(value);
-  // @@protoc_insertion_point(field_set:txkv.ValReply.error_code)
+  // @@protoc_insertion_point(field_set:txkv.GetReply.error_code)
 }
 
 // -------------------------------------------------------------------
 
 // WriteRequest
 
-// uint64 tid = 1;
-inline void WriteRequest::clear_tid() {
-  tid_ = uint64_t{0u};
+// uint64 cid = 1;
+inline void WriteRequest::clear_cid() {
+  cid_ = uint64_t{0u};
 }
-inline uint64_t WriteRequest::_internal_tid() const {
-  return tid_;
+inline uint64_t WriteRequest::_internal_cid() const {
+  return cid_;
 }
-inline uint64_t WriteRequest::tid() const {
-  // @@protoc_insertion_point(field_get:txkv.WriteRequest.tid)
-  return _internal_tid();
+inline uint64_t WriteRequest::cid() const {
+  // @@protoc_insertion_point(field_get:txkv.WriteRequest.cid)
+  return _internal_cid();
 }
-inline void WriteRequest::_internal_set_tid(uint64_t value) {
+inline void WriteRequest::_internal_set_cid(uint64_t value) {
   
-  tid_ = value;
+  cid_ = value;
 }
-inline void WriteRequest::set_tid(uint64_t value) {
-  _internal_set_tid(value);
-  // @@protoc_insertion_point(field_set:txkv.WriteRequest.tid)
+inline void WriteRequest::set_cid(uint64_t value) {
+  _internal_set_cid(value);
+  // @@protoc_insertion_point(field_set:txkv.WriteRequest.cid)
 }
 
 // uint64 key = 2;
@@ -1095,6 +1269,8 @@ inline void WriteRequest::set_val(uint64_t value) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
