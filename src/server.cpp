@@ -20,6 +20,9 @@ Status MyKVImpl::Begin(ServerContext* ctx, const BaseRequest *req, ErrorReply *r
   auto itr = ConnMap.find(cid);
   if (itr != ConnMap.end()) {
     // TBD: must implicit commit and release TxCB
+    cout << "[DEBUG] implicit commit" << endl;
+    TxCB *txcb = itr->second;
+    server->commit_tx(txcb);
   }
   TxCB *txcb = server->start_tx();
   ConnMap[req->cid()] = txcb;
@@ -58,48 +61,65 @@ Status MyKVImpl::Rollback(ServerContext* ctx, const BaseRequest *req, ErrorReply
 Status MyKVImpl::Get(ServerContext* ctx, const KeyRequest *req, GetReply *reply) {
   uint64_t cid = req->cid();
   uint64_t key = req->key();
+  TxCB *txcb;
+  bool singleSTMT = false;
   // find a TxCB instance
   auto itr = ConnMap.find(cid);
   if (itr != ConnMap.end()) {
-    TxCB *txcb = itr->second;
-    ReturnVal ret = server->get(txcb, key);
-    if(ret.error_no == KEY_NOT_FOUND) {
-      reply->set_error_code(1); // TBD: key not found
-    } else {
-      reply->set_error_code(0);
-      reply->set_val(ret.val);
-    }
+    txcb = itr->second;
   } else {
-    // TBD: error
-    return Status::CANCELLED;
+    // start transaction for this stmt
+    singleSTMT = true;
+    txcb = server->start_tx();
+  }
+  ReturnVal ret = server->get(txcb, key);
+  if(ret.error_no == KEY_NOT_FOUND) {
+    reply->set_error_code(1); // TBD: key not found
+  } else {
+    reply->set_error_code(0);
+    reply->set_val(ret.val);
+  }
+  if (singleSTMT) {
+    server->commit_tx(txcb);
   }
   return Status::OK;
 }
 
 Status MyKVImpl::Put(ServerContext* ctx, const WriteRequest *wreq, ErrorReply *reply) {
   uint64_t cid = wreq->cid();
+  bool singleSTMT = false;
+  TxCB *txcb;
   // find a TxCB instance
   auto itr = ConnMap.find(cid);
   if (itr != ConnMap.end()) {
-    TxCB *txcb = itr->second;
-    server->put(txcb, wreq->key(), wreq->val());
+    txcb = itr->second;
   } else {
-    // TBD: error
-    return Status::CANCELLED;
+    // start transaction for this stmt
+    singleSTMT = true;
+    txcb = server->start_tx();
+  }
+  server->put(txcb, wreq->key(), wreq->val());
+  if(singleSTMT) {
+    server->commit_tx(txcb);
   }
   return Status::OK;
 }
 
 Status MyKVImpl::Del(ServerContext* ctx, const KeyRequest *req, ErrorReply *reply) {
   uint64_t cid = req->cid();
+  bool singleSTMT = false;
+  TxCB *txcb;
   // find a TxCB instance
   auto itr = ConnMap.find(cid);
   if (itr != ConnMap.end()) {
-    TxCB *txcb = itr->second;
-    server->del(txcb, req->key());
+    txcb = itr->second;
   } else {
-    // TBD: error
-    return Status::CANCELLED;
+    singleSTMT = true;
+    txcb = server->start_tx();
+  }
+  server->del(txcb, req->key());
+  if(singleSTMT) {
+    server->commit_tx(txcb);
   }
   return Status::OK;
 }
