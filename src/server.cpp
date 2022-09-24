@@ -1,46 +1,66 @@
-#include "kv/KVclient.h"
 #include "kv/KVserver.h"
 #include <iostream>
-#include <pthread.h>
-#include <unistd.h>
 #include "server.h"
 
 using namespace std;
 
 KVserver *server;
 
-Status MyKVImpl::Begin(ServerContext* ctx, const google::protobuf::Empty*, TxReply *reply) {
+Status MyKVImpl::Connect(ServerContext* ctx, const google::protobuf::Empty*, ConnectionReply *reply) {
+  ReturnVal ret = server->connect();
+  if(ret.error_no == NO_ERROR) {
+    reply->set_cid(ret.val);
+    return Status::OK;
+  }
+  return Status::CANCELLED;
+}
+
+Status MyKVImpl::Begin(ServerContext* ctx, const BaseRequest *req, ErrorReply *reply) {
+  uint64_t cid = req->cid();
+  auto itr = ConnMap.find(cid);
+  if (itr != ConnMap.end()) {
+    // TBD: must implicit commit and release TxCB
+  }
   TxCB *txcb = server->start_tx();
-  TxMap[txcb->txid] = txcb;
-  reply->set_tid(txcb->txid);
+  ConnMap[req->cid()] = txcb;
   reply->set_error_code(0);
   return Status::OK;
 }
 
-Status MyKVImpl::Commit(ServerContext* ctx, const TxRequest *req, google::protobuf::Empty* res) {
-  uint64_t txid = req->tid();
-  // find a TxCB instance
-  auto itr = TxMap.find(txid);
-  if (itr != TxMap.end()) {
+Status MyKVImpl::Commit(ServerContext* ctx, const BaseRequest *req, ErrorReply *reply) {
+  uint64_t cid = req->cid();
+  auto itr = ConnMap.find(cid);
+  if (itr != ConnMap.end()) {
     TxCB *txcb = itr->second;
     server->commit_tx(txcb);
   } else {
     // TBD: error
+    return Status::CANCELLED;
   }
+  ConnMap.erase(cid); // TBD: should delete all txcb-related instances
   return Status::OK;
 }
 
-Status MyKVImpl::Rollback(ServerContext* ctx, const TxRequest *req, google::protobuf::Empty* res) {
-  // TBD: impl
+Status MyKVImpl::Rollback(ServerContext* ctx, const BaseRequest *req, ErrorReply *reply) {
+  uint64_t cid = req->cid();
+  auto itr = ConnMap.find(cid);
+  if (itr != ConnMap.end()) {
+    TxCB *txcb = itr->second;
+    // TBD: impl rollback process
+  } else {
+    // TBD: error
+    return Status::CANCELLED;
+  }
+  ConnMap.erase(cid); // TBD: should delete all txcb-related instances
   return Status::OK;
 }
 
-Status MyKVImpl::Get(ServerContext* ctx, const KeyRequest *req, ValReply *reply) {
-  uint64_t txid = req->tid();
+Status MyKVImpl::Get(ServerContext* ctx, const KeyRequest *req, GetReply *reply) {
+  uint64_t cid = req->cid();
   uint64_t key = req->key();
   // find a TxCB instance
-  auto itr = TxMap.find(txid);
-  if (itr != TxMap.end()) {
+  auto itr = ConnMap.find(cid);
+  if (itr != ConnMap.end()) {
     TxCB *txcb = itr->second;
     ReturnVal ret = server->get(txcb, key);
     if(ret.error_no == KEY_NOT_FOUND) {
@@ -51,36 +71,38 @@ Status MyKVImpl::Get(ServerContext* ctx, const KeyRequest *req, ValReply *reply)
     }
   } else {
     // TBD: error
+    return Status::CANCELLED;
   }
   return Status::OK;
 }
 
-Status MyKVImpl::Put(ServerContext* ctx, const WriteRequest *wreq, google::protobuf::Empty* res) {
-  uint64_t txid = wreq->tid();
+Status MyKVImpl::Put(ServerContext* ctx, const WriteRequest *wreq, ErrorReply *reply) {
+  uint64_t cid = wreq->cid();
   // find a TxCB instance
-  auto itr = TxMap.find(txid);
-  if (itr != TxMap.end()) {
+  auto itr = ConnMap.find(cid);
+  if (itr != ConnMap.end()) {
     TxCB *txcb = itr->second;
     server->put(txcb, wreq->key(), wreq->val());
   } else {
     // TBD: error
+    return Status::CANCELLED;
   }
   return Status::OK;
 }
 
-Status MyKVImpl::Del(ServerContext* ctx, const KeyRequest *req, google::protobuf::Empty* res) {
-  uint64_t txid = req->tid();
+Status MyKVImpl::Del(ServerContext* ctx, const KeyRequest *req, ErrorReply *reply) {
+  uint64_t cid = req->cid();
   // find a TxCB instance
-  auto itr = TxMap.find(txid);
-  if (itr != TxMap.end()) {
+  auto itr = ConnMap.find(cid);
+  if (itr != ConnMap.end()) {
     TxCB *txcb = itr->second;
     server->del(txcb, req->key());
   } else {
     // TBD: error
+    return Status::CANCELLED;
   }
   return Status::OK;
 }
-
 
 int main() {
   // initialize server

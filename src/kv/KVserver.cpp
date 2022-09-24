@@ -1,5 +1,11 @@
 #include "KVserver.h"
 
+ReturnVal KVserver::connect() {
+  uint64_t id = connection_id.fetch_add(1);
+  ReturnVal ret = {id, NO_ERROR};
+  return ret;
+}
+
 TxCB *KVserver::start_tx() {
   return txManager->start_tx();
 }

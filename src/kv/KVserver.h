@@ -6,13 +6,17 @@
 #include "TxManager.h"
 #include "common.h"
 #include <iostream>
+#include <atomic>
 
 // Server Program (Tp-Monitor and Application) in TP book
 class KVserver {
  private:
   TxManager *txManager;
   MapStore *store;
+  std::atomic<uint64_t> connection_id = 1;
+
  public:
+  ReturnVal connect();
   TxCB *start_tx();
   ReturnVal get(TxCB *txcb, ulong key);
   ErrorNo put(TxCB *txcb, ulong key, ulong value);

@@ -23,27 +23,29 @@ using grpc::ServerReader;
 using grpc::ServerReaderWriter;
 using grpc::ServerWriter;
 using grpc::Status;
-using txkv::TxRequest;
-using txkv::TxReply;
+using txkv::BaseRequest;
+using txkv::ConnectionReply;
+using txkv::ErrorReply;
 using txkv::KeyRequest;
-using txkv::ValReply;
+using txkv::GetReply;
 using txkv::WriteRequest;
 
 class MyKVImpl final : public txkv::MyKV::Service {
  private:
-  std::unordered_map<uint64_t, TxCB *> TxMap;
+  std::unordered_map<uint64_t, TxCB *> ConnMap;
  public:
-  explicit MyKVImpl(std::unordered_map<uint64_t, TxCB *> txmap){
-    TxMap = txmap;
+  explicit MyKVImpl(std::unordered_map<uint64_t, TxCB *> cmap){
+    ConnMap = cmap;
   }
   ~MyKVImpl(){}
 
-  Status Begin(ServerContext* ctx, const google::protobuf::Empty*, TxReply *reply) override;
-  Status Commit(ServerContext* ctx, const TxRequest *req, google::protobuf::Empty* res) override;
-  Status Rollback(ServerContext* ctx, const TxRequest *req, google::protobuf::Empty* res) override;
-  Status Get(ServerContext* ctx, const KeyRequest *req, ValReply *reply) override;
-  Status Put(ServerContext* ctx, const WriteRequest *wreq, google::protobuf::Empty* res) override;
-  Status Del(ServerContext* ctx, const KeyRequest *req, google::protobuf::Empty* res) override;
+  Status Connect(ServerContext* ctx, const google::protobuf::Empty*, ConnectionReply *reply) override;
+  Status Begin(ServerContext* ctx, const BaseRequest *req, ErrorReply *reply) override;
+  Status Commit(ServerContext* ctx, const BaseRequest *req, ErrorReply *reply) override;
+  Status Rollback(ServerContext* ctx, const BaseRequest *req, ErrorReply *reply) override;
+  Status Get(ServerContext* ctx, const KeyRequest *req, GetReply *reply) override;
+  Status Put(ServerContext* ctx, const WriteRequest *wreq, ErrorReply *reply) override;
+  Status Del(ServerContext* ctx, const KeyRequest *req, ErrorReply *reply) override;
 };
 
 

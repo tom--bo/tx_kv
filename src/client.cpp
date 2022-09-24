@@ -14,8 +14,9 @@ using grpc::Channel;
 using txkv::MyKV;
 using grpc::Status;
 using grpc::ClientContext;
-using txkv::TxReply;
-
+using txkv::ErrorReply;
+using txkv::GetReply;
+using txkv::ConnectionReply;
 
 class TxKVClient {
  public:
@@ -23,31 +24,54 @@ class TxKVClient {
       : stub_(MyKV::NewStub(channel)) {}
  private:
   unique_ptr<MyKV::Stub> stub_;
-  uint64_t tid = 0;
+  uint64_t cid = 0;
 
  public:
-  bool Begin() {
-    TxReply txReply;
+  uint64_t get_cid() {
+    return cid;
+  }
+
+  bool Connect() {
     ClientContext context;
     google::protobuf::Empty dummy;
+    ConnectionReply reply;
+    Status status = stub_->Connect(&context, dummy, &reply);
+    if(status.ok()) {
+      cid = reply.cid();
+      return true;
+    }
+    cid = 0; // reset
+    return false;
+  }
 
-    Status status = stub_->Begin(&context, dummy, &txReply);
+  bool Begin() {
+    ClientContext context;
+    BaseRequest *req = new BaseRequest();
+    req->set_cid(cid);
+    ErrorReply reply;
+
+    Status status = stub_->Begin(&context, *req, &reply);
     if(!status.ok()) {
       cout << "Request failed" << endl;
       cout << status.error_code() << ", " << status.error_details() << ", " << status.error_message() << endl;
+      delete(req);
       return false;
-    } else {
-      tid = txReply.tid();
     }
+    delete(req);
     return true;
   }
 
   bool Commit() {
     ClientContext context;
-    TxRequest *req = new TxRequest();
-    req->set_tid(tid);
-    google::protobuf::Empty dummy;
-    Status status = stub_->Commit(&context, *req, &dummy);
+    BaseRequest *req = new BaseRequest();
+    req->set_cid(cid);
+    ErrorReply reply;
+    req->set_cid(cid);
+    Status status = stub_->Commit(&context, *req, &reply);
+    delete(req);
+    if(!status.ok()) {
+      cout << "grpc canceled!" << endl;
+    }
   }
 
   bool Rollback() {
@@ -55,34 +79,45 @@ class TxKVClient {
     return false;
   }
 
-  void Get(uint64_t key, ValReply *val) {
+  void Get(uint64_t key, GetReply *reply) {
     ClientContext context;
     KeyRequest *req = new KeyRequest();
-    req->set_tid(tid);
+    req->set_cid(cid);
     req->set_key(key);
-    Status status = stub_->Get(&context, *req, val);
-    delete(req);
+
+    Status status = stub_->Get(&context, *req, reply);
+    if(!status.ok()) {
+      cout << "grpc canceled!" << endl;
+    }
     return;
   }
 
   uint64_t Put(uint64_t key, uint64_t val) {
     ClientContext context;
     WriteRequest *req = new WriteRequest();
-    req->set_tid(tid);
+    req->set_cid(cid);
     req->set_key(key);
     req->set_val(val);
-    google::protobuf::Empty dummy;
-    Status status = stub_->Put(&context, *req, &dummy);
+    ErrorReply reply;
+
+    Status status = stub_->Put(&context, *req, &reply);
+    if(!status.ok()) {
+      cout << "grpc canceled!" << endl;
+    }
     return true;
   }
 
   uint64_t Del(uint64_t key) {
     ClientContext context;
     KeyRequest *req = new KeyRequest();
-    req->set_tid(tid);
+    req->set_cid(cid);
     req->set_key(key);
-    google::protobuf::Empty dummy;
-    Status status = stub_->Del(&context, *req, &dummy);
+    ErrorReply reply;
+
+    Status status = stub_->Del(&context, *req, &reply);
+    if(!status.ok()) {
+      cout << "grpc canceled!" << endl;
+    }
     return true;
   }
 };
@@ -93,7 +128,14 @@ int main() {
   TxKVClient *cli = new TxKVClient(
       grpc::CreateChannel("127.0.0.1:8000", grpc::InsecureChannelCredentials())
   );
+  bool ok = cli->Connect();
+  if(!ok) {
+    cout << "Connection failed." << endl;
+    exit(1);
+  }
+  cout << "connection_id: " << cli->get_cid() << endl;
 
+  // command input loop
   while(true) {
     cout << "cmd> ";
     // read one line
@@ -119,18 +161,18 @@ int main() {
       cout << "rollback" << endl;
       cli->Rollback();
     } else if(tmp == "get") {
-      ValReply *valReply = new ValReply();
+      GetReply *getReply = new GetReply();
       iss >> tmp;
       uint64_t key = stoull(tmp, nullptr, 10);
-      cli->Get(key, valReply);
-      if(valReply->error_code() == 0) {
-        cout << valReply->val() << endl;
-      } else if(valReply->error_code() == 1) {
+      cli->Get(key, getReply);
+      if(getReply->error_code() == 0) {
+        cout << getReply->val() << endl;
+      } else if(getReply->error_code() == 1) {
         cout << "Key Not Found" << endl;
       } else {
         cout << "Unknown Error Code" << endl;
       }
-      delete(valReply);
+      delete(getReply);
     } else if(tmp == "put") {
       iss >> tmp; // key
       uint64_t key = stoull(tmp, nullptr, 10);
