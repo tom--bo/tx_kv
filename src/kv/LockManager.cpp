@@ -11,7 +11,7 @@ LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
   if(head == nullptr) {
     head = lockhash->CreateLockHead(key);
   }
-  request = new LockRequest{nullptr, head, LOCK_GRANTED, mode, mode, me}; /* initialize at first */
+  request = new LockRequest{nullptr, head, LOCK_GRANTED, mode, LOCK_FREE, me}; /* initialize at first */
   pthread_mutex_lock(&head->mu); /* lock here 01 */
   if(head->queue == nullptr) { /* equivalent to L:11 in lock() in TP-book(jp) p570 */
     head->queue = request;
@@ -26,10 +26,18 @@ LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
     return LOCK_OK; /* equivalent to L:17 in lock() in TP-book(jp) p570 */
   } else { // has locks anyway L:18
     last = head->queue;
-    while(last->next != nullptr) {
-      /* skip checking lock-conversion, and lock for same key from 1 tx */
+    do {
+      /* check lock-conversion, and lock for same key from own tx */
+      if(last->txcb->txid == me->txid) {
+        if(last->mode > mode) {
+          // already has strong lock_mode lock
+          pthread_mutex_unlock(&head->mu); /* unlock here 01 */
+          delete(request);
+          return LOCK_OK;
+        }
+      }
       last = last->next;
-    }
+    } while(last->next != nullptr);
     if(!head->waiting && LockCompat(mode, head->granted_mode)) { /* L:25 This key has no waiting thread and current lock-req is also granted */
       head->granted_mode = GrantGroup(mode, head->granted_mode); /* lock_max() in original */
       last->next = request;
@@ -61,6 +69,7 @@ LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
     }
   }
 }
+
 bool LockManager::Unlock(LockRequest *req) {
   LockRequest *now, *priv;
   LockHead *lockhead = req->head;
