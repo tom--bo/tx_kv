@@ -14,6 +14,7 @@
 #include <grpcpp/server_builder.h>
 #include <grpcpp/server_context.h>
 #include "grpc/kv.grpc.pb.h"
+#include "kv/KVclient.h"
 
 using grpc::Server;
 using grpc::ServerBuilder;
