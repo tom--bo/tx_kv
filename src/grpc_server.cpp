@@ -1,12 +1,12 @@
 #include "kv/KVserver.h"
 #include <iostream>
-#include "server.h"
+#include "grpc_server.h"
 
 using namespace std;
 
 KVserver *server;
 
-Status MyKVImpl::Connect(ServerContext* ctx, const google::protobuf::Empty*, ConnectionReply *reply) {
+Status TPMonitor::Connect(ServerContext* ctx, const google::protobuf::Empty*, ConnectionReply *reply) {
   ReturnVal ret = server->connect();
   if(ret.error_no == NO_ERROR) {
     reply->set_cid(ret.val);
@@ -15,7 +15,7 @@ Status MyKVImpl::Connect(ServerContext* ctx, const google::protobuf::Empty*, Con
   return Status::CANCELLED;
 }
 
-Status MyKVImpl::Begin(ServerContext* ctx, const BaseRequest *req, ErrorReply *reply) {
+Status TPMonitor::Begin(ServerContext* ctx, const BaseRequest *req, ErrorReply *reply) {
   uint64_t cid = req->cid();
   auto itr = ConnMap.find(cid);
   if (itr != ConnMap.end()) {
@@ -30,7 +30,7 @@ Status MyKVImpl::Begin(ServerContext* ctx, const BaseRequest *req, ErrorReply *r
   return Status::OK;
 }
 
-Status MyKVImpl::Commit(ServerContext* ctx, const BaseRequest *req, ErrorReply *reply) {
+Status TPMonitor::Commit(ServerContext* ctx, const BaseRequest *req, ErrorReply *reply) {
   uint64_t cid = req->cid();
   auto itr = ConnMap.find(cid);
   if (itr != ConnMap.end()) {
@@ -44,7 +44,7 @@ Status MyKVImpl::Commit(ServerContext* ctx, const BaseRequest *req, ErrorReply *
   return Status::OK;
 }
 
-Status MyKVImpl::Rollback(ServerContext* ctx, const BaseRequest *req, ErrorReply *reply) {
+Status TPMonitor::Rollback(ServerContext* ctx, const BaseRequest *req, ErrorReply *reply) {
   uint64_t cid = req->cid();
   auto itr = ConnMap.find(cid);
   if (itr != ConnMap.end()) {
@@ -58,7 +58,7 @@ Status MyKVImpl::Rollback(ServerContext* ctx, const BaseRequest *req, ErrorReply
   return Status::OK;
 }
 
-Status MyKVImpl::Get(ServerContext* ctx, const KeyRequest *req, GetReply *reply) {
+Status TPMonitor::Get(ServerContext* ctx, const KeyRequest *req, GetReply *reply) {
   uint64_t cid = req->cid();
   uint64_t key = req->key();
   TxCB *txcb;
@@ -85,7 +85,7 @@ Status MyKVImpl::Get(ServerContext* ctx, const KeyRequest *req, GetReply *reply)
   return Status::OK;
 }
 
-Status MyKVImpl::Put(ServerContext* ctx, const WriteRequest *wreq, ErrorReply *reply) {
+Status TPMonitor::Put(ServerContext* ctx, const WriteRequest *wreq, ErrorReply *reply) {
   uint64_t cid = wreq->cid();
   bool singleSTMT = false;
   TxCB *txcb;
@@ -105,7 +105,7 @@ Status MyKVImpl::Put(ServerContext* ctx, const WriteRequest *wreq, ErrorReply *r
   return Status::OK;
 }
 
-Status MyKVImpl::Del(ServerContext* ctx, const KeyRequest *req, ErrorReply *reply) {
+Status TPMonitor::Del(ServerContext* ctx, const KeyRequest *req, ErrorReply *reply) {
   uint64_t cid = req->cid();
   bool singleSTMT = false;
   TxCB *txcb;
@@ -132,7 +132,7 @@ int main() {
   // initialize grpc server
   std::unordered_map<uint64_t, TxCB *> txMap;
   string server_address("0.0.0.0:8000");
-  MyKVImpl *txkvImpl = new MyKVImpl(txMap);
+  TPMonitor *txkvImpl = new TPMonitor(txMap);
   ServerBuilder builder;
   builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
   builder.RegisterService(txkvImpl);

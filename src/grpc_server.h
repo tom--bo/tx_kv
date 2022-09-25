@@ -29,14 +29,14 @@ using txkv::KeyRequest;
 using txkv::GetReply;
 using txkv::WriteRequest;
 
-class MyKVImpl final : public txkv::MyKV::Service {
+class TPMonitor final : public txkv::MyKV::Service {
  private:
   std::unordered_map<uint64_t, TxCB *> ConnMap;
  public:
-  explicit MyKVImpl(std::unordered_map<uint64_t, TxCB *> cmap){
+  explicit TPMonitor(std::unordered_map<uint64_t, TxCB *> cmap){
     ConnMap = cmap;
   }
-  ~MyKVImpl(){}
+  ~TPMonitor(){}
 
   Status Connect(ServerContext* ctx, const google::protobuf::Empty*, ConnectionReply *reply) override;
   Status Begin(ServerContext* ctx, const BaseRequest *req, ErrorReply *reply) override;

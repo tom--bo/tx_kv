@@ -12,7 +12,7 @@ FetchContent_Declare(
 set(FETCHCONTENT_QUIET OFF)
 FetchContent_MakeAvailable(gRPC)
 
-add_executable(server src/server.cpp
+add_executable(server src/grpc_server.cpp
         src/kv/KVserver.cpp src/kv/KVserver.h
         src/kv/TxManager.cpp src/kv/TxManager.h
         src/kv/common.h
@@ -21,7 +21,7 @@ add_executable(server src/server.cpp
         src/kv/LockManager.cpp src/kv/LockManager.h
         src/grpc/kv.grpc.pb.cc src/grpc/kv.grpc.pb.h
         src/grpc/kv.pb.cc src/grpc/kv.pb.h
-        src/server.h)
+        src/grpc_server.h)
 
 target_link_libraries(server PUBLIC "-pthread" grpc++)
 
@@ -46,13 +46,6 @@ set(FETCHCONTENT_QUIET OFF)
 FetchContent_MakeAvailable(gRPC)
 
 add_executable(cli src/client.cpp
-        # src/kv/KVserver.cpp src/kv/KVserver.h
-        # src/kv/KVclient.cpp src/kv/KVclient.h
-        # src/kv/TxManager.cpp src/kv/TxManager.h
-        # src/kv/common.h
-        # src/kv/MapStore.cpp src/kv/MapStore.h
-        # src/kv/LockDef.h
-        # src/kv/LockManager.cpp src/kv/LockManager.h
         src/grpc/kv.grpc.pb.cc src/grpc/kv.grpc.pb.h
         src/grpc/kv.pb.cc src/grpc/kv.pb.h)
 
@@ -86,7 +79,7 @@ add_executable(test
         src/kv/LockManager.cpp src/kv/LockManager.h
         src/grpc/kv.grpc.pb.cc src/grpc/kv.grpc.pb.h
         src/grpc/kv.pb.cc src/grpc/kv.pb.h
-        src/server.h
+        src/grpc_server.h
         src/server_test.cpp)
 
 target_link_libraries(test PUBLIC "-pthread" grpc++)

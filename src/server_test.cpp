@@ -1,9 +1,8 @@
-#include "kv/KVclient.h"
 #include "kv/KVserver.h"
 #include <iostream>
 #include <pthread.h>
 #include <unistd.h>
-#include "server.h"
+#include "grpc_server.h"
 
 using namespace std;
 
