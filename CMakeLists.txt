@@ -22,7 +22,7 @@ add_executable(server src/grpc_server.cpp
         src/kv/LockManager.cpp src/kv/LockManager.h
         src/grpc/kv.grpc.pb.cc src/grpc/kv.grpc.pb.h
         src/grpc/kv.pb.cc src/grpc/kv.pb.h
-        src/grpc_server.h)
+        src/grpc_server.h src/kv/undo.h)
 
 target_link_libraries(server PUBLIC "-pthread" grpc++)
 

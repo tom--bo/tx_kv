@@ -33,17 +33,16 @@ int main() {
     transform(tmp.begin(), tmp.end(), tmp.begin(), ::tolower);
 
     // switch by cmd
-    if(tmp == "begin") {
+    if(tmp == "begin" || tmp == "b") {
       ret = cli->Begin();
       if(!ret) {
         break;
       }
-    } else if(tmp == "commit") {
+    } else if(tmp == "commit" || tmp == "c") {
       cli->Commit();
-    } else if(tmp == "rollback") {
-      cout << "rollback" << endl;
+    } else if(tmp == "rollback" || tmp == "r") {
       cli->Rollback();
-    } else if(tmp == "get") {
+    } else if(tmp == "get" || tmp == "g") {
       GetReply *getReply = new GetReply();
       iss >> tmp;
       uint64_t key = stoull(tmp, nullptr, 10);
@@ -56,25 +55,26 @@ int main() {
         cout << "Unknown Error Code" << endl;
       }
       delete(getReply);
-    } else if(tmp == "put") {
+    } else if(tmp == "put" || tmp == "p") {
       iss >> tmp; // key
       uint64_t key = stoull(tmp, nullptr, 10);
       iss >> tmp; // val
       uint64_t val = stoull(tmp, nullptr, 10);
       cli->Put(key, val);
-    } else if(tmp == "del") {
+    } else if(tmp == "del" || tmp == "d") {
       iss >> tmp;
       uint64_t key = stoull(tmp, nullptr, 10);
       cli->Del(key);
-    } else if(tmp == "help") {
+    } else if(tmp == "help" || tmp == "h") {
       cout << "[command list]" << endl;
-      cout << " begin" << endl;
-      cout << " commit" << endl;
-      cout << " rolback (not implemented yet)" << endl;
-      cout << " get {key}" << endl;
-      cout << " put {key} {val}" << endl;
-      cout << " del {key}" << endl;
-      cout << " help" << endl;
+      cout << " - begin" << endl;
+      cout << " - commit" << endl;
+      cout << " - rolback (not implemented yet)" << endl;
+      cout << " - get {key}" << endl;
+      cout << " - put {key} {val}" << endl;
+      cout << " - del {key}" << endl;
+      cout << " - help" << endl;
+      cout << "(Omit command is possible, use the first one character (ex) 'begin' => 'b')" << endl;
     } else {
       cout << "Bad command." << endl;
     }

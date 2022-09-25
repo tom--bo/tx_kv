@@ -65,7 +65,7 @@ bool LockManager::Unlock(LockRequest *req) {
   LockRequest *now, *priv;
   LockHead *lockhead = req->head;
   pthread_mutex_lock(&lockhead->mu); /* lock 01 */
-  if(lockhead->queue == req && req->next == nullptr) { /* L:19 in UnLock in TP-book(jp) p572 */
+    if(lockhead->queue == req && req->next == nullptr) { /* L:19 in UnLock in TP-book(jp) p572 */
     /* In my impl, do not release lockheader */
     lockhead->queue = nullptr;
     lockhead->waiting = false;
@@ -114,12 +114,12 @@ bool LockManager::Unlock(LockRequest *req) {
 bool LockManager::UnlockAll(TxCB *txcb) {
   LockRequest *req = txcb->listhead;
   LockRequest *next;
-  do {
+  while (req != nullptr) {
     next = req->tran_next;
     Unlock(req);
-    delete(req);
+    delete (req);
     req = next;
-  } while(next != nullptr);
+  }
   return true;
 }
 /* TP-book(jp) p494 */

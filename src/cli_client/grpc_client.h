@@ -77,7 +77,16 @@ class TxKVClient {
   }
 
   bool Rollback() {
-    std::cout << "rollback is not implemented yet" << std::endl;
+    ClientContext context;
+    BaseRequest *req = new BaseRequest();
+    req->set_cid(cid);
+    ErrorReply reply;
+    req->set_cid(cid);
+    Status status = stub_->Rollback(&context, *req, &reply);
+    delete(req);
+    if(!status.ok()) {
+      std::cout << "grpc canceled!" << std::endl;
+    }
     return false;
   }
 

@@ -49,7 +49,7 @@ Status TPMonitor::Rollback(ServerContext* ctx, const BaseRequest *req, ErrorRepl
   auto itr = ConnMap.find(cid);
   if (itr != ConnMap.end()) {
     TxCB *txcb = itr->second;
-    // TBD: impl rollback process
+    server->rollback_tx(txcb);
   } else {
     // TBD: error
     return Status::CANCELLED;

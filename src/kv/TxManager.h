@@ -3,6 +3,7 @@
 
 #include "LockDef.h"
 #include "common.h"
+#include "undo.h"
 #include <atomic>
 
 class MapStore;
@@ -13,6 +14,8 @@ class TxCB {
   LockRequest *listhead;
   LockRequest *anchor; /* 'locks' in TP-book explained as the anchor of tx-lock-list */
   LockRequest *wait;
+  UndoRecord  *undo_head;
+  UndoRecord  *undo_anchor;
   // TxCB *cycle; /* Not impl yet */
 };
 
