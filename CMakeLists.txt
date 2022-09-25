@@ -14,7 +14,6 @@ FetchContent_MakeAvailable(gRPC)
 
 add_executable(server src/server.cpp
         src/kv/KVserver.cpp src/kv/KVserver.h
-        src/kv/KVclient.cpp src/kv/KVclient.h
         src/kv/TxManager.cpp src/kv/TxManager.h
         src/kv/common.h
         src/kv/MapStore.cpp src/kv/MapStore.h
@@ -80,7 +79,6 @@ FetchContent_MakeAvailable(gRPC)
 
 add_executable(test
         src/kv/KVserver.cpp src/kv/KVserver.h
-        src/kv/KVclient.cpp src/kv/KVclient.h
         src/kv/TxManager.cpp src/kv/TxManager.h
         src/kv/common.h
         src/kv/MapStore.cpp src/kv/MapStore.h
