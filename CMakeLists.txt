@@ -1,5 +1,5 @@
 project(server)
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.19)
 set(CMAKE_CXX_STANDARD 17)
 
 set(ABSL_PROPAGATE_CXX_STD on)
@@ -32,7 +32,7 @@ target_link_libraries(server PUBLIC "-pthread" grpc++)
 ################
 
 project(cli)
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.19)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -46,9 +46,9 @@ FetchContent_Declare(
 set(FETCHCONTENT_QUIET OFF)
 FetchContent_MakeAvailable(gRPC)
 
-add_executable(cli src/client.cpp
+add_executable(cli src/cli_client/client.cpp
         src/grpc/kv.grpc.pb.cc src/grpc/kv.grpc.pb.h
-        src/grpc/kv.pb.cc src/grpc/kv.pb.h)
+        src/grpc/kv.pb.cc src/grpc/kv.pb.h src/cli_client/grpc_client.h)
 
 target_link_libraries(cli PUBLIC "-pthread" grpc++)
 
@@ -58,7 +58,7 @@ target_link_libraries(cli PUBLIC "-pthread" grpc++)
 
 project(test)
 
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.19)
 set(CMAKE_CXX_STANDARD 17)
 
 set(ABSL_PROPAGATE_CXX_STD on)

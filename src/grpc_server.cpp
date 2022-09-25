@@ -130,9 +130,9 @@ int main() {
   server->db_init();
 
   // initialize grpc server
-  std::unordered_map<uint64_t, TxCB *> txMap;
+  std::unordered_map<uint64_t, TxCB *> connection_map;
   string server_address("0.0.0.0:8000");
-  TPMonitor *txkvImpl = new TPMonitor(txMap);
+  TPMonitor *txkvImpl = new TPMonitor(connection_map);
   ServerBuilder builder;
   builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
   builder.RegisterService(txkvImpl);
