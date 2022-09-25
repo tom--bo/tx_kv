@@ -34,6 +34,21 @@ LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
           pthread_mutex_unlock(&head->mu); /* unlock here 01 */
           delete(request);
           return LOCK_OK;
+        } else {
+          // request lock conversion
+          // ?? 自分以外のgranted_modeを再計算する
+          if(LockCompat(mode, recalc_granted_mode)) { /* Requested lock-mode is compatible with granted-lock mode */
+            last->mode = mode;
+            head->granted_mode = GrantGroup(mode, head->granted_mode);  /* lock_max() in original */
+            delete(request);
+          } else {
+            head->waiting = true;
+            last->convert_mode = mode;
+            delete(request);
+            while(last->convert_mode != LOCK_FREE) {
+              pthread_cond_wait(&head->cond, &head->mu);
+            }
+          }
         }
       }
       last = last->next;
