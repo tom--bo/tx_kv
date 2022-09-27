@@ -26,7 +26,7 @@ ReturnVal MapStore::get(TxCB *txcb, ulong key) {
 ErrorNo MapStore::put(TxCB *txcb, ulong key, ulong value) {
   lock_manager->Lock(txcb, key, LOCK_X);
   // prepare undo
-  UndoRecord *undo = new UndoRecord;
+  UndoRecord *undo = new UndoRecord();
   undo->key = key;
   undo->op_type = PUT;
   auto itr = store.find(key);
@@ -47,7 +47,7 @@ ErrorNo MapStore::put(TxCB *txcb, ulong key, ulong value) {
 ErrorNo MapStore::del(TxCB *txcb, ulong key) {
   lock_manager->Lock(txcb, key, LOCK_X);
   // prepare undo
-  UndoRecord *undo = new UndoRecord;
+  UndoRecord *undo = new UndoRecord();
   undo->key = key;
   undo->op_type = DEL;
   auto itr = store.find(key);
