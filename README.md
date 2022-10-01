@@ -32,10 +32,11 @@ cmd> help
 [command list]
  begin
  commit
- rolback (not implemented yet)
+ rolback
  get {key}
  put {key} {val}
  del {key}
+ exit (close connection)
  help
 
 cmd> begin

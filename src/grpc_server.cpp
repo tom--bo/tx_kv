@@ -15,11 +15,25 @@ Status TPMonitor::Connect(ServerContext* ctx, const google::protobuf::Empty*, Co
   return Status::CANCELLED;
 }
 
+Status TPMonitor::Close(ServerContext* ctx, const BaseRequest *req, ConnectionReply *reply) {
+  uint64_t cid = req->cid();
+  auto itr = ConnMap.find(cid);
+  if (itr != ConnMap.end()) {
+    // Rollback and release TxCB
+    cout << "[DEBUG] Rollback to close the connection" << endl;
+    TxCB *txcb = itr->second;
+    server->rollback_tx(txcb);
+    ConnMap.erase(req->cid());
+  }
+  reply->set_error_code(0);
+  return Status::OK;
+}
+
 Status TPMonitor::Begin(ServerContext* ctx, const BaseRequest *req, ErrorReply *reply) {
   uint64_t cid = req->cid();
   auto itr = ConnMap.find(cid);
   if (itr != ConnMap.end()) {
-    // TBD: must implicit commit and release TxCB
+    // Implicit commit and release TxCB
     cout << "[DEBUG] implicit commit" << endl;
     TxCB *txcb = itr->second;
     server->commit_tx(txcb);

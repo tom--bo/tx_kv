@@ -29,6 +29,7 @@ static const char* MyKV_method_names[] = {
   "/txkv.MyKV/Get",
   "/txkv.MyKV/Put",
   "/txkv.MyKV/Del",
+  "/txkv.MyKV/Close",
 };
 
 std::unique_ptr< MyKV::Stub> MyKV::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -45,6 +46,7 @@ MyKV::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, cons
   , rpcmethod_Get_(MyKV_method_names[4], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_Put_(MyKV_method_names[5], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_Del_(MyKV_method_names[6], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_Close_(MyKV_method_names[7], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status MyKV::Stub::Connect(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::txkv::ConnectionReply* response) {
@@ -208,6 +210,29 @@ void MyKV::Stub::async::Del(::grpc::ClientContext* context, const ::txkv::KeyReq
   return result;
 }
 
+::grpc::Status MyKV::Stub::Close(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::txkv::ConnectionReply* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::txkv::BaseRequest, ::txkv::ConnectionReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Close_, context, request, response);
+}
+
+void MyKV::Stub::async::Close(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ConnectionReply* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::txkv::BaseRequest, ::txkv::ConnectionReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Close_, context, request, response, std::move(f));
+}
+
+void MyKV::Stub::async::Close(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ConnectionReply* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Close_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::txkv::ConnectionReply>* MyKV::Stub::PrepareAsyncCloseRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::txkv::ConnectionReply, ::txkv::BaseRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Close_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::txkv::ConnectionReply>* MyKV::Stub::AsyncCloseRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncCloseRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 MyKV::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       MyKV_method_names[0],
@@ -279,6 +304,16 @@ MyKV::Service::Service() {
              ::txkv::ErrorReply* resp) {
                return service->Del(ctx, req, resp);
              }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      MyKV_method_names[7],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< MyKV::Service, ::txkv::BaseRequest, ::txkv::ConnectionReply, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](MyKV::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::txkv::BaseRequest* req,
+             ::txkv::ConnectionReply* resp) {
+               return service->Close(ctx, req, resp);
+             }, this)));
 }
 
 MyKV::Service::~Service() {
@@ -327,6 +362,13 @@ MyKV::Service::~Service() {
 }
 
 ::grpc::Status MyKV::Service::Del(::grpc::ServerContext* context, const ::txkv::KeyRequest* request, ::txkv::ErrorReply* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status MyKV::Service::Close(::grpc::ServerContext* context, const ::txkv::BaseRequest* request, ::txkv::ConnectionReply* response) {
   (void) context;
   (void) request;
   (void) response;

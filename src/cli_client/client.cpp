@@ -23,7 +23,9 @@ int main() {
     cout << "cmd> ";
     // read one line
     getline(cin, in);
-    if(in.empty()) {
+    if(cin.eof()) {
+      break;
+    } else if(in.empty()) {
       continue;
     }
 
@@ -75,6 +77,9 @@ int main() {
       cout << " - del {key}" << endl;
       cout << " - help" << endl;
       cout << "(Omit command is possible, use the first one character (ex) 'begin' => 'b')" << endl;
+    } else if(tmp == "close") {
+      cli->Close();
+      break;
     } else {
       cout << "Bad command." << endl;
     }

@@ -174,7 +174,7 @@ const char descriptor_table_protodef_kv_2eproto[] PROTOBUF_SECTION_VARIABLE(prot
   "&\n\nKeyRequest\022\013\n\003cid\030\001 \001(\004\022\013\n\003key\030\002 \001(\004\""
   "+\n\010GetReply\022\013\n\003val\030\001 \001(\004\022\022\n\nerror_code\030\002"
   " \001(\r\"5\n\014WriteRequest\022\013\n\003cid\030\001 \001(\004\022\013\n\003key"
-  "\030\002 \001(\004\022\013\n\003val\030\003 \001(\0042\335\002\n\004MyKV\022:\n\007Connect\022"
+  "\030\002 \001(\004\022\013\n\003val\030\003 \001(\0042\222\003\n\004MyKV\022:\n\007Connect\022"
   "\026.google.protobuf.Empty\032\025.txkv.Connectio"
   "nReply\"\000\022.\n\005Begin\022\021.txkv.BaseRequest\032\020.t"
   "xkv.ErrorReply\"\000\022/\n\006Commit\022\021.txkv.BaseRe"
@@ -183,14 +183,15 @@ const char descriptor_table_protodef_kv_2eproto[] PROTOBUF_SECTION_VARIABLE(prot
   "Get\022\020.txkv.KeyRequest\032\016.txkv.GetReply\"\000\022"
   "-\n\003Put\022\022.txkv.WriteRequest\032\020.txkv.ErrorR"
   "eply\"\000\022+\n\003Del\022\020.txkv.KeyRequest\032\020.txkv.E"
-  "rrorReply\"\000b\006proto3"
+  "rrorReply\"\000\0223\n\005Close\022\021.txkv.BaseRequest\032"
+  "\025.txkv.ConnectionReply\"\000b\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_kv_2eproto_deps[1] = {
   &::descriptor_table_google_2fprotobuf_2fempty_2eproto,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_kv_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_kv_2eproto = {
-  false, false, 659, descriptor_table_protodef_kv_2eproto, "kv.proto", 
+  false, false, 712, descriptor_table_protodef_kv_2eproto, "kv.proto", 
   &descriptor_table_kv_2eproto_once, descriptor_table_kv_2eproto_deps, 1, 6,
   schemas, file_default_instances, TableStruct_kv_2eproto::offsets,
   file_level_metadata_kv_2eproto, file_level_enum_descriptors_kv_2eproto, file_level_service_descriptors_kv_2eproto,

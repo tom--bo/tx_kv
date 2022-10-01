@@ -46,6 +46,7 @@ class TPMonitor final : public txkv::MyKV::Service {
   Status Get(ServerContext* ctx, const KeyRequest *req, GetReply *reply) override;
   Status Put(ServerContext* ctx, const WriteRequest *wreq, ErrorReply *reply) override;
   Status Del(ServerContext* ctx, const KeyRequest *req, ErrorReply *reply) override;
+  Status Close(ServerContext* ctx, const BaseRequest *req, ConnectionReply *reply) override;
 };
 
 

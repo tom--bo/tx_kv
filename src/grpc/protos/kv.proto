@@ -12,6 +12,7 @@ service MyKV {
   rpc Get(KeyRequest) returns (GetReply) {}
   rpc Put(WriteRequest) returns (ErrorReply) {}
   rpc Del(KeyRequest) returns (ErrorReply) {}
+  rpc Close(BaseRequest) returns (ConnectionReply) {}
 }
 
 message BaseRequest {

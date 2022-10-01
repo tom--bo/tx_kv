@@ -85,6 +85,13 @@ class MyKV final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>> PrepareAsyncDel(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>>(PrepareAsyncDelRaw(context, request, cq));
     }
+    virtual ::grpc::Status Close(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::txkv::ConnectionReply* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ConnectionReply>> AsyncClose(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ConnectionReply>>(AsyncCloseRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ConnectionReply>> PrepareAsyncClose(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ConnectionReply>>(PrepareAsyncCloseRaw(context, request, cq));
+    }
     class async_interface {
      public:
       virtual ~async_interface() {}
@@ -102,6 +109,8 @@ class MyKV final {
       virtual void Put(::grpc::ClientContext* context, const ::txkv::WriteRequest* request, ::txkv::ErrorReply* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void Del(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::txkv::ErrorReply* response, std::function<void(::grpc::Status)>) = 0;
       virtual void Del(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::txkv::ErrorReply* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void Close(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ConnectionReply* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void Close(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ConnectionReply* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
@@ -121,6 +130,8 @@ class MyKV final {
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>* PrepareAsyncPutRaw(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>* AsyncDelRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ErrorReply>* PrepareAsyncDelRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ConnectionReply>* AsyncCloseRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::txkv::ConnectionReply>* PrepareAsyncCloseRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
@@ -174,6 +185,13 @@ class MyKV final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>> PrepareAsyncDel(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>>(PrepareAsyncDelRaw(context, request, cq));
     }
+    ::grpc::Status Close(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::txkv::ConnectionReply* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ConnectionReply>> AsyncClose(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ConnectionReply>>(AsyncCloseRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ConnectionReply>> PrepareAsyncClose(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::txkv::ConnectionReply>>(PrepareAsyncCloseRaw(context, request, cq));
+    }
     class async final :
       public StubInterface::async_interface {
      public:
@@ -191,6 +209,8 @@ class MyKV final {
       void Put(::grpc::ClientContext* context, const ::txkv::WriteRequest* request, ::txkv::ErrorReply* response, ::grpc::ClientUnaryReactor* reactor) override;
       void Del(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::txkv::ErrorReply* response, std::function<void(::grpc::Status)>) override;
       void Del(::grpc::ClientContext* context, const ::txkv::KeyRequest* request, ::txkv::ErrorReply* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void Close(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ConnectionReply* response, std::function<void(::grpc::Status)>) override;
+      void Close(::grpc::ClientContext* context, const ::txkv::BaseRequest* request, ::txkv::ConnectionReply* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -216,6 +236,8 @@ class MyKV final {
     ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* PrepareAsyncPutRaw(::grpc::ClientContext* context, const ::txkv::WriteRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* AsyncDelRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::txkv::ErrorReply>* PrepareAsyncDelRaw(::grpc::ClientContext* context, const ::txkv::KeyRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::txkv::ConnectionReply>* AsyncCloseRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::txkv::ConnectionReply>* PrepareAsyncCloseRaw(::grpc::ClientContext* context, const ::txkv::BaseRequest& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_Connect_;
     const ::grpc::internal::RpcMethod rpcmethod_Begin_;
     const ::grpc::internal::RpcMethod rpcmethod_Commit_;
@@ -223,6 +245,7 @@ class MyKV final {
     const ::grpc::internal::RpcMethod rpcmethod_Get_;
     const ::grpc::internal::RpcMethod rpcmethod_Put_;
     const ::grpc::internal::RpcMethod rpcmethod_Del_;
+    const ::grpc::internal::RpcMethod rpcmethod_Close_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -237,6 +260,7 @@ class MyKV final {
     virtual ::grpc::Status Get(::grpc::ServerContext* context, const ::txkv::KeyRequest* request, ::txkv::GetReply* response);
     virtual ::grpc::Status Put(::grpc::ServerContext* context, const ::txkv::WriteRequest* request, ::txkv::ErrorReply* response);
     virtual ::grpc::Status Del(::grpc::ServerContext* context, const ::txkv::KeyRequest* request, ::txkv::ErrorReply* response);
+    virtual ::grpc::Status Close(::grpc::ServerContext* context, const ::txkv::BaseRequest* request, ::txkv::ConnectionReply* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_Connect : public BaseClass {
@@ -378,7 +402,27 @@ class MyKV final {
       ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_Connect<WithAsyncMethod_Begin<WithAsyncMethod_Commit<WithAsyncMethod_Rollback<WithAsyncMethod_Get<WithAsyncMethod_Put<WithAsyncMethod_Del<Service > > > > > > > AsyncService;
+  template <class BaseClass>
+  class WithAsyncMethod_Close : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_Close() {
+      ::grpc::Service::MarkMethodAsync(7);
+    }
+    ~WithAsyncMethod_Close() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Close(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ConnectionReply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestClose(::grpc::ServerContext* context, ::txkv::BaseRequest* request, ::grpc::ServerAsyncResponseWriter< ::txkv::ConnectionReply>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(7, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef WithAsyncMethod_Connect<WithAsyncMethod_Begin<WithAsyncMethod_Commit<WithAsyncMethod_Rollback<WithAsyncMethod_Get<WithAsyncMethod_Put<WithAsyncMethod_Del<WithAsyncMethod_Close<Service > > > > > > > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_Connect : public BaseClass {
    private:
@@ -568,7 +612,34 @@ class MyKV final {
     virtual ::grpc::ServerUnaryReactor* Del(
       ::grpc::CallbackServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::ErrorReply* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_Connect<WithCallbackMethod_Begin<WithCallbackMethod_Commit<WithCallbackMethod_Rollback<WithCallbackMethod_Get<WithCallbackMethod_Put<WithCallbackMethod_Del<Service > > > > > > > CallbackService;
+  template <class BaseClass>
+  class WithCallbackMethod_Close : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_Close() {
+      ::grpc::Service::MarkMethodCallback(7,
+          new ::grpc::internal::CallbackUnaryHandler< ::txkv::BaseRequest, ::txkv::ConnectionReply>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::txkv::BaseRequest* request, ::txkv::ConnectionReply* response) { return this->Close(context, request, response); }));}
+    void SetMessageAllocatorFor_Close(
+        ::grpc::MessageAllocator< ::txkv::BaseRequest, ::txkv::ConnectionReply>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(7);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::txkv::BaseRequest, ::txkv::ConnectionReply>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_Close() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Close(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ConnectionReply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* Close(
+      ::grpc::CallbackServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ConnectionReply* /*response*/)  { return nullptr; }
+  };
+  typedef WithCallbackMethod_Connect<WithCallbackMethod_Begin<WithCallbackMethod_Commit<WithCallbackMethod_Rollback<WithCallbackMethod_Get<WithCallbackMethod_Put<WithCallbackMethod_Del<WithCallbackMethod_Close<Service > > > > > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_Connect : public BaseClass {
@@ -685,6 +756,23 @@ class MyKV final {
     }
     // disable synchronous version of this method
     ::grpc::Status Del(::grpc::ServerContext* /*context*/, const ::txkv::KeyRequest* /*request*/, ::txkv::ErrorReply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_Close : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_Close() {
+      ::grpc::Service::MarkMethodGeneric(7);
+    }
+    ~WithGenericMethod_Close() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Close(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ConnectionReply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -827,6 +915,26 @@ class MyKV final {
     }
     void RequestDel(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_Close : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_Close() {
+      ::grpc::Service::MarkMethodRaw(7);
+    }
+    ~WithRawMethod_Close() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Close(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ConnectionReply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestClose(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(7, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -981,6 +1089,28 @@ class MyKV final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* Del(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_Close : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_Close() {
+      ::grpc::Service::MarkMethodRawCallback(7,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Close(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_Close() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Close(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ConnectionReply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* Close(
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
@@ -1172,9 +1302,36 @@ class MyKV final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedDel(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::txkv::KeyRequest,::txkv::ErrorReply>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_Connect<WithStreamedUnaryMethod_Begin<WithStreamedUnaryMethod_Commit<WithStreamedUnaryMethod_Rollback<WithStreamedUnaryMethod_Get<WithStreamedUnaryMethod_Put<WithStreamedUnaryMethod_Del<Service > > > > > > > StreamedUnaryService;
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_Close : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_Close() {
+      ::grpc::Service::MarkMethodStreamed(7,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::txkv::BaseRequest, ::txkv::ConnectionReply>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::txkv::BaseRequest, ::txkv::ConnectionReply>* streamer) {
+                       return this->StreamedClose(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_Close() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status Close(::grpc::ServerContext* /*context*/, const ::txkv::BaseRequest* /*request*/, ::txkv::ConnectionReply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedClose(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::txkv::BaseRequest,::txkv::ConnectionReply>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_Connect<WithStreamedUnaryMethod_Begin<WithStreamedUnaryMethod_Commit<WithStreamedUnaryMethod_Rollback<WithStreamedUnaryMethod_Get<WithStreamedUnaryMethod_Put<WithStreamedUnaryMethod_Del<WithStreamedUnaryMethod_Close<Service > > > > > > > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_Connect<WithStreamedUnaryMethod_Begin<WithStreamedUnaryMethod_Commit<WithStreamedUnaryMethod_Rollback<WithStreamedUnaryMethod_Get<WithStreamedUnaryMethod_Put<WithStreamedUnaryMethod_Del<Service > > > > > > > StreamedService;
+  typedef WithStreamedUnaryMethod_Connect<WithStreamedUnaryMethod_Begin<WithStreamedUnaryMethod_Commit<WithStreamedUnaryMethod_Rollback<WithStreamedUnaryMethod_Get<WithStreamedUnaryMethod_Put<WithStreamedUnaryMethod_Del<WithStreamedUnaryMethod_Close<Service > > > > > > > > StreamedService;
 };
 
 }  // namespace txkv

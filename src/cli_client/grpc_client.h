@@ -45,6 +45,19 @@ class TxKVClient {
     return false;
   }
 
+  bool Close() {
+    ClientContext context;
+    BaseRequest *req = new BaseRequest();
+    req->set_cid(cid);
+    ConnectionReply reply;
+    Status status = stub_->Close(&context, *req, &reply);
+    if(status.ok()) {
+      cid = 0; // reset
+      return true;
+    }
+    return false;
+  }
+
   bool Begin() {
     ClientContext context;
     BaseRequest *req = new BaseRequest();
