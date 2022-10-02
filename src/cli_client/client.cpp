@@ -67,6 +67,9 @@ int main() {
       iss >> tmp;
       uint64_t key = stoull(tmp, nullptr, 10);
       cli->Del(key);
+    } else if(tmp == "exit" || tmp == "e") {
+      cli->Close();
+      break;
     } else if(tmp == "help" || tmp == "h") {
       cout << "[command list]" << endl;
       cout << " - begin" << endl;
@@ -75,11 +78,9 @@ int main() {
       cout << " - get {key}" << endl;
       cout << " - put {key} {val}" << endl;
       cout << " - del {key}" << endl;
+      cout << " - exit" << endl;
       cout << " - help" << endl;
       cout << "(Omit command is possible, use the first one character (ex) 'begin' => 'b')" << endl;
-    } else if(tmp == "close") {
-      cli->Close();
-      break;
     } else {
       cout << "Bad command." << endl;
     }
