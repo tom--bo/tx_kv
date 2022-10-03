@@ -6,7 +6,6 @@
 void AddUndoRecord(TxCB *txcb, UndoRecord *u) {
   if(txcb->undo_head == nullptr) {
     txcb->undo_head = u;
-    txcb->undo_anchor = u;
   } else {
     u->next = txcb->undo_head;
     txcb->undo_head = u;

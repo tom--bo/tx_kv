@@ -17,7 +17,7 @@ LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
     head->queue = request;
     head->granted_mode = mode;
     if(me->anchor == nullptr) {
-      me->listhead = request;
+      me->lockhead = request;
     } else {
       me->anchor->tran_next = request;
     }
@@ -72,7 +72,7 @@ LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
       head->granted_mode = GrantGroup(mode, head->granted_mode); /* lock_max() in original */
       now->next = request;
       if(me->anchor == nullptr) {
-        me->listhead = request;
+        me->lockhead = request;
       } else {
         me->anchor->tran_next = request;
       }
@@ -89,7 +89,7 @@ LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
       }
       me->wait = nullptr;
       if(me->anchor == nullptr) {
-        me->listhead = request;
+        me->lockhead = request;
       } else {
         me->anchor->tran_next = request;
       }
@@ -184,7 +184,7 @@ bool LockManager::Unlock(LockRequest *req) {
 }
 
 bool LockManager::UnlockAll(TxCB *txcb) {
-  LockRequest *req = txcb->listhead;
+  LockRequest *req = txcb->lockhead;
   LockRequest *next;
   while (req != nullptr) {
     next = req->tran_next;
