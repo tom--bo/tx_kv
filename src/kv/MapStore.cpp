@@ -6,10 +6,11 @@
 void AddUndoRecord(TxCB *txcb, UndoRecord *u) {
   if(txcb->undo_head == nullptr) {
     txcb->undo_head = u;
+    txcb->undo_anchor = u;
   } else {
-    txcb->undo_anchor->next = u;
+    u->next = txcb->undo_head;
+    txcb->undo_head = u;
   }
-  txcb->undo_anchor = u;
   return;
 }
 
@@ -18,9 +19,9 @@ ReturnVal MapStore::get(TxCB *txcb, ulong key) {
   auto itr = store.find(key);
   if (itr != store.end()) {
     // found
-    return ReturnVal {itr->second, NO_ERROR};
+    return ReturnVal{itr->second, NO_ERROR};
   }
-  return ReturnVal {0, KEY_NOT_FOUND};
+  return ReturnVal{0, KEY_NOT_FOUND};
 }
 
 ErrorNo MapStore::put(TxCB *txcb, ulong key, ulong value) {
