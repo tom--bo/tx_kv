@@ -8,6 +8,7 @@ typedef unsigned long int TxID;
 typedef enum {
   NO_ERROR,
   KEY_NOT_FOUND,
+  TIMEOUT,
 } ErrorNo;
 
 typedef struct {

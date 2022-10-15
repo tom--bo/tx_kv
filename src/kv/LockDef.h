@@ -21,6 +21,7 @@ typedef enum {
   LOCK_GRANTED,
   LOCK_CONVERTING,
   LOCK_WAITING,
+  LOCK_TIMED_OUT,
   LOCK_DENIED
 } LockStatus;
 

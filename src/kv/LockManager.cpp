@@ -6,6 +6,8 @@
 LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
   LockHead *head; /* *lock in original TP-book */
   LockRequest *request, *now, *prev;
+  int condwait_ret;
+  struct timespec ts;
 
   head = lockhash->FindLockHead(key);
   if(head == nullptr) {
@@ -46,6 +48,7 @@ LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
             tmpReq = tmpReq->next;
           }
           if(LockCompat(mode, recalcGrantedMode)) { /* Requested lock-mode is compatible with recalculated granted-lock mode */
+            /* Actually this branch is unreachable now, because now txkv has onlyS and X */
             now->mode = mode;
             head->granted_mode = GrantGroup(mode, head->granted_mode);  /* lock_max() in original */
             pthread_mutex_unlock(&head->mu); /* unlock 01 */
@@ -56,7 +59,15 @@ LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
             now->convert_mode = mode;
             delete(request);
             while(now->convert_mode != LOCK_FREE) {
-              pthread_cond_wait(&head->cond, &head->mu);
+              clock_gettime(CLOCK_MONOTONIC, &ts);
+              ts.tv_sec += 5;
+              condwait_ret = pthread_cond_timedwait(&head->cond, &head->mu, &ts); // lock-conversion wait
+              if(condwait_ret == ETIMEDOUT) {
+                  now->convert_mode = LOCK_FREE;
+                  delete(request);
+                  pthread_mutex_unlock(&head->mu);
+                  return LOCK_TIMEOUT;
+              }
             }
             pthread_mutex_unlock(&head->mu); /* unlock 01 */
             return LOCK_OK;
@@ -85,7 +96,14 @@ LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
       now->next = request;
       me->wait = request;
       while(request->status == LOCK_WAITING) {
-        pthread_cond_wait(&head->cond, &head->mu);
+        clock_gettime(CLOCK_MONOTONIC, &ts);
+        ts.tv_sec += 5;
+        condwait_ret = pthread_cond_timedwait(&head->cond, &head->mu, &ts);
+        if(condwait_ret == ETIMEDOUT) {
+            request->status = LOCK_TIMED_OUT;
+            pthread_mutex_unlock(&head->mu); /* unlock 01 */
+            return LOCK_TIMEOUT;
+        }
       }
       me->wait = nullptr;
       if(me->anchor == nullptr) {
@@ -107,7 +125,7 @@ bool LockManager::Unlock(LockRequest *req) {
   bool hasConvertingLock = false;
   pthread_mutex_lock(&lockhead->mu); /* lock 01 */
   if(lockhead->queue == req && req->next == nullptr) { /* L:19 in UnLock in TP-book(jp) p572 */
-    /* In my impl, do not release lockheader */
+    /* Currently do not release lockhead */
     lockhead->queue = nullptr;
     lockhead->waiting = false;
     lockhead->granted_mode = LOCK_FREE;

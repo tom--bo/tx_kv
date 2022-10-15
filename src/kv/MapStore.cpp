@@ -14,7 +14,10 @@ void AddUndoRecord(TxCB *txcb, UndoRecord *u) {
 }
 
 ReturnVal MapStore::get(TxCB *txcb, ulong key) {
-  lock_manager->Lock(txcb, key, LOCK_S);
+  LockReply reply = lock_manager->Lock(txcb, key, LOCK_S);
+  if(reply != LOCK_OK) {
+      return ReturnVal{0, TIMEOUT};
+  }
   auto itr = store.find(key);
   if (itr != store.end()) {
     // found
@@ -24,7 +27,10 @@ ReturnVal MapStore::get(TxCB *txcb, ulong key) {
 }
 
 ErrorNo MapStore::put(TxCB *txcb, ulong key, ulong value) {
-  lock_manager->Lock(txcb, key, LOCK_X);
+  LockReply reply = lock_manager->Lock(txcb, key, LOCK_X);
+  if(reply != LOCK_OK) {
+      return TIMEOUT;
+  }
   // prepare undo
   UndoRecord *undo = new UndoRecord();
   undo->key = key;
@@ -45,7 +51,10 @@ ErrorNo MapStore::put(TxCB *txcb, ulong key, ulong value) {
 }
 
 ErrorNo MapStore::del(TxCB *txcb, ulong key) {
-  lock_manager->Lock(txcb, key, LOCK_X);
+  LockReply reply = lock_manager->Lock(txcb, key, LOCK_X);
+  if(reply != LOCK_OK) {
+      return TIMEOUT;
+  }
   // prepare undo
   UndoRecord *undo = new UndoRecord();
   undo->key = key;

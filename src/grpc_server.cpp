@@ -88,10 +88,14 @@ Status TPMonitor::Get(ServerContext* ctx, const KeyRequest *req, GetReply *reply
   }
   ReturnVal ret = server->get(txcb, key);
   if(ret.error_no == KEY_NOT_FOUND) {
-    reply->set_error_code(1); // TBD: key not found
+      reply->set_error_code(1);// TBD: key not found
+  } else if(ret.error_no == TIMEOUT) {
+      reply->set_error_code(2);// TBD: rollback by lock-timeout
+      server->rollback_tx(txcb);
   } else {
     reply->set_error_code(0);
     reply->set_val(ret.val);
+    return Status::OK;
   }
   if (singleSTMT) {
     server->commit_tx(txcb);
@@ -112,7 +116,12 @@ Status TPMonitor::Put(ServerContext* ctx, const WriteRequest *wreq, ErrorReply *
     singleSTMT = true;
     txcb = server->start_tx();
   }
-  server->put(txcb, wreq->key(), wreq->val());
+  ErrorNo errorno = server->put(txcb, wreq->key(), wreq->val());
+  if(errorno == TIMEOUT) {
+    reply->set_error_code(2);// TBD: rollback by lock-timeout
+    server->rollback_tx(txcb);
+    return Status::OK;
+  }
   if(singleSTMT) {
     server->commit_tx(txcb);
   }
@@ -131,7 +140,12 @@ Status TPMonitor::Del(ServerContext* ctx, const KeyRequest *req, ErrorReply *rep
     singleSTMT = true;
     txcb = server->start_tx();
   }
-  server->del(txcb, req->key());
+  ErrorNo errorno = server->del(txcb, req->key());
+  if(errorno == TIMEOUT) {
+      reply->set_error_code(2);// TBD: rollback by lock-timeout
+      server->rollback_tx(txcb);
+      return Status::OK;
+  }
   if(singleSTMT) {
     server->commit_tx(txcb);
   }
