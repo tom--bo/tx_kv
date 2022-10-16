@@ -19,6 +19,11 @@ using txkv::ErrorReply;
 using txkv::GetReply;
 using txkv::ConnectionReply;
 
+struct Response {
+  int code;
+  std::string msg;
+};
+
 class TxKVClient {
  public:
   TxKVClient(std::shared_ptr<Channel> channel)
@@ -32,20 +37,25 @@ class TxKVClient {
     return cid;
   }
 
-  bool Connect() {
+  Response Connect() {
+    Response res;
     ClientContext context;
     google::protobuf::Empty dummy;
     ConnectionReply reply;
     Status status = stub_->Connect(&context, dummy, &reply);
     if(status.ok()) {
       cid = reply.cid();
-      return true;
+      res.code = 0;
+      return res;
     }
     cid = 0; // reset
-    return false;
+    res.code = -1;
+    res.msg = "grpc status is not ok";
+    return res;
   }
 
-  bool Close() {
+  Response Close() {
+    Response res;
     ClientContext context;
     BaseRequest *req = new BaseRequest();
     req->set_cid(cid);
@@ -53,12 +63,16 @@ class TxKVClient {
     Status status = stub_->Close(&context, *req, &reply);
     if(status.ok()) {
       cid = 0; // reset
-      return true;
+      res.code = 0;
+      return res;
     }
-    return false;
+    res.code = 1;
+    res.msg = "grpc status is not ok";
+    return res;
   }
 
-  bool Begin() {
+  Response Begin() {
+    Response res;
     ClientContext context;
     BaseRequest *req = new BaseRequest();
     req->set_cid(cid);
@@ -69,13 +83,17 @@ class TxKVClient {
       std::cout << "Request failed" << std::endl;
       std::cout << status.error_code() << ", " << status.error_details() << ", " << status.error_message() << std::endl;
       delete(req);
-      return false;
+      res.code = 1;
+      res.msg = "grpc status is not ok";
+      return res;
     }
     delete(req);
-    return true;
+    res.code = 0;
+    return res;
   }
 
-  bool Commit() {
+  Response Commit() {
+    Response res;
     ClientContext context;
     BaseRequest *req = new BaseRequest();
     req->set_cid(cid);
@@ -85,11 +103,16 @@ class TxKVClient {
     delete(req);
     if(!status.ok()) {
       std::cout << "grpc canceled!" << std::endl;
+      res.code = 1;
+      res.msg = "grpc status is not ok";
+      return res;
     }
-    return true;
+    res.code = 0;
+    return res;
   }
 
-  bool Rollback() {
+  Response Rollback() {
+    Response res;
     ClientContext context;
     BaseRequest *req = new BaseRequest();
     req->set_cid(cid);
@@ -99,11 +122,16 @@ class TxKVClient {
     delete(req);
     if(!status.ok()) {
       std::cout << "grpc canceled!" << std::endl;
+      res.code = 1;
+      res.msg = "grpc status is not ok";
+      return res;
     }
-    return false;
+    res.code = 0;
+    return res;
   }
 
-  void Get(uint64_t key, GetReply *reply) {
+  Response Get(uint64_t key, GetReply *reply) {
+    Response res;
     ClientContext context;
     KeyRequest *req = new KeyRequest();
     req->set_cid(cid);
@@ -112,11 +140,21 @@ class TxKVClient {
     Status status = stub_->Get(&context, *req, reply);
     if(!status.ok()) {
       std::cout << "grpc canceled!" << std::endl;
+      res.code = 1;
+      res.msg = "grpc status is not ok";
+      return res;
     }
-    return;
+    if(reply->error_code() == 2) { /* timeout */
+      res.code = 2;
+      res.msg = "timed out and rollbacked";
+      return res;
+    }
+    res.code = 0;
+    return res;
   }
 
-  uint64_t Put(uint64_t key, uint64_t val) {
+  Response Put(uint64_t key, uint64_t val) {
+    Response res;
     ClientContext context;
     WriteRequest *req = new WriteRequest();
     req->set_cid(cid);
@@ -127,11 +165,21 @@ class TxKVClient {
     Status status = stub_->Put(&context, *req, &reply);
     if(!status.ok()) {
       std::cout << "grpc canceled!" << std::endl;
+      res.code = 1;
+      res.msg = "grpc status is not ok";
+      return res;
     }
-    return true;
+    if(reply.error_code() == 2) { /* timeout */
+      res.code = 2;
+      res.msg = "timed out and rollbacked";
+      return res;
+    }
+    res.code = 0;
+    return res;
   }
 
-  uint64_t Del(uint64_t key) {
+  Response Del(uint64_t key) {
+    Response res;
     ClientContext context;
     KeyRequest *req = new KeyRequest();
     req->set_cid(cid);
@@ -141,8 +189,17 @@ class TxKVClient {
     Status status = stub_->Del(&context, *req, &reply);
     if(!status.ok()) {
       std::cout << "grpc canceled!" << std::endl;
+      res.code = 1;
+      res.msg = "grpc status is not ok";
+      return res;
     }
-    return true;
+    if(reply.error_code() == 2) { /* timeout */
+      res.code = 2;
+      res.msg = "timed out and rollbacked";
+      return res;
+    }
+    res.code = 0;
+    return res;
   }
 };
 

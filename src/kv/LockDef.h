@@ -21,6 +21,7 @@ typedef enum {
   LOCK_GRANTED,
   LOCK_CONVERTING,
   LOCK_WAITING,
+  LOCK_TIMED_OUT,
   LOCK_DENIED
 } LockStatus;
 
@@ -52,6 +53,7 @@ struct LockHead {
  public:
   pthread_mutex_t mu;
   pthread_cond_t cond;
+  pthread_condattr_t condattr;
   // LockHead *chain; /* Need this after impl hash-chain */
   // char *lock_name; /* Need this after impl hash-chain */
   LockRequest *queue;
@@ -59,7 +61,9 @@ struct LockHead {
   bool waiting;
   LockHead() {
     pthread_mutex_init(&mu, NULL);
-    pthread_cond_init(&cond, NULL);
+    pthread_condattr_init(&condattr);
+    pthread_condattr_setclock(&condattr, CLOCK_MONOTONIC);
+    pthread_cond_init(&cond, &condattr);
     queue = nullptr;
     granted_mode = LOCK_FREE;
     waiting = false;

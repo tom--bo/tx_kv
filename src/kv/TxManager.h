@@ -11,7 +11,7 @@ class MapStore;
 class TxCB {
  public:
   TxID txid;
-  LockRequest *lockhead;
+  LockRequest *lock_head;
   LockRequest *anchor; /* 'locks' in TP-book explained as the anchor of tx-lock-list */
   LockRequest *wait;
   UndoRecord  *undo_head;
@@ -30,7 +30,7 @@ class TxManager {
   TxCB *start_tx() {
     TxCB *txcb = new TxCB();
     txcb->txid = global_txid.fetch_add(1);
-    txcb->lockhead = nullptr;
+    txcb->lock_head = nullptr;
     txcb->anchor = nullptr;
     txcb->wait = nullptr;
     return txcb;
