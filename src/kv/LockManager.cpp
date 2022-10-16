@@ -67,6 +67,9 @@ LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
                   delete(request);
                   pthread_mutex_unlock(&head->mu);
                   return LOCK_TIMEOUT;
+              } else if(condwait_ret != 0) {
+                // TBD
+                exit(1);
               }
             }
             pthread_mutex_unlock(&head->mu); /* unlock 01 */
@@ -100,9 +103,18 @@ LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
         ts.tv_sec += 5;
         condwait_ret = pthread_cond_timedwait(&head->cond, &head->mu, &ts);
         if(condwait_ret == ETIMEDOUT) {
-            request->status = LOCK_TIMED_OUT;
-            pthread_mutex_unlock(&head->mu); /* unlock 01 */
-            return LOCK_TIMEOUT;
+          request->status = LOCK_TIMED_OUT; /* same process as if this thread can get lock */
+          me->wait = nullptr;
+          if(me->anchor == nullptr) {
+            me->lock_head = request;
+          } else {
+            me->anchor->tran_next = request;
+          }
+          me->anchor = request;
+          pthread_mutex_unlock(&head->mu); /* unlock 01 */
+          return LOCK_TIMEOUT;
+        } else if(condwait_ret != 0) {
+          exit(1);
         }
       }
       me->wait = nullptr;
@@ -145,7 +157,7 @@ bool LockManager::Unlock(LockRequest *req) {
       }
       prev->next = now->next; /* delete req node from list */
     }
-    /* Find converting-lock request only the first one */
+    /* Find converting-lock request, seek only the first one */
     now = (lockhead->queue);
     while(now != nullptr && now->status == LOCK_GRANTED) {
       if(now->convert_mode != LOCK_FREE) {
@@ -194,6 +206,19 @@ bool LockManager::Unlock(LockRequest *req) {
           now = now->next;
         }
       }
+    }
+    /* Check whether this key has waiting lock */
+    now = (lockhead->queue);
+    while(now != nullptr) {
+      // TBD: optimize this loop to eliminate
+      if(now->status == LOCK_WAITING) {
+        lockhead->waiting = true;
+        break;
+      }
+      now = now->next;
+    }
+    if(now == nullptr) {
+      lockhead->waiting = false;
     }
   }
   pthread_mutex_unlock(&lockhead->mu); /* unlock 01 */
