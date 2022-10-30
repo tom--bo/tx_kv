@@ -7,12 +7,12 @@ using namespace std;
 
 int main() {
   string in, tmp;
-  bool ret;
+  Response ret;
   TxKVClient *cli = new TxKVClient(
       grpc::CreateChannel("127.0.0.1:8000", grpc::InsecureChannelCredentials())
   );
-  bool ok = cli->Connect();
-  if(!ok) {
+  Response res = cli->Connect();
+  if(res.code != 0) {
     cout << "Connection failed." << endl;
     exit(1);
   }
@@ -37,7 +37,7 @@ int main() {
     // switch by cmd
     if(tmp == "begin" || tmp == "b") {
       ret = cli->Begin();
-      if(!ret) {
+      if(res.code != 0) {
         break;
       }
     } else if(tmp == "commit" || tmp == "c") {
@@ -48,13 +48,20 @@ int main() {
       GetReply *getReply = new GetReply();
       iss >> tmp;
       uint64_t key = stoull(tmp, nullptr, 10);
-      cli->Get(key, getReply);
-      if(getReply->error_code() == 0) {
-        cout << getReply->val() << endl;
-      } else if(getReply->error_code() == 1) {
-        cout << "Key Not Found" << endl;
-      } else {
-        cout << "Unknown Error Code" << endl;
+      Response res = cli->Get(key, getReply);
+      switch(res.code) {
+        case 0:
+          cout << getReply->val() << endl;
+          break;
+        case 1:
+          cout << "Key Not Found" << endl;
+          break;
+        case 2:
+          cout << res.msg << endl;
+          break;
+        default:
+          cout << "Unknown Error Code" << endl;
+          break;
       }
       delete(getReply);
     } else if(tmp == "put" || tmp == "p") {
@@ -62,11 +69,33 @@ int main() {
       uint64_t key = stoull(tmp, nullptr, 10);
       iss >> tmp; // val
       uint64_t val = stoull(tmp, nullptr, 10);
-      cli->Put(key, val);
+      Response res = cli->Put(key, val);
+      switch(res.code) {
+        case 0:
+          // do nothing
+          break;
+        case 2:
+          cout << res.msg << endl;
+          break;
+        default:
+          cout << "Unknown Error Code" << endl;
+          break;
+      }
     } else if(tmp == "del" || tmp == "d") {
       iss >> tmp;
       uint64_t key = stoull(tmp, nullptr, 10);
-      cli->Del(key);
+      Response res = cli->Del(key);
+      switch(res.code) {
+        case 0:
+          // do nothing
+          break;
+        case 2:
+          cout << res.msg << endl;
+          break;
+        default:
+          cout << "Unknown Error Code" << endl;
+          break;
+      }
     } else if(tmp == "exit" || tmp == "e") {
       cli->Close();
       break;
