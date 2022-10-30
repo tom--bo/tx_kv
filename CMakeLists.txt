@@ -2,6 +2,9 @@ project(server)
 cmake_minimum_required(VERSION 3.19)
 set(CMAKE_CXX_STANDARD 17)
 
+# set(BOOST_ENABLE_CMAKE on)
+# set(BoostRoot ${PROJECT_SOURCE_DIR}/clion-cmake/_deps/boost-src)
+
 set(ABSL_PROPAGATE_CXX_STD on)
 include(FetchContent)
 FetchContent_Declare(
@@ -13,16 +16,14 @@ set(FETCHCONTENT_QUIET OFF)
 FetchContent_MakeAvailable(gRPC)
 
 add_executable(server src/grpc_server.cpp
-        src/kv/KVserver.cpp src/kv/KVserver.h
-        src/kv/KVclient.cpp src/kv/KVclient.h
-        src/kv/TxManager.cpp src/kv/TxManager.h
-        src/kv/common.h
-        src/kv/MapStore.cpp src/kv/MapStore.h
-        src/kv/LockDef.h
-        src/kv/LockManager.cpp src/kv/LockManager.h
-        src/grpc/kv.grpc.pb.cc src/grpc/kv.grpc.pb.h
-        src/grpc/kv.pb.cc src/grpc/kv.pb.h
-        src/grpc_server.h src/kv/undo.h)
+    src/kv/KVserver.cpp
+    src/kv/KVclient.cpp
+    src/kv/TxManager.cpp
+    src/kv/MapStore.cpp
+    src/kv/LockManager.cpp
+    src/grpc/kv.grpc.pb.cc
+    src/grpc/kv.pb.cc
+)
 
 target_link_libraries(server PUBLIC "-pthread" grpc++)
 
@@ -47,8 +48,10 @@ set(FETCHCONTENT_QUIET OFF)
 FetchContent_MakeAvailable(gRPC)
 
 add_executable(cli src/cli_client/client.cpp
-        src/grpc/kv.grpc.pb.cc src/grpc/kv.grpc.pb.h
-        src/grpc/kv.pb.cc src/grpc/kv.pb.h src/cli_client/grpc_client.h)
+    src/grpc/kv.grpc.pb.cc
+    src/grpc/kv.pb.cc
+    src/mmap_kv/mmap_test.cpp
+)
 
 target_link_libraries(cli PUBLIC "-pthread" grpc++)
 
@@ -72,18 +75,36 @@ set(FETCHCONTENT_QUIET OFF)
 FetchContent_MakeAvailable(gRPC)
 
 add_executable(test
-        src/kv/KVserver.cpp src/kv/KVserver.h
-        src/kv/KVclient.cpp src/kv/KVclient.h
-        src/kv/TxManager.cpp src/kv/TxManager.h
-        src/kv/common.h
-        src/kv/MapStore.cpp src/kv/MapStore.h
-        src/kv/LockDef.h
-        src/kv/LockManager.cpp src/kv/LockManager.h
-        src/grpc/kv.grpc.pb.cc src/grpc/kv.grpc.pb.h
-        src/grpc/kv.pb.cc src/grpc/kv.pb.h
-        src/grpc_server.h
-        src/server_test.cpp)
+    src/kv/KVserver.cpp
+    src/kv/KVclient.cpp
+    src/kv/TxManager.cpp
+    src/kv/MapStore.cpp
+    src/kv/LockDef.h
+    src/kv/LockManager.cpp
+    src/grpc/kv.grpc.pb.cc
+    src/grpc/kv.pb.cc
+    src/server_test.cpp
+)
 
 target_link_libraries(test PUBLIC "-pthread" grpc++)
 
+################
+# mmap_kv
+################
 
+# project(mmap_kv)
+#
+# cmake_minimum_required(VERSION 3.19)
+# set(CMAKE_CXX_STANDARD 17)
+#
+# set(ABSL_PROPAGATE_CXX_STD on)
+#
+# add_executable(mmap_kv
+#     src/mmap_kv/KVserver.cpp
+#     src/mmap_kv/TxManager.cpp
+#     src/mmap_kv/MapStore.cpp
+#     src/mmap_kv/LockManager.cpp
+#     src/mmap_kv/mmap_test.cpp
+# )
+#
+# target_link_libraries(mmap_kv PUBLIC "-pthread")
