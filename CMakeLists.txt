@@ -50,7 +50,6 @@ FetchContent_MakeAvailable(gRPC)
 add_executable(cli src/cli_client/client.cpp
     src/grpc/kv.grpc.pb.cc
     src/grpc/kv.pb.cc
-    src/mmap_kv/mmap_test.cpp
 )
 
 target_link_libraries(cli PUBLIC "-pthread" grpc++)
