@@ -88,22 +88,22 @@ add_executable(test
 target_link_libraries(test PUBLIC "-pthread" grpc++)
 
 ################
-# mmap_kv
+# shmem_kv
 ################
 
-# project(mmap_kv)
-#
-# cmake_minimum_required(VERSION 3.19)
-# set(CMAKE_CXX_STANDARD 17)
-#
-# set(ABSL_PROPAGATE_CXX_STD on)
-#
-# add_executable(mmap_kv
-#     src/mmap_kv/KVserver.cpp
-#     src/mmap_kv/TxManager.cpp
-#     src/mmap_kv/MapStore.cpp
-#     src/mmap_kv/LockManager.cpp
-#     src/mmap_kv/mmap_test.cpp
-# )
-#
-# target_link_libraries(mmap_kv PUBLIC "-pthread")
+project(shmem_kv)
+
+cmake_minimum_required(VERSION 3.19)
+set(CMAKE_CXX_STANDARD 17)
+
+set(ABSL_PROPAGATE_CXX_STD on)
+
+add_executable(shmem_kv
+        src/shmem_kv/KVserver.cpp
+        src/shmem_kv/TxManager.cpp
+        src/shmem_kv/MapStore.cpp
+        src/shmem_kv/LockManager.cpp
+        src/shmem_kv/mmap_test.cpp
+)
+
+target_link_libraries(shmem_kv PUBLIC "-pthread")
