@@ -6,7 +6,7 @@
 #include "undo.h"
 #include <atomic>
 
-class MapStore;
+class ArrayStore;
 
 class TxCB {
  public:
@@ -21,9 +21,9 @@ class TxCB {
 class TxManager {
  private:
   std::atomic<TxID> global_txid;
-  MapStore *store;
+  ArrayStore *store;
  public:
-  TxManager(MapStore *map_store) {
+  TxManager(ArrayStore *map_store) {
     global_txid = 1;
     store = map_store;
   }

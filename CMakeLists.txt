@@ -101,7 +101,7 @@ set(ABSL_PROPAGATE_CXX_STD on)
 add_executable(shmem_kv
         src/shmem_kv/KVserver.cpp
         src/shmem_kv/TxManager.cpp
-        src/shmem_kv/MapStore.cpp
+        src/shmem_kv/ArrayStore.cpp
         src/shmem_kv/LockManager.cpp
         src/shmem_kv/mmap_test.cpp
 )

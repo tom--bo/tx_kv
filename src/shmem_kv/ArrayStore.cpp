@@ -1,22 +1,22 @@
-#include "MapStore.h"
+#include "ArrayStore.h"
 #include "LockManager.h"
 #include "TxManager.h"
 #include "undo.h"
 
-bool MapStore::is_used(ulong key) {
+bool ArrayStore::is_used(ulong key) {
   int div = key / 8;
   int mod_minus = key % 8 -1;
   return used[div] && (1 << mod_minus);
 }
 
-void MapStore::set_used(ulong key) {
+void ArrayStore::set_used(ulong key) {
   int div = key / 8;
   int mod_minus = key % 8 -1;
   used[div] |= (1 << mod_minus);
   return;
 }
 
-void MapStore::set_not_used(ulong key) {
+void ArrayStore::set_not_used(ulong key) {
   int div = key / 8;
   int mod_minus = key % 8 -1;
   used[div] &= ~(1 << mod_minus);
@@ -34,7 +34,7 @@ void AddUndoRecord(TxCB *txcb, UndoRecord *u) {
   return;
 }
 
-ReturnVal MapStore::get(TxCB *txcb, ulong key) {
+ReturnVal ArrayStore::get(TxCB *txcb, ulong key) {
   LockReply reply = lock_manager->Lock(txcb, key, LOCK_S);
   if(reply != LOCK_OK) {
       return ReturnVal{0, TIMEOUT};
@@ -47,7 +47,7 @@ ReturnVal MapStore::get(TxCB *txcb, ulong key) {
 }
 
 
-ErrorNo MapStore::put(TxCB *txcb, ulong key, ulong value) {
+ErrorNo ArrayStore::put(TxCB *txcb, ulong key, ulong value) {
   LockReply reply = lock_manager->Lock(txcb, key, LOCK_X);
   if(reply != LOCK_OK) {
       return TIMEOUT;
@@ -71,7 +71,7 @@ ErrorNo MapStore::put(TxCB *txcb, ulong key, ulong value) {
   return NO_ERROR;
 }
 
-ErrorNo MapStore::del(TxCB *txcb, ulong key) {
+ErrorNo ArrayStore::del(TxCB *txcb, ulong key) {
   LockReply reply = lock_manager->Lock(txcb, key, LOCK_X);
   if(reply != LOCK_OK) {
       return TIMEOUT;
@@ -92,12 +92,12 @@ ErrorNo MapStore::del(TxCB *txcb, ulong key) {
   return NO_ERROR;
 }
 
-ErrorNo MapStore::commit_tx(TxCB *txcb) {
+ErrorNo ArrayStore::commit_tx(TxCB *txcb) {
   lock_manager->UnlockAll(txcb);
   return NO_ERROR;
 }
 
-ErrorNo MapStore::rollback_tx(TxCB *txcb) {
+ErrorNo ArrayStore::rollback_tx(TxCB *txcb) {
   UndoRecord *u = txcb->undo_head;
   while(u != nullptr) {
     if(u->is_null) {

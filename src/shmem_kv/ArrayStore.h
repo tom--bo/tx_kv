@@ -11,7 +11,7 @@
 class TxCB;
 class LockManager;
 
-class MapStore {
+class ArrayStore {
  private:
   char used[BIT_ARR_SIZE] = {};
   ulong data[DATA_CAPACITY] = {};
@@ -25,7 +25,7 @@ class MapStore {
   ErrorNo del(TxCB *txcb, ulong key);
   ErrorNo commit_tx(TxCB *txcb);
   ErrorNo rollback_tx(TxCB *txcb);
-  MapStore(LockManager* lm) {
+  ArrayStore(LockManager* lm) {
     lock_manager = lm;
   }
 };

@@ -1,18 +1,18 @@
 #ifndef TX_KV__KVSERVER_H_
 #define TX_KV__KVSERVER_H_
 
+#include "ArrayStore.h"
 #include "LockManager.h"
-#include "MapStore.h"
 #include "TxManager.h"
 #include "common.h"
-#include <iostream>
 #include <atomic>
+#include <iostream>
 
 // Server Program (Tp-Monitor and Application) in TP book
 class KVserver {
  private:
   TxManager *txManager;
-  MapStore *store;
+  ArrayStore *store;
   std::atomic<uint64_t> connection_id = 1;
 
  public:
@@ -25,7 +25,7 @@ class KVserver {
 
   bool db_init() {
     LockManager *lm = new LockManager();
-    store = new MapStore(lm);
+    store = new ArrayStore(lm);
     txManager = new TxManager(store);
     return true;
   }
