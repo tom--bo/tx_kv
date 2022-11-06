@@ -1,11 +1,38 @@
 #include "LockManager.h"
 #include "TxManager.h"
 
+LockRequest *LockManager::GetPooledLock() {
+  LockRequest *request=nullptr;
+  pthread_mutex_lock(lockRequest_mutex); /* lock 00 */
+  for(int i = 0; i < LOCK_REQUEST_CAPACITY; i++) {
+    if(!LockReqUsed[i]) {
+      request = &LockRequestPool[i];
+      LockReqUsed[i] = true;
+      request[i].pool_id = i;
+      break;
+    }
+  }
+  pthread_mutex_unlock(lockRequest_mutex); /* unlock 00 */
+  return request;
+}
+
+void LockManager::ReleasePooledLock(LockRequest *req) {
+  int pool_id = req->pool_id;
+  pthread_mutex_lock(lockRequest_mutex); /* lock 00 */
+  LockReqUsed[pool_id] = false;
+  req->next = nullptr;
+  req->head = nullptr;
+  req->txcb = nullptr;
+  req->tran_next = nullptr;
+  pthread_mutex_unlock(lockRequest_mutex); /* unlock 00 */
+  return;
+}
+
 /* LockClass and timeout is not impl yet */
 /* use LockArray */
 LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
   LockHead *head; /* *lock in original TP-book */
-  LockRequest *request, *now, *prev;
+  LockRequest *request=nullptr, *now, *prev;
   int condwait_ret;
   struct timespec ts;
 
@@ -14,12 +41,19 @@ LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
     // error
     return LOCK_NOT_LOCKED;
   }
-  /* get LockRequest
-  pthread_mutex_lock(lockRequest_mutex); /* lock 00 */
-
-  pthread_mutex_unlock(lockRequest_mutex); /* unlock 00 */
-
-  request = new LockRequest{nullptr, head, LOCK_GRANTED, mode, LOCK_FREE, me}; /* initialize at first */
+  /* get LockRequest */
+  request = GetPooledLock();
+  if(request == nullptr) {
+    return LOCK_NOT_LOCKED;
+  } else {
+    request->next = nullptr;
+    request->head = head;
+    request->status = LOCK_GRANTED;
+    request->mode = mode;
+    request->convert_mode = LOCK_FREE;
+    request->txcb = me;
+    request->tran_next = nullptr;
+  }
   pthread_mutex_lock(&head->mu); /* lock 01 */
   if(head->queue == nullptr) { /* equivalent to L:11 in lock() in TP-book(jp) p570 */
     head->queue = request;
@@ -40,7 +74,7 @@ LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
         if(now->mode >= mode) {
           // already has strong lock_mode lock
           pthread_mutex_unlock(&head->mu); /* unlock 01 */
-          delete(request);
+          ReleasePooledLock(request);
           return LOCK_OK;
         } else {
           // request lock conversion
@@ -58,19 +92,19 @@ LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
             now->mode = mode;
             head->granted_mode = GrantGroup(mode, head->granted_mode);  /* lock_max() in original */
             pthread_mutex_unlock(&head->mu); /* unlock 01 */
-            delete(request);
+            ReleasePooledLock(request);
             return LOCK_OK;
           } else {
             head->waiting = true;
             now->convert_mode = mode;
-            delete(request);
+            ReleasePooledLock(request);
             while(now->convert_mode != LOCK_FREE) {
               clock_gettime(CLOCK_MONOTONIC, &ts);
               ts.tv_sec += 5;
               condwait_ret = pthread_cond_timedwait(&head->cond, &head->mu, &ts); // lock-conversion wait
               if(condwait_ret == ETIMEDOUT) {
                   now->convert_mode = LOCK_FREE;
-                  delete(request);
+                  ReleasePooledLock(request);
                   pthread_mutex_unlock(&head->mu);
                   return LOCK_TIMEOUT;
               } else if(condwait_ret != 0) {
@@ -238,7 +272,7 @@ bool LockManager::UnlockAll(TxCB *txcb) {
   while (req != nullptr) {
     next = req->tran_next;
     Unlock(req);
-    delete (req);
+    ReleasePooledLock(req);
     req = next;
   }
   return true;

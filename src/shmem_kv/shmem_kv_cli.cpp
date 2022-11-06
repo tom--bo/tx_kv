@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
 
   /* create, attach shared memory */
   key_t key;
-  key = ftok("/tmp/tx_kv", 1);
+  key = ftok("/tmp/tx_kv.share", 1);
   if(key == IPC_ERROR) {
     cout << "[Error] ftok" << endl;
     return 1;
@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
   }
 
 
-  LockManager *lm = new LockManager(d->lockarray, d->lockRequest_mutex, d->lockReqUsed, d->lockReqPool);
+  LockManager *lm = new LockManager(d->lockarray, &d->lockRequest_mutex, d->lockReqUsed, d->lockReqPool);
   ArrayStore *store = new ArrayStore(lm, d->used, d->data);
   TxManager *tm = new TxManager(store, &d->global_txid, &d->txcb_mutex, d->txcbUsed, d->txcbPool);
   KVserver *server = new KVserver(store, tm);
@@ -191,8 +191,10 @@ int main(int argc, char *argv[]) {
     }
   }
 
+  // detach
   shmdt(shared_ptr);
-  // shmctl(shared_ptr, IPC_RMID, nullptr);
+  // delete shared block
+  shmctl(shared_block_id, IPC_RMID, nullptr);
 
   return 0;
 }

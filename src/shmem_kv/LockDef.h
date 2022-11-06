@@ -46,6 +46,7 @@ typedef struct _LockRequest{
   TxCB *txcb; /* Instead of 'TransCB tran;' in TP-book */
   // LockRequest *tran_prev; /* not impl yet */
   _LockRequest *tran_next;
+  int pool_id;
 } LockRequest;
 
 /* TBD: Need LockHead-pool */

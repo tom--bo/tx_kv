@@ -18,6 +18,8 @@ class LockManager {
   LockManager(LockHead* la, pthread_mutex_t *mu, bool *used, LockRequest *pool)
       :lock_array{la}, lockRequest_mutex{mu}, LockReqUsed{used}, LockRequestPool{pool} {}
   /* LockClass and timeout are not impl yet */
+  LockRequest *GetPooledLock();
+  void ReleasePooledLock(LockRequest *req);
   LockReply Lock(TxCB *me, ulong key, LockMode mode);
   bool Unlock(LockRequest *req);
   bool UnlockAll(TxCB *txcb);
