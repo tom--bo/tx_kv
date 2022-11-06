@@ -104,6 +104,6 @@ add_executable(shmem_kv
         src/shmem_kv/ArrayStore.cpp
         src/shmem_kv/LockManager.cpp
         src/shmem_kv/mmap_test.cpp
-)
+        )
 
 target_link_libraries(shmem_kv PUBLIC "-pthread")

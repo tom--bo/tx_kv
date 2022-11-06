@@ -2,17 +2,23 @@
 #include "TxManager.h"
 
 /* LockClass and timeout is not impl yet */
-/* LockHash is not hashed but just map now */
+/* use LockArray */
 LockReply LockManager::Lock(TxCB *me, ulong key, LockMode mode) {
   LockHead *head; /* *lock in original TP-book */
   LockRequest *request, *now, *prev;
   int condwait_ret;
   struct timespec ts;
 
-  head = lockhash->FindLockHead(key);
+  head = &lock_array[key];
   if(head == nullptr) {
-    head = lockhash->CreateLockHead(key);
+    // error
+    return LOCK_NOT_LOCKED;
   }
+  /* get LockRequest
+  pthread_mutex_lock(lockRequest_mutex); /* lock 00 */
+
+  pthread_mutex_unlock(lockRequest_mutex); /* unlock 00 */
+
   request = new LockRequest{nullptr, head, LOCK_GRANTED, mode, LOCK_FREE, me}; /* initialize at first */
   pthread_mutex_lock(&head->mu); /* lock 01 */
   if(head->queue == nullptr) { /* equivalent to L:11 in lock() in TP-book(jp) p570 */

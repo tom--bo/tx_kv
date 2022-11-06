@@ -5,21 +5,21 @@
 
 bool ArrayStore::is_used(ulong key) {
   int div = key / 8;
-  int mod_minus = key % 8 -1;
-  return used[div] && (1 << mod_minus);
+  int mod = key % 8;
+  return used[div] && (1 << mod);
 }
 
 void ArrayStore::set_used(ulong key) {
   int div = key / 8;
-  int mod_minus = key % 8 -1;
-  used[div] |= (1 << mod_minus);
+  int mod = key % 8 -1;
+  used[div] |= (1 << mod);
   return;
 }
 
 void ArrayStore::set_not_used(ulong key) {
   int div = key / 8;
-  int mod_minus = key % 8 -1;
-  used[div] &= ~(1 << mod_minus);
+  int mod = key % 8 -1;
+  used[div] &= ~(1 << mod);
   return;
 }
 

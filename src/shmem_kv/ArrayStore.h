@@ -5,17 +5,14 @@
 #include <limits.h>
 #include <unordered_map>
 
-#define DATA_CAPACITY 100
-#define BIT_ARR_SIZE 13 /* DATA_CAPACITY/8+1  */
-
 class TxCB;
 class LockManager;
 
 class ArrayStore {
  private:
-  char used[BIT_ARR_SIZE] = {};
-  ulong data[DATA_CAPACITY] = {};
   LockManager *lock_manager;
+  char *used;
+  ulong *data;
  public:
   bool is_used(ulong key);
   void set_used(ulong key);
@@ -25,9 +22,7 @@ class ArrayStore {
   ErrorNo del(TxCB *txcb, ulong key);
   ErrorNo commit_tx(TxCB *txcb);
   ErrorNo rollback_tx(TxCB *txcb);
-  ArrayStore(LockManager* lm) {
-    lock_manager = lm;
-  }
+  ArrayStore(LockManager* lm, char *u, ulong *d): lock_manager{lm}, used{u}, data{d} {}
 };
 
 #endif//TX_KV__MAPSTORE_H_

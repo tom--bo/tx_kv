@@ -13,7 +13,6 @@ class KVserver {
  private:
   TxManager *txManager;
   ArrayStore *store;
-  std::atomic<uint64_t> connection_id = 1;
 
  public:
   TxCB *start_tx();
@@ -22,18 +21,7 @@ class KVserver {
   ErrorNo del(TxCB *txcb, ulong key);
   ErrorNo commit_tx(TxCB *txcb);
   ErrorNo rollback_tx(TxCB *txcb);
-
-  bool db_init() {
-    LockManager *lm = new LockManager();
-    store = new ArrayStore(lm);
-    txManager = new TxManager(store);
-    return true;
-  }
-
-  KVserver() {
-    txManager = nullptr;
-    store = nullptr;
-  }
+  KVserver(ArrayStore *as, TxManager *tm): store{as}, txManager{tm} {}
 };
 
 
